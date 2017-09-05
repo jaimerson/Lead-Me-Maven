@@ -3,9 +3,11 @@ package dados_instituicao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import modelo.Curso;
@@ -16,7 +18,7 @@ import modelo.PossibilidadePreRequisito;
 public class LeitorArquivos {
 
     public static final String DIRETORIO_GRADES = "src/main/resources/grades/";
-
+    public static final String DIRETORIO_TURMAS = "src/main/resources/turmas/";
     public static String[] getArquivosMatrizesCurricularesDoCurso(String nomeCurso) {
         File file = new File(DIRETORIO_GRADES);
         final String nomeDoCurso = nomeCurso;
@@ -93,5 +95,21 @@ public class LeitorArquivos {
             }
         }
         lerArq.close();
+    }
+    
+    public static Double getMediaAprovacao(String nomeCurso, String disciplina) throws FileNotFoundException, UnsupportedEncodingException, IOException{
+        BufferedReader lerArq = new BufferedReader(
+            new InputStreamReader(
+                new FileInputStream(DIRETORIO_TURMAS + nomeCurso + " - turmas "+ disciplina +".txt"), "UTF-8"));
+        String linha; //2017.1:95
+        Double soma = 0.0;
+        Integer qtdeTurmas = 0;
+        while( (linha = lerArq.readLine()) != null){
+            soma += Double.parseDouble(linha.split(":")[1]);
+            qtdeTurmas++;
+        }
+        
+        lerArq.close();
+        return soma/qtdeTurmas;
     }
 }

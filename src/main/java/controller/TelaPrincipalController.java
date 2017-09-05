@@ -4,6 +4,8 @@ import dados_instituicao.ColetorDados;
 import dados_instituicao.ColetorDadosFactory;
 import dados_instituicao.LeitorArquivos;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,12 +50,14 @@ public class TelaPrincipalController extends Application {
     private Label txtBemVindo;
 
     @FXML
-    private ComboBox<?> cbTurma;
-
-    @FXML
     private ListView<?> listDisciplinas;
 
     private ServiceFacade service;
+    
+    @FXML
+    void carregarGrafico(ActionEvent event) {
+        
+    }
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -66,6 +70,7 @@ public class TelaPrincipalController extends Application {
             stage.show();
             service = ServiceFacadeFactory.getInstance().getServiceInstance();
             service.carregarCurso("BTI");
+//            cbDisciplina.setItems( FXCollections.observableArrayList( ));
         } catch (Exception e) {
             e.printStackTrace();
         }

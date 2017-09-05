@@ -24,4 +24,9 @@ public class ServiceFacadeImpl implements ServiceFacade {
         return this.curso;
     }
 
+    @Override
+    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException{
+        return coletorDados.getMediaAprovacao(nomeCurso, disciplina);
+    }
+
 }

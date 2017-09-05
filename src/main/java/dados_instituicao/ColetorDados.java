@@ -7,4 +7,5 @@ import modelo.Curso;
 public interface ColetorDados {
 
     public Curso getCurso(String nomeCurso) throws DataException;
+    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException;
 }

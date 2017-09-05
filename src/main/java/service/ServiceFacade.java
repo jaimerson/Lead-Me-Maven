@@ -9,5 +9,6 @@ public interface ServiceFacade {
 
     public void carregarCurso(String nomeCurso) throws DataException;
     public Curso getCurso();
+    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException;
     
 }
