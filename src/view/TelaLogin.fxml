@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+   <children>
+      <Button id="btnEntrar" fx:id="btnEntrar" layoutX="275.0" layoutY="253.0" mnemonicParsing="false" onAction="#entrar" text="Entrar" />
+      <Label layoutX="234.0" layoutY="73.0" text="Lead Me">
+         <font>
+            <Font name="Linux Biolinum G Regular" size="36.0" />
+         </font>
+      </Label>
+      <TextField id="txtLogin" fx:id="txtLogin" layoutX="224.0" layoutY="146.0" />
+      <Label layoutX="224.0" layoutY="129.0" text="Login">
+         <font>
+            <Font name="Linux Biolinum G Regular" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="224.0" layoutY="179.0" text="Senha">
+         <font>
+            <Font name="Linux Biolinum G Regular" size="14.0" />
+         </font>
+      </Label>
+      <TextField id="txtSenha" fx:id="txtSenha" layoutX="224.0" layoutY="196.0" />
+      <Button id="btnSair" fx:id="btnSair" layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#sair" text="Sair" />
+   </children>
+</AnchorPane>
