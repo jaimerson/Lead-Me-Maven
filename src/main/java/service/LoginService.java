@@ -36,6 +36,9 @@ public class LoginService{
             //Carregar informaçoes do historico do aluno
             coletor.carregarHistoricoAluno(aluno);
         }
+        else{
+            aluno = null;
+        }
         return aluno;        
     }
 
