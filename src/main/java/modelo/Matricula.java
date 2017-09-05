@@ -12,6 +12,8 @@ public class Matricula {
     private Double nota1;
     private Double nota2;
     private Double nota3;
+    
+    private Double media;
 
     public Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
@@ -65,6 +67,14 @@ public class Matricula {
 
     public void setHistoricoFrequencia(List<Frequencia> historicoFrequencia) {
         this.historicoFrequencia = historicoFrequencia;
+    }
+
+    public Double getMedia() {
+        return media;
+    }
+
+    public void setMedia(Double media) {
+        this.media = media;
     }
 
 }

@@ -25,6 +25,6 @@
             <Font name="Linux Biolinum G Regular" size="14.0" />
          </font>
       </Label>
-      <TextField id="txtSenha" fx:id="txtSenha" layoutX="224.0" layoutY="196.0" />
+      <PasswordField fx:id="txtSenha" layoutX="224.0" layoutY="200.0" />
    </children>
 </AnchorPane>

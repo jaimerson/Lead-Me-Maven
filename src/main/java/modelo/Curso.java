@@ -7,10 +7,12 @@ public class Curso {
 
     private String nome;
     private List<MatrizCurricular> matrizesCurricular;
+    private List<Aluno> alunos;
 
     public Curso(String nome) {
         this.nome = nome;
         this.matrizesCurricular = new ArrayList<>();
+        this.alunos = new ArrayList<>();
     }
 
     public String getNome() {
@@ -34,4 +36,15 @@ public class Curso {
         this.matrizesCurricular.add(matriz);
     }
 
+    public List<Aluno> getAlunos() {
+        return alunos;
+    }
+
+    public void setAlunos(List<Aluno> alunos) {
+        this.alunos = alunos;
+    }
+
+    public void adicionarAluno(Aluno aluno){
+        this.alunos.add(aluno);
+    }
 }
