@@ -4,11 +4,14 @@ package service;
 
 import excecoes.DataException;
 import modelo.Aluno;
+import modelo.Disciplina;
 
 public interface ServiceFacade {
 
-    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException;
+    public Double getMediaAprovacao(Disciplina disciplina) throws DataException;
     public Aluno autenticar(String usuario, String senha) throws DataException;
     public Aluno getAlunoLogado();
+    public Disciplina getDisciplina(String codigo);
+    public Disciplina[] getDisciplinasDoCurso();
     
 }

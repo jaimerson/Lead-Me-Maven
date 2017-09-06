@@ -4,20 +4,24 @@ import dados_instituicao.ColetorDados;
 import dados_instituicao.ColetorDadosFactory;
 import excecoes.DataException;
 import modelo.Aluno;
+import modelo.Disciplina;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
     private ColetorDados coletorDados;
     private LoginService loginService;
-
+    private CursoService cursoService;
+    
     public ServiceFacadeImpl() {
         coletorDados = ColetorDadosFactory.getInstance().getColetorInstance();
         loginService = LoginService.getInstance();
+        cursoService = CursoService.getInstance();
     }
 
     @Override
-    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException{
-        return coletorDados.getMediaAprovacao(nomeCurso, disciplina);
+    public Double getMediaAprovacao(Disciplina disciplina) throws DataException{
+        String nomeCurso = disciplina.getCurso().getNome();
+        return coletorDados.getMediaAprovacao(nomeCurso, disciplina.getCodigo());
     }
 
     @Override
@@ -28,6 +32,16 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public Aluno getAlunoLogado() {
         return loginService.getAluno();
+    }
+
+    @Override
+    public Disciplina[] getDisciplinasDoCurso() {
+        return cursoService.getDisciplinasDoCurso();
+    }
+
+    @Override
+    public Disciplina getDisciplina(String codigo) {
+        return cursoService.getDisciplinaByCodigo(codigo);
     }
 
 }

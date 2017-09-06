@@ -11,6 +11,9 @@ public class Aluno extends Pessoa {
     private List<Matricula> matriculas;
     private Integer cargaObrigatoriaCumprida;
     private Integer cargaOptativaCumprida;
+    private Double iea;
+    private Double mcn;
+    
     public Aluno() {
         curso = null;
         matriculas = new ArrayList<>();
@@ -64,6 +67,22 @@ public class Aluno extends Pessoa {
     
     public Integer getCargaTotalCumprida(){
         return this.cargaObrigatoriaCumprida + this.cargaOptativaCumprida;
+    }
+
+    public Double getIea() {
+        return iea;
+    }
+
+    public void setIea(Double iea) {
+        this.iea = iea;
+    }
+
+    public Double getMcn() {
+        return mcn;
+    }
+
+    public void setMcn(Double mcn) {
+        this.mcn = mcn;
     }
     
     public Double getProgresso(){

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Curso {
 
@@ -62,5 +63,24 @@ public class Curso {
 
     public void setCargaHoraria(Integer cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
+    }
+    
+    public Disciplina[] getDisciplinas(){
+        List<Disciplina> disciplinas = new ArrayList<>();
+        Set<String> chaves = matrizesCurricular.keySet();
+        MatrizCurricular matriz;
+        for (String chave: chaves){
+            matriz = matrizesCurricular.get(chave);
+            Map<String, MatrizDisciplina> disciplinasNaMatriz = matriz.getDisciplinasNaMatriz();
+            Set<String> chavesDisciplinas = disciplinasNaMatriz.keySet();
+            MatrizDisciplina matrizDisciplina;
+            for (String chaveDisciplina: chavesDisciplinas){
+                matrizDisciplina = disciplinasNaMatriz.get(chaveDisciplina);
+                if (!disciplinas.contains(matrizDisciplina.getDisciplina())){
+                    disciplinas.add(matrizDisciplina.getDisciplina());
+                }
+            }
+        }
+        return disciplinas.toArray(new Disciplina[disciplinas.size()]);
     }
 }

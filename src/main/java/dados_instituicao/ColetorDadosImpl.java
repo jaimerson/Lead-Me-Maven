@@ -21,6 +21,7 @@ import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.PossibilidadePreRequisito;
 import modelo.Turma;
+import service.CursoService;
 
 public class ColetorDadosImpl implements ColetorDados {
 
@@ -47,7 +48,7 @@ public class ColetorDadosImpl implements ColetorDados {
         try {
             lerArq = new BufferedReader(
                     new InputStreamReader(
-                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas " + disciplina + ".txt"), "UTF-8"));
+                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas - " + disciplina + ".txt"), "UTF-8"));
             String linha; //2017.1:95
             Double soma = 0.0;
             Integer qtdeTurmas = 0;
@@ -200,6 +201,10 @@ public class ColetorDadosImpl implements ColetorDados {
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
             Curso curso = carregarCurso(nomeCurso, matrizCurricular);
             aluno.setCurso(curso);
+            CursoService cursoService = CursoService.getInstance();
+            cursoService.setCurso(curso);
+            aluno.setIea(Double.parseDouble(lerArq.readLine()));
+            aluno.setMcn(Double.parseDouble(lerArq.readLine()));
             String linha;
             //O aluno tem uma lista de matriculas
             Matricula matricula;
