@@ -11,7 +11,8 @@ public interface ServiceFacade {
     public Double getMediaAprovacao(Disciplina disciplina) throws DataException;
     public Aluno autenticar(String usuario, String senha) throws DataException;
     public Aluno getAlunoLogado();
-    public Disciplina getDisciplina(String codigo);
-    public Disciplina[] getDisciplinasDoCurso();
+    public Disciplina getDisciplinaByCodigo(String codigo);
+    public Disciplina getDisciplina(String toString);
+    public String[] getDisciplinasDoCursoToString();
     
 }

@@ -83,4 +83,23 @@ public class Curso {
         }
         return disciplinas.toArray(new Disciplina[disciplinas.size()]);
     }
+    
+    public String[] getDisciplinasToString(){
+        List<String> disciplinas = new ArrayList<>();
+        Set<String> chaves = matrizesCurricular.keySet();
+        MatrizCurricular matriz;
+        for (String chave: chaves){
+            matriz = matrizesCurricular.get(chave);
+            Map<String, MatrizDisciplina> disciplinasNaMatriz = matriz.getDisciplinasNaMatriz();
+            Set<String> chavesDisciplinas = disciplinasNaMatriz.keySet();
+            MatrizDisciplina matrizDisciplina;
+            for (String chaveDisciplina: chavesDisciplinas){
+                matrizDisciplina = disciplinasNaMatriz.get(chaveDisciplina);
+                if (!disciplinas.contains(matrizDisciplina.getDisciplina().toString())){
+                    disciplinas.add(matrizDisciplina.getDisciplina().toString());
+                }
+            }
+        }
+        return disciplinas.toArray(new String[disciplinas.size()]);
+    }
 }

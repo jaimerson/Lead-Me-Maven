@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,9 @@ import modelo.Aluno;
 import modelo.Disciplina;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
+import org.controlsfx.control.textfield.TextFields;
 
 public class TelaPrincipalController extends Application implements Initializable {
 
@@ -56,17 +60,19 @@ public class TelaPrincipalController extends Application implements Initializabl
     private Label txtBemVindo;
 
     @FXML
-    private ListView<?> listDisciplinas;
+    private ListView<String> listDisciplinas;
 
     @FXML
     private Label txtTituloPieChart;
 
     private ServiceFacade service;
 
-    private Disciplina[] disciplinas;
+    private String[] disciplinas;
 
     //Quando escolher a disciplina para verificar a taxa de aprovacao
     private Disciplina disciplinaSelecionada;
+
+    private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
 
     @FXML
     void carregarGrafico(ActionEvent event) {
@@ -90,6 +96,46 @@ public class TelaPrincipalController extends Application implements Initializabl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
+        disciplinas = service.getDisciplinasDoCursoToString();
+
+        final ObservableList<String> items = FXCollections.observableArrayList();
+
+        /*estatistica*/
+        autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
+        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
+
+            @Override
+            public void handle(AutoCompletionEvent<String> event) {
+                disciplinaSelecionada = service.getDisciplina(event.getCompletion());
+                txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionada.getNome());
+                Double aprovacoes = 100.0;
+                try {
+                    aprovacoes = service.getMediaAprovacao(disciplinaSelecionada);
+                } catch (DataException ex) {
+                    //Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);;
+                }
+                ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
+                        new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
+                        new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
+                chartAprovacoes.setData(dadosPieChart);
+                txtDisciplina.clear();
+                event.consume();
+            }
+        });
+        /*simulação*/
+        autoCompleteSimulacao = TextFields.bindAutoCompletion(txtBuscarDisciplina, disciplinas);
+        autoCompleteSimulacao.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
+
+            @Override
+            public void handle(AutoCompletionEvent<String> event) {
+                items.add(event.getCompletion());
+                listDisciplinas.setItems(items);
+                txtBuscarDisciplina.clear();
+                event.consume();
+            }
+        });
+
+        service = ServiceFacadeFactory.getInstance().getServiceInstance();
         Aluno alunoLogado = service.getAlunoLogado();
 
         //Tela inicial
@@ -99,16 +145,17 @@ public class TelaPrincipalController extends Application implements Initializabl
         lbProgresso.setText("Progresso no curso: " + String.format("%.2f", progresso * 100) + "%");
         txtIEA.setText(alunoLogado.getIea().toString());
         txtMCN.setText(alunoLogado.getMcn().toString());
+
         //Tela de estatísticas
-        disciplinas = service.getDisciplinasDoCurso();
-        disciplinaSelecionada = service.getDisciplina("IMD0040");
+        disciplinas = service.getDisciplinasDoCursoToString();
+        disciplinaSelecionada = service.getDisciplinaByCodigo("IMD0040");
         txtDisciplina.setText(disciplinaSelecionada.toString());
         txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionada.getNome());
         try {
             Double aprovacoes = service.getMediaAprovacao(disciplinaSelecionada);
             ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
-                    new PieChart.Data("Aprovados: "+String.format("%.2f", aprovacoes)+"%", aprovacoes),
-                    new PieChart.Data("Reprovados: "+String.format("%.2f", 100.0 - aprovacoes)+"%", 100.0 - aprovacoes));
+                    new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
+                    new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
             chartAprovacoes.setData(dadosPieChart);
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);

@@ -35,13 +35,18 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public Disciplina[] getDisciplinasDoCurso() {
-        return cursoService.getDisciplinasDoCurso();
+    public String[] getDisciplinasDoCursoToString() {
+        return cursoService.getDisciplinasDoCursoToString();
     }
 
     @Override
-    public Disciplina getDisciplina(String codigo) {
+    public Disciplina getDisciplinaByCodigo(String codigo) {
         return cursoService.getDisciplinaByCodigo(codigo);
+    }
+
+    @Override
+    public Disciplina getDisciplina(String toString) {
+        return cursoService.getDisciplina(toString);
     }
 
 }

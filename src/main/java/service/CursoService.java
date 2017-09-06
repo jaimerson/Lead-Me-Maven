@@ -38,6 +38,10 @@ public class CursoService {
         return curso.getDisciplinas();
     }
     
+    public String[] getDisciplinasDoCursoToString(){
+        return curso.getDisciplinasToString();
+    }
+    
     public Disciplina getDisciplina(String disciplinaAutoComplete){
         for (Disciplina disciplina: getDisciplinasDoCurso()){
             if (disciplina.toString().equals(disciplinaAutoComplete)){
