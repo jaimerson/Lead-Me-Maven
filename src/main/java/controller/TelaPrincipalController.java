@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +23,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
@@ -63,7 +69,7 @@ public class TelaPrincipalController extends Application implements Initializabl
     private Label txtTituloPieChart;
 
     @FXML
-    private TableView<?> tableDisciplinasDisponiveis;
+    private TableView<MatrizDisciplina> tableDisciplinasDisponiveis;
 
     private ServiceFacade service;
 
@@ -155,11 +161,33 @@ public class TelaPrincipalController extends Application implements Initializabl
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         //Tela de sugestoes/simulacoes
         List<MatrizDisciplina> disciplinasDisponiveis = service.getDisciplinasDisponiveis();
+        ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasDisponiveis);
+      
+        tableDisciplinasDisponiveis.setItems(listaObs);
+        TableColumn<MatrizDisciplina,String> codigoTabela = new TableColumn<MatrizDisciplina,String>("Código");
+        TableColumn<MatrizDisciplina,String> nomeTabela= new TableColumn<MatrizDisciplina,String>("Nome");
+        TableColumn<MatrizDisciplina,String> naturezaTabela= new TableColumn<MatrizDisciplina,String>("Natureza");
+        TableColumn<MatrizDisciplina,Integer> semestreTabela= new TableColumn<MatrizDisciplina,Integer>("Semestre");
         
+        codigoTabela.setCellValueFactory(new Callback<CellDataFeatures<MatrizDisciplina, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<MatrizDisciplina, String> c) {
+                return new SimpleStringProperty(c.getValue().getDisciplina().getCodigo());
+            }
+        }); 
+        nomeTabela.setCellValueFactory(new Callback<CellDataFeatures<MatrizDisciplina, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<MatrizDisciplina, String> c) {
+                return new SimpleStringProperty(c.getValue().getDisciplina().getNome());
+            }
+        });
+        naturezaTabela.setCellValueFactory(new PropertyValueFactory("naturezaDisciplina"));
+        semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
         
+        tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
     }
 
 }
