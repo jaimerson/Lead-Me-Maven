@@ -5,9 +5,16 @@
  */
 package service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
+import modelo.MatrizCurricular;
+import modelo.MatrizDisciplina;
 
 /**
  *
@@ -61,5 +68,24 @@ public class CursoService {
         return null;
     }
     
+    public List<MatrizDisciplina> getDisciplinasDisponiveis(Aluno aluno){
+        //Crio a lista com as disciplinas disponiveis
+        List<MatrizDisciplina> disciplinasDisponiveis = new ArrayList<>();
+        //Consulto a grade do aluno para considerar as sugestoes
+        MatrizCurricular matriz = curso.getMatrizesCurricular().get(aluno.getMatrizCurricular());
+        //E para cada disciplina da matriz, eu verifico se o aluno pode pagar
+        Map<String, MatrizDisciplina> disciplinasNaMatriz = matriz.getDisciplinasNaMatriz();
+        Set<String> codigoDisciplinas = disciplinasNaMatriz.keySet();
+        MatrizDisciplina disciplinaNaMatriz;
+        for (String codigoDisciplina: codigoDisciplinas){
+            disciplinaNaMatriz = disciplinasNaMatriz.get(codigoDisciplina);
+            if (aluno.podePagar(disciplinaNaMatriz)){
+                disciplinasDisponiveis.add(disciplinaNaMatriz);
+            }
+        }
+        //Ordena pela ordem de prioridade das disciplinas a serem pagas
+        Collections.sort(disciplinasDisponiveis);
+        return disciplinasDisponiveis;
+    }
     
 }

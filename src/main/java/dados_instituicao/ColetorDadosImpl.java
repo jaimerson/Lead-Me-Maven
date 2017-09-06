@@ -201,6 +201,7 @@ public class ColetorDadosImpl implements ColetorDados {
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
             Curso curso = carregarCurso(nomeCurso, matrizCurricular);
             aluno.setCurso(curso);
+            aluno.setMatrizCurricular(matrizCurricular);
             CursoService cursoService = CursoService.getInstance();
             cursoService.setCurso(curso);
             aluno.setIea(Double.parseDouble(lerArq.readLine()));
