@@ -60,9 +60,7 @@ public class LoginController extends Application {
             alert.setTitle("Usuário/Senha inválida");
             alert.setHeaderText("Usuário/senha inválida");
             alert.setContentText("Verifique os dados e tente novamente");
-
             alert.showAndWait();
-
         }
     }
 

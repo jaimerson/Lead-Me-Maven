@@ -16,8 +16,11 @@ import java.util.logging.Logger;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
+import modelo.Matricula;
 import modelo.MatrizCurricular;
+import modelo.MatrizDisciplina;
 import modelo.PossibilidadePreRequisito;
+import modelo.Turma;
 
 public class ColetorDadosImpl implements ColetorDados {
 
@@ -30,7 +33,7 @@ public class ColetorDadosImpl implements ColetorDados {
     public Curso getCurso(String nomeCurso) throws DataException {
         Curso curso = null;
         try {
-            curso = carregarCursoComGrades(nomeCurso);
+            curso = carregarCurso(nomeCurso,null);
         } catch (IOException ex) {
             Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -80,12 +83,14 @@ public class ColetorDadosImpl implements ColetorDados {
         });
     }
 
-    private Curso carregarCursoComGrades(String nomeCurso) throws IOException {
+    private Curso carregarCurso(String nomeCurso,String matrizCurricular) throws IOException {
         Map<String, Disciplina> disciplinasDoCurso = new HashMap<String, Disciplina>();
         Curso curso = new Curso(nomeCurso);
         System.out.println(System.getProperty("user.dir"));
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
-
+        if (matrizCurricular != null){
+            arquivosGrade = new String[]{"Grade - "+ nomeCurso + " - "+ matrizCurricular+ ".txt"};
+        }
         for (String arquivoGrade : arquivosGrade) {
             MatrizCurricular matriz = new MatrizCurricular(arquivoGrade.split(" - ")[2].replace(".txt", ""));
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + arquivoGrade), "UTF-8"));
@@ -95,6 +100,8 @@ public class ColetorDadosImpl implements ColetorDados {
             String[] dadosLinha;
             Disciplina disciplina;
 
+            matriz.setCargaHorariaObrigatoria(Integer.parseInt(lerArq.readLine()));
+            matriz.setCargaHorariaOptativa(Integer.parseInt(lerArq.readLine()));
             while ((linha = lerArq.readLine()) != null) {
                 linha = linha.replace("\n", "");
                 dadosLinha = linha.split(";");
@@ -129,6 +136,9 @@ public class ColetorDadosImpl implements ColetorDados {
             codigoDisciplina = linha.split(": ")[0];
             //Pego a referencia no hashmap
             disciplina = disciplinas.get(codigoDisciplina);
+            if (disciplina == null){
+                continue;
+            }
             preRequisitos = linha.split(": ")[1];
             //Separo as possibilidades de pre requisito para adicioná-las na disciplina
             possibilidades = preRequisitos.split(" OU ");
@@ -185,6 +195,38 @@ public class ColetorDadosImpl implements ColetorDados {
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS +  "historicos/"+ aluno.getNumeroMatricula()+"-historico.txt"), "UTF-8"));
             aluno.setNome(lerArq.readLine());
             lerArq.readLine(); //ignorando a matricula
+            String cursoComMatriz = lerArq.readLine();
+            String nomeCurso = cursoComMatriz.split(" - ")[0];
+            String matrizCurricular = cursoComMatriz.split(" - ")[1];
+            Curso curso = carregarCurso(nomeCurso, matrizCurricular);
+            aluno.setCurso(curso);
+            String linha;
+            //O aluno tem uma lista de matriculas
+            Matricula matricula;
+            MatrizDisciplina matrizDisciplina;
+            Turma turma;
+            String[] dadosDisciplina;
+            while ((linha = lerArq.readLine()) != null){
+                dadosDisciplina = linha.split(";");
+                matrizDisciplina = aluno.getCurso().getDisciplina(matrizCurricular, dadosDisciplina[1]);
+                if (matrizDisciplina == null){
+                    continue;
+                }
+                turma = new Turma(dadosDisciplina[0], matrizDisciplina.getDisciplina());
+                matricula = new Matricula(turma, aluno);
+                matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
+                matricula.setSituacao(dadosDisciplina[4]);
+                //Contando as horas cumpridas  
+                if (matricula.getSituacao().contains("APR")){
+                    if(matrizDisciplina.getNaturezaDisciplina().equals("OBRIGATORIO")){
+                        aluno.setCargaObrigatoriaCumprida(aluno.getCargaObrigatoriaCumprida()+matrizDisciplina.getDisciplina().getCargaHoraria());
+                    }
+                    else{
+                        aluno.setCargaOptativaCumprida(aluno.getCargaOptativaCumprida()+matrizDisciplina.getDisciplina().getCargaHoraria());
+                    }
+                }
+                aluno.adicionarMatricula(matricula);
+            }
             
             lerArq.close();
         } catch (FileNotFoundException ex) {

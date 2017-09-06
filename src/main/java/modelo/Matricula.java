@@ -14,6 +14,7 @@ public class Matricula {
     private Double nota3;
     
     private Double media;
+    private String situacao;
 
     public Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
@@ -77,4 +78,11 @@ public class Matricula {
         this.media = media;
     }
 
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
 }

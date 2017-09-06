@@ -1,17 +1,19 @@
 package modelo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MatrizCurricular {
 
     private String nomeMatriz;
     private Curso curso;
-    private List<MatrizDisciplina> disciplinasNaMatriz;
-
+    private Map<String,MatrizDisciplina> disciplinasNaMatriz;
+    private Integer cargaHorariaObrigatoria;
+    private Integer cargaHorariaOptativa;
+    
     public MatrizCurricular(String nomeMatriz) {
         this.nomeMatriz = nomeMatriz;
-        this.disciplinasNaMatriz = new ArrayList<>();
+        this.disciplinasNaMatriz = new HashMap<String,MatrizDisciplina>();
     }
 
     public String getNomeMatriz() {
@@ -30,11 +32,29 @@ public class MatrizCurricular {
         this.curso = curso;
     }
 
-    public List<MatrizDisciplina> getDisciplinasNaMatriz() {
+    public Integer getCargaHorariaObrigatoria() {
+        return cargaHorariaObrigatoria;
+    }
+
+    public void setCargaHorariaObrigatoria(Integer cargaHorariaObrigatoria) {
+        this.cargaHorariaObrigatoria = cargaHorariaObrigatoria;
+    }
+
+    public Integer getCargaHorariaOptativa() {
+        return cargaHorariaOptativa;
+    }
+
+    public void setCargaHorariaOptativa(Integer cargaHorariaOptativa) {
+        this.cargaHorariaOptativa = cargaHorariaOptativa;
+    }
+    
+    
+
+    public Map<String,MatrizDisciplina> getDisciplinasNaMatriz() {
         return disciplinasNaMatriz;
     }
 
-    public void setDisciplinasNaMatriz(List<MatrizDisciplina> disciplinasNaMatriz) {
+    public void setDisciplinasNaMatriz(Map<String,MatrizDisciplina> disciplinasNaMatriz) {
         this.disciplinasNaMatriz = disciplinasNaMatriz;
     }
 
@@ -42,8 +62,15 @@ public class MatrizCurricular {
         MatrizDisciplina disciplinaRelacionada = new MatrizDisciplina(this, disciplina);
         disciplinaRelacionada.setNaturezaDisciplina(natureza);
         disciplinaRelacionada.setSemestreIdeal(semestreIdeal);
-        this.disciplinasNaMatriz.add(disciplinaRelacionada);
+        this.disciplinasNaMatriz.put(disciplinaRelacionada.getDisciplina().getCodigo(),disciplinaRelacionada);
         disciplina.adicionarMatrizRelacionada(this, natureza, semestreIdeal);
     }
+    
+    public MatrizDisciplina getDisciplina(String codigo){
+        return disciplinasNaMatriz.get(codigo);
+    }
 
+    public Integer getCargaTotal(){
+        return this.cargaHorariaObrigatoria + this.cargaHorariaOptativa;
+    }
 }

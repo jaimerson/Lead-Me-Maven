@@ -19,7 +19,6 @@ modelo\Disciplina.class
 minerador\BibliotecaMineracaoImpl.class
 controller\LoginController.class
 modelo\Matricula.class
-service\CursoService.class
 com\mycompany\lead\me\MainApp.class
 minerador\BibliotecaMineracao.class
 modelo\MatrizDisciplina.class

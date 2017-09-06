@@ -9,17 +9,10 @@ public class ServiceFacadeImpl implements ServiceFacade {
 
     private ColetorDados coletorDados;
     private LoginService loginService;
-    private CursoService cursoService;
 
     public ServiceFacadeImpl() {
         coletorDados = ColetorDadosFactory.getInstance().getColetorInstance();
         loginService = LoginService.getInstance();
-        cursoService = CursoService.getInstance();
-    }
-
-    @Override
-    public void carregarCurso(String nomeCurso) throws DataException {
-        cursoService.carregarCurso(nomeCurso);
     }
 
     @Override

@@ -30,7 +30,7 @@
                               <Font name="Linux Biolinum G Regular" size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="25.0" layoutY="58.0" text="Progresso no curso">
+                        <Label fx:id="lbProgresso" layoutX="25.0" layoutY="58.0" text="Progresso no curso">
                            <font>
                               <Font name="Linux Biolinum G Regular" size="14.0" />
                            </font>

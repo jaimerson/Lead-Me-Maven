@@ -21,11 +21,13 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import modelo.Aluno;
-import modelo.Curso;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
 
 public class TelaPrincipalController extends Application implements Initializable {
+
+    @FXML
+    private Label lbProgresso;
 
     @FXML
     private TextField txtBuscarDisciplina;
@@ -79,12 +81,10 @@ public class TelaPrincipalController extends Application implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
         Aluno alunoLogado = service.getAlunoLogado();
-        try {
-            service.carregarCurso("BTI");
-        } catch (DataException ex) {
-            Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
+        txtBemVindo.setText("Bem vindo(a), " + alunoLogado.getNome());
+        Double progresso = alunoLogado.getProgresso();
+        progressBarCurso.setProgress(progresso);
+        lbProgresso.setText("Progresso no curso: "+ String.format("%.2f",progresso*100)+"%");
     }
 
 }

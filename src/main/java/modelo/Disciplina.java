@@ -20,8 +20,6 @@ public class Disciplina {
         turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
         preRequisitos = new ArrayList<>();
-//        coRequisitos = new ArrayList<>();
-//        equivalentes = new ArrayList<>();
     }
 
     public Disciplina(String codigo, String nome, Integer cargaHoraria) {
@@ -31,8 +29,6 @@ public class Disciplina {
         turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
         preRequisitos = new ArrayList<>();
-//        coRequisitos = new ArrayList<>();
-//        equivalentes = new ArrayList<>();
     }
 
     public String getCodigo() {
@@ -78,4 +74,13 @@ public class Disciplina {
         this.preRequisitos.add(possibilidade);
     }
 
+    public Integer getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public void setCargaHoraria(Integer cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
+    }
+
+    
 }

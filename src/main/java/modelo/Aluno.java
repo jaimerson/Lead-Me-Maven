@@ -2,16 +2,20 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Aluno extends Pessoa {
 
     private String numeroMatricula;
     private Curso curso;
     private List<Matricula> matriculas;
-
+    private Integer cargaObrigatoriaCumprida;
+    private Integer cargaOptativaCumprida;
     public Aluno() {
         curso = null;
         matriculas = new ArrayList<>();
+        cargaObrigatoriaCumprida = 0;
+        cargaOptativaCumprida = 0;
     }
 
     public String getNumeroMatricula() {
@@ -36,6 +40,46 @@ public class Aluno extends Pessoa {
 
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
+    }
+    
+    public void adicionarMatricula(Matricula matricula){
+        this.matriculas.add(matricula);
+    }
+
+    public Integer getCargaObrigatoriaCumprida() {
+        return cargaObrigatoriaCumprida;
+    }
+
+    public void setCargaObrigatoriaCumprida(Integer cargaObrigatoriaCumprida) {
+        this.cargaObrigatoriaCumprida = cargaObrigatoriaCumprida;
+    }
+
+    public Integer getCargaOptativaCumprida() {
+        return cargaOptativaCumprida;
+    }
+
+    public void setCargaOptativaCumprida(Integer cargaOptativaCumprida) {
+        this.cargaOptativaCumprida = cargaOptativaCumprida;
+    }
+    
+    public Integer getCargaTotalCumprida(){
+        return this.cargaObrigatoriaCumprida + this.cargaOptativaCumprida;
+    }
+    
+    public Double getProgresso(){
+        Integer cargaHorariaCumprida = getCargaTotalCumprida();
+        Set<String> keys = this.curso.getMatrizesCurricular().keySet();
+        MatrizCurricular matriz = null;
+        for (String key: keys){
+            matriz = this.curso.getMatrizesCurricular().get(key);
+        }
+        if(matriz != null){    
+            Integer cargaHorariaTotal = matriz.getCargaTotal();
+            return cargaHorariaCumprida.doubleValue()/cargaHorariaTotal;
+        }
+        else{
+            return 0.0;
+        }
     }
 
 }

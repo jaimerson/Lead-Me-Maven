@@ -29,7 +29,6 @@ public class LoginService{
     
     public Aluno autenticar(String usuario, String senha) throws DataException{
         ColetorDados coletor = ColetorDadosFactory.getInstance().getColetorInstance();
-        CursoService cursoService = CursoService.getInstance();
         if (coletor.existeUsuario(usuario, senha)){
             aluno = new Aluno();
             aluno.setNumeroMatricula(usuario);
