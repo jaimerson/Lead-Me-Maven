@@ -2,6 +2,7 @@ package controller;
 
 import excecoes.DataException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +21,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import modelo.Aluno;
 import modelo.Disciplina;
+import modelo.MatrizDisciplina;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -51,19 +54,16 @@ public class TelaPrincipalController extends Application implements Initializabl
     private PieChart chartAprovacoes;
 
     @FXML
-    private Button btnSimularSemestre;
-
-    @FXML
     private Label txtMCN;
 
     @FXML
     private Label txtBemVindo;
 
     @FXML
-    private ListView<String> listDisciplinas;
+    private Label txtTituloPieChart;
 
     @FXML
-    private Label txtTituloPieChart;
+    private TableView<?> tableDisciplinasDisponiveis;
 
     private ServiceFacade service;
 
@@ -73,11 +73,6 @@ public class TelaPrincipalController extends Application implements Initializabl
     private Disciplina disciplinaSelecionada;
 
     private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
-
-    @FXML
-    void carregarGrafico(ActionEvent event) {
-
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -129,7 +124,7 @@ public class TelaPrincipalController extends Application implements Initializabl
             @Override
             public void handle(AutoCompletionEvent<String> event) {
                 items.add(event.getCompletion());
-                listDisciplinas.setItems(items);
+//                listDisciplinas.setItems(items);
                 txtBuscarDisciplina.clear();
                 event.consume();
             }
@@ -160,7 +155,11 @@ public class TelaPrincipalController extends Application implements Initializabl
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        //Tela de sugestoes/simulacoes
+        List<MatrizDisciplina> disciplinasDisponiveis = service.getDisciplinasDisponiveis();
+        
+        
     }
 
 }

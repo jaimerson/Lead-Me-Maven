@@ -3,8 +3,10 @@ package service;
 import dados_instituicao.ColetorDados;
 import dados_instituicao.ColetorDadosFactory;
 import excecoes.DataException;
+import java.util.List;
 import modelo.Aluno;
 import modelo.Disciplina;
+import modelo.MatrizDisciplina;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -47,6 +49,11 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public Disciplina getDisciplina(String toString) {
         return cursoService.getDisciplina(toString);
+    }
+
+    @Override
+    public List<MatrizDisciplina> getDisciplinasDisponiveis() {
+        return null;
     }
 
 }

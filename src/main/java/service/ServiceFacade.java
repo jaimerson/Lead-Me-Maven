@@ -3,8 +3,10 @@ package service;
 //Facade para ser usada pela camada de controller (camada de apresenta��o em geral)
 
 import excecoes.DataException;
+import java.util.List;
 import modelo.Aluno;
 import modelo.Disciplina;
+import modelo.MatrizDisciplina;
 
 public interface ServiceFacade {
 
@@ -14,5 +16,6 @@ public interface ServiceFacade {
     public Disciplina getDisciplinaByCodigo(String codigo);
     public Disciplina getDisciplina(String toString);
     public String[] getDisciplinasDoCursoToString();
+    public List<MatrizDisciplina> getDisciplinasDisponiveis();
     
 }
