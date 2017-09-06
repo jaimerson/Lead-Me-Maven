@@ -19,6 +19,14 @@ public class PossibilidadePreRequisito {
     public PossibilidadePreRequisito(){
         preRequisitos = new ArrayList<>();
     }
+
+    public List<Disciplina> getPreRequisitos() {
+        return preRequisitos;
+    }
+
+    public void setPreRequisitos(List<Disciplina> preRequisitos) {
+        this.preRequisitos = preRequisitos;
+    }
     
     public void adicionarPreRequisitoNaPossibilidade(Disciplina disciplina){
         preRequisitos.add(disciplina);

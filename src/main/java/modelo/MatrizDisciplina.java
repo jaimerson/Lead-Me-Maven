@@ -1,6 +1,6 @@
 package modelo;
 
-public class MatrizDisciplina {
+public class MatrizDisciplina implements Comparable{
 
     private MatrizCurricular matrizCurricular;
     private Disciplina disciplina;
@@ -46,6 +46,19 @@ public class MatrizDisciplina {
 
     public void setSemestreIdeal(Integer semestreIdeal) {
         this.semestreIdeal = semestreIdeal;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        MatrizDisciplina outra = (MatrizDisciplina) o;
+        //OBRIGATORIO < OPTATIVO, ainda bem, pois facilita a comparacao
+        int comparacaoNatureza = this.naturezaDisciplina.compareTo(outra.getNaturezaDisciplina());
+        if (comparacaoNatureza != 0){
+            return comparacaoNatureza;
+        }
+        else{
+            return this.semestreIdeal.compareTo(outra.getSemestreIdeal());
+        }
     }
 
 }

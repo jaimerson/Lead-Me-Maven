@@ -8,6 +8,7 @@ public class Aluno extends Pessoa {
 
     private String numeroMatricula;
     private Curso curso;
+    private String matrizCurricular;
     private List<Matricula> matriculas;
     private Integer cargaObrigatoriaCumprida;
     private Integer cargaOptativaCumprida;
@@ -37,6 +38,14 @@ public class Aluno extends Pessoa {
         this.curso = curso;
     }
 
+    public String getMatrizCurricular() {
+        return matrizCurricular;
+    }
+
+    public void setMatrizCurricular(String matrizCurricular) {
+        this.matrizCurricular = matrizCurricular;
+    }
+    
     public List<Matricula> getMatriculas() {
         return matriculas;
     }
@@ -99,6 +108,45 @@ public class Aluno extends Pessoa {
         else{
             return 0.0;
         }
+    }
+    
+    public boolean pagouMateria(Disciplina disciplina){
+        for(Matricula matricula: this.matriculas){
+            if (matricula.getTurma().getDisciplina().equals(disciplina) && matricula.getSituacao().contains("APR")){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean podePagar(MatrizDisciplina disciplinaNaMatriz){
+        //Primeiro, devemos verificar se a disciplina já n foi paga
+        for(Matricula matricula: this.matriculas){
+            if (matricula.getTurma().getDisciplina().equals(disciplinaNaMatriz.getDisciplina())){
+                return false;
+            }
+        }
+        List<PossibilidadePreRequisito> preRequisitos = disciplinaNaMatriz.getDisciplina().getPreRequisitos();
+        //Para cada possibilidade de preRequisito
+        boolean podePagar = true;
+        boolean cumpriuPossibilidade;
+        for(PossibilidadePreRequisito possibilidade: preRequisitos){
+            podePagar = false;
+            cumpriuPossibilidade = true;
+            List<Disciplina> disciplinasPossibilidade = possibilidade.getPreRequisitos();
+            //Para cada disciplina da possibilidade
+            for (Disciplina disciplina: disciplinasPossibilidade){
+                //Se o nao aluno pagou a materia, não satisfaz a possibilidade de pre requisito
+                if (!this.pagouMateria(disciplina)){
+                    cumpriuPossibilidade = false;
+                    break;
+                }
+            }
+            if(cumpriuPossibilidade){
+                return true;
+            }
+        }
+        return podePagar;
     }
 
 }

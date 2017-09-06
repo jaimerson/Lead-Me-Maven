@@ -53,7 +53,7 @@ public class ServiceFacadeImpl implements ServiceFacade {
 
     @Override
     public List<MatrizDisciplina> getDisciplinasDisponiveis() {
-        return null;
+        return cursoService.getDisciplinasDisponiveis(getAlunoLogado());
     }
 
 }

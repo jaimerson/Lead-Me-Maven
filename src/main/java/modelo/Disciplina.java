@@ -64,6 +64,14 @@ public class Disciplina {
         this.matrizesRelacionadas = matrizesRelacionadas;
     }
 
+    public List<PossibilidadePreRequisito> getPreRequisitos() {
+        return preRequisitos;
+    }
+
+    public void setPreRequisitos(List<PossibilidadePreRequisito> preRequisitos) {
+        this.preRequisitos = preRequisitos;
+    }
+    
     public void adicionarMatrizRelacionada(MatrizCurricular matriz, String natureza, Integer semestreIdeal) {
         MatrizDisciplina matrizRelacionada = new MatrizDisciplina(matriz, this);
         matrizRelacionada.setNaturezaDisciplina(natureza);
