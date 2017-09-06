@@ -23,32 +23,23 @@ import modelo.PossibilidadePreRequisito;
 import modelo.Turma;
 import service.CursoService;
 
-public class ColetorDadosImpl implements ColetorDados {
+public class ColetorDadosFacadeImpl implements ColetorDadosFacade {
 
     public static final String DIRETORIO_RECURSOS = "src/main/resources/";
 
-    public ColetorDadosImpl() {
+    public ColetorDadosFacadeImpl() {
     }
-
+    
     @Override
-    public Curso getCurso(String nomeCurso) throws DataException {
-        Curso curso = null;
-        try {
-            curso = carregarCurso(nomeCurso,null);
-        } catch (IOException ex) {
-            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return curso;
-    }
-
-    @Override
-    public Double getMediaAprovacao(String nomeCurso, String disciplina) throws DataException {
+    public Double getMediaAprovacao(Disciplina disciplina) throws DataException {
+        String nomeCurso = disciplina.getCurso().getNome();
+        String codigoDisciplina = disciplina.getCodigo();
         BufferedReader lerArq;
         Double resultado = null;
         try {
             lerArq = new BufferedReader(
                     new InputStreamReader(
-                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas - " + disciplina + ".txt"), "UTF-8"));
+                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas - " + codigoDisciplina + ".txt"), "UTF-8"));
             String linha; //2017.1:95
             Double soma = 0.0;
             Integer qtdeTurmas = 0;
@@ -236,9 +227,9 @@ public class ColetorDadosImpl implements ColetorDados {
             
             lerArq.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ColetorDadosFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ColetorDadosFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

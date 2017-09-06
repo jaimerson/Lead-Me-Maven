@@ -5,6 +5,9 @@
  */
 package service;
 
+import dados_instituicao.ColetorDadosFacade;
+import dados_instituicao.ColetorDadosFactory;
+import excecoes.DataException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,10 +26,11 @@ import modelo.MatrizDisciplina;
 public class CursoService {
     
     private static CursoService service = new CursoService();
+    private ColetorDadosFacade coletor;
     
     private Curso curso;
     private CursoService(){
-        
+        coletor = ColetorDadosFactory.getInstance().getColetorInstance();
     }
     
     public static CursoService getInstance(){
@@ -66,6 +70,10 @@ public class CursoService {
             }
         }
         return null;
+    }
+    
+    public Double getMediaAprovacao(Disciplina disciplina) throws DataException {
+        return coletor.getMediaAprovacao(disciplina);
     }
     
     public List<MatrizDisciplina> getDisciplinasDisponiveis(Aluno aluno){

@@ -1,29 +1,26 @@
 package service;
 
-import dados_instituicao.ColetorDados;
 import dados_instituicao.ColetorDadosFactory;
 import excecoes.DataException;
 import java.util.List;
 import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
+import dados_instituicao.ColetorDadosFacade;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
-    private ColetorDados coletorDados;
     private LoginService loginService;
     private CursoService cursoService;
     
     public ServiceFacadeImpl() {
-        coletorDados = ColetorDadosFactory.getInstance().getColetorInstance();
         loginService = LoginService.getInstance();
         cursoService = CursoService.getInstance();
     }
 
     @Override
     public Double getMediaAprovacao(Disciplina disciplina) throws DataException{
-        String nomeCurso = disciplina.getCurso().getNome();
-        return coletorDados.getMediaAprovacao(nomeCurso, disciplina.getCodigo());
+        return cursoService.getMediaAprovacao(disciplina);
     }
 
     @Override

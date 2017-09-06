@@ -4,7 +4,7 @@ package dados_instituicao;
 public class ColetorDadosFactory {
 
     private static ColetorDadosFactory factory = new ColetorDadosFactory();
-    private ColetorDados coletorDados = new ColetorDadosImpl();
+    private ColetorDadosFacade coletorDados = new ColetorDadosFacadeImpl();
 
     public static ColetorDadosFactory getInstance() {
         return factory;
@@ -14,7 +14,7 @@ public class ColetorDadosFactory {
 
     }
 
-    public ColetorDados getColetorInstance() {
+    public ColetorDadosFacade getColetorInstance() {
         return coletorDados;
     }
 }
