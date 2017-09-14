@@ -87,7 +87,7 @@ public class CursoService {
         MatrizDisciplina disciplinaNaMatriz;
         for (String codigoDisciplina: codigoDisciplinas){
             disciplinaNaMatriz = disciplinasNaMatriz.get(codigoDisciplina);
-            if (aluno.podePagar(disciplinaNaMatriz)){
+            if (aluno.podePagar(disciplinaNaMatriz.getDisciplina())){
                 disciplinasDisponiveis.add(disciplinaNaMatriz);
             }
         }

@@ -119,14 +119,14 @@ public class Aluno extends Pessoa {
         return false;
     }
     
-    public boolean podePagar(MatrizDisciplina disciplinaNaMatriz){
+    public boolean podePagar(Disciplina disciplina){
         //Primeiro, devemos verificar se a disciplina já n foi paga
         for(Matricula matricula: this.matriculas){
-            if (matricula.getTurma().getDisciplina().equals(disciplinaNaMatriz.getDisciplina())){
+            if (matricula.getTurma().getDisciplina().equals(disciplina)){
                 return false;
             }
         }
-        List<PossibilidadePreRequisito> preRequisitos = disciplinaNaMatriz.getDisciplina().getPreRequisitos();
+        List<PossibilidadePreRequisito> preRequisitos = disciplina.getPreRequisitos();
         //Para cada possibilidade de preRequisito
         boolean podePagar = true;
         boolean cumpriuPossibilidade;
@@ -135,9 +135,9 @@ public class Aluno extends Pessoa {
             cumpriuPossibilidade = true;
             List<Disciplina> disciplinasPossibilidade = possibilidade.getPreRequisitos();
             //Para cada disciplina da possibilidade
-            for (Disciplina disciplina: disciplinasPossibilidade){
+            for (Disciplina disc: disciplinasPossibilidade){
                 //Se o nao aluno pagou a materia, não satisfaz a possibilidade de pre requisito
-                if (!this.pagouMateria(disciplina)){
+                if (!this.pagouMateria(disc)){
                     cumpriuPossibilidade = false;
                     break;
                 }
