@@ -36,9 +36,10 @@ import modelo.Turma;
 public class AlunoDAO extends AbstractDAO{
     
     private static AlunoDAO instance = new AlunoDAO();
+    private CursoDAO cursoDAO;
     
     private AlunoDAO(){
-        
+        cursoDAO = CursoDAO.getInstance();
     }
     
     public static AlunoDAO getInstance(){
@@ -93,7 +94,7 @@ public class AlunoDAO extends AbstractDAO{
             String cursoComMatriz = lerArq.readLine();
             String nomeCurso = cursoComMatriz.split(" - ")[0];
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
-            Curso curso = carregarCurso(nomeCurso, matrizCurricular);
+            Curso curso = cursoDAO.carregarCurso(nomeCurso);
             aluno.setCurso(curso);
             aluno.setMatrizCurricular(matrizCurricular);
 //            CursoService cursoService = CursoService.getInstance();
@@ -131,90 +132,5 @@ public class AlunoDAO extends AbstractDAO{
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
-    }
-
-    private Curso carregarCurso(String nomeCurso, String matrizCurricular) throws IOException {
-        Map<String, Disciplina> disciplinasDoCurso = new HashMap<String, Disciplina>();
-        Curso curso = new Curso(nomeCurso);
-        System.out.println(System.getProperty("user.dir"));
-        String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
-        if (matrizCurricular != null) {
-            arquivosGrade = new String[]{"Grade - " + nomeCurso + " - " + matrizCurricular + ".txt"};
-        }
-        for (String arquivoGrade : arquivosGrade) {
-            MatrizCurricular matriz = new MatrizCurricular(arquivoGrade.split(" - ")[2].replace(".txt", ""));
-            BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + arquivoGrade), "UTF-8"));
-            String linha;
-            String codigo, nomeDisciplina, naturezaDisciplina;
-            Integer cargaHoraria, semestreIdeal;
-            String[] dadosLinha;
-            Disciplina disciplina;
-
-            matriz.setCargaHorariaObrigatoria(Integer.parseInt(lerArq.readLine()));
-            matriz.setCargaHorariaOptativa(Integer.parseInt(lerArq.readLine()));
-            while ((linha = lerArq.readLine()) != null) {
-                linha = linha.replace("\n", "");
-                dadosLinha = linha.split(";");
-                codigo = dadosLinha[0];
-                nomeDisciplina = dadosLinha[1];
-                cargaHoraria = Integer.parseInt(dadosLinha[2]);
-                naturezaDisciplina = dadosLinha[3];
-                semestreIdeal = Integer.parseInt(dadosLinha[4]);
-                if (!disciplinasDoCurso.containsKey(codigo)) {
-                    disciplina = new Disciplina(codigo, nomeDisciplina, cargaHoraria);
-                    disciplinasDoCurso.put(codigo, disciplina);
-                } else {
-                    disciplina = disciplinasDoCurso.get(codigo);
-                }
-                matriz.adicionarDisciplina(disciplina, naturezaDisciplina, semestreIdeal);
-            }
-            lerArq.close();
-            curso.adicionarMatrizCurricular(matriz);
-        }
-        carregarPreRequisitos(nomeCurso, disciplinasDoCurso);
-        return curso;
-    }
-
-    private void carregarPreRequisitos(String nomeCurso, Map<String, Disciplina> disciplinas) throws IOException {
-        BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + nomeCurso + " - pre requisitos.txt"), "UTF-8"));
-        String linha;
-        String codigoDisciplina, preRequisitos;
-        Disciplina disciplina;
-        String[] possibilidades, disciplinasPossibilidade;
-        //para cada disciplina
-        while ((linha = lerArq.readLine()) != null) {
-            codigoDisciplina = linha.split(": ")[0];
-            //Pego a referencia no hashmap
-            disciplina = disciplinas.get(codigoDisciplina);
-            if (disciplina == null) {
-                continue;
-            }
-            preRequisitos = linha.split(": ")[1];
-            //Separo as possibilidades de pre requisito para adicioná-las na disciplina
-            possibilidades = preRequisitos.split(" OU ");
-            //Para cada possibilidade, eu tenho um conjunto de matérias que o aluno deve cumprir (uma ou mais)
-            for (String possibilidade : possibilidades) {
-                PossibilidadePreRequisito possibilidadePreRequisito = new PossibilidadePreRequisito();
-                disciplinasPossibilidade = possibilidade.split(" E ");
-                //Para cada matéria da possibilidade, adicionar no objeto possibilidade
-                for (String disciplinaPossibilidade : disciplinasPossibilidade) {
-                    possibilidadePreRequisito.adicionarPreRequisitoNaPossibilidade(disciplinas.get(disciplinaPossibilidade));
-                }
-                //Para cada possibilidade, adicionar na disciplina
-                disciplina.adicionarPossibilidadePreRequisito(possibilidadePreRequisito);
-            }
-        }
-        lerArq.close();
-    }
-
-    private String[] getArquivosMatrizesCurricularesDoCurso(String nomeCurso) {
-        File file = new File(DIRETORIO_RECURSOS + "grades/");
-        final String nomeDoCurso = nomeCurso;
-        return file.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().startsWith("grade - " + nomeDoCurso.toLowerCase());
-            }
-        });
     }
 }
