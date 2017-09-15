@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dados_instituicao;
+package base_dados;
 
 import excecoes.DataException;
+import excecoes.AutenticacaoException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,20 +27,25 @@ import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.PossibilidadePreRequisito;
 import modelo.Turma;
-import service.CursoService;
+//import service.CursoService;
 
 /**
  *
  * @author rafao
  */
-public class ColetorDados {
-
-    public static final String DIRETORIO_RECURSOS = "src/main/resources/";
+public class AlunoDAO extends AbstractDAO{
     
-    public ColetorDados(){
+    private static AlunoDAO instance = new AlunoDAO();
+    
+    private AlunoDAO(){
         
     }
-    public boolean existeUsuario(String usuario, String senha) throws DataException {
+    
+    public static AlunoDAO getInstance(){
+        return instance;
+    }
+    
+    private boolean existeUsuario(String usuario, String senha) throws DataException {
         boolean existeUsuario = false;
         try {
             Map<String, String> logins = getLoginsESenhas();
@@ -69,7 +75,16 @@ public class ColetorDados {
         lerArq.close();
         return logins;
     }
-
+    public Aluno carregarAluno(String usuario, String senha) throws DataException, AutenticacaoException{
+        Aluno aluno = new Aluno();
+        if (!existeUsuario(usuario,senha)){
+            throw new AutenticacaoException("Usuário e/ou senha inválidos");
+        }
+        aluno.setNumeroMatricula(usuario);
+        carregarHistoricoAluno(aluno);
+        return aluno;
+    }
+    
     public void carregarHistoricoAluno(Aluno aluno) throws DataException {
         try {
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "historicos/" + aluno.getNumeroMatricula() + "-historico.txt"), "UTF-8"));
@@ -81,8 +96,8 @@ public class ColetorDados {
             Curso curso = carregarCurso(nomeCurso, matrizCurricular);
             aluno.setCurso(curso);
             aluno.setMatrizCurricular(matrizCurricular);
-            CursoService cursoService = CursoService.getInstance();
-            cursoService.setCurso(curso);
+//            CursoService cursoService = CursoService.getInstance();
+//            cursoService.setCurso(curso);
             aluno.setIea(Double.parseDouble(lerArq.readLine()));
             aluno.setMcn(Double.parseDouble(lerArq.readLine()));
             String linha;
@@ -114,9 +129,7 @@ public class ColetorDados {
 
             lerArq.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ColetorDadosFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ColetorDadosFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -203,38 +216,5 @@ public class ColetorDados {
                 return name.toLowerCase().startsWith("grade - " + nomeDoCurso.toLowerCase());
             }
         });
-    }
-
-    public Double getMediaAprovacao(Disciplina disciplina) throws DataException {
-        String nomeCurso = disciplina.getCurso().getNome();
-        String codigoDisciplina = disciplina.getCodigo();
-        BufferedReader lerArq;
-        Double resultado = null;
-        try {
-            lerArq = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas - " + codigoDisciplina + ".txt"), "UTF-8"));
-            String linha; //2017.1:95
-            Double soma = 0.0;
-            Integer qtdeTurmas = 0;
-            while ((linha = lerArq.readLine()) != null) {
-                soma += Double.parseDouble(linha.split(":")[1]);
-                qtdeTurmas++;
-            }
-
-            lerArq.close();
-            resultado = soma / qtdeTurmas;
-
-        } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DataException(ex.getMessage());
-        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DataException(ex.getMessage());
-        } catch (IOException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DataException(ex.getMessage());
-        }
-        return resultado;
     }
 }

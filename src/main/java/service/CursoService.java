@@ -5,8 +5,7 @@
  */
 package service;
 
-import dados_instituicao.ColetorDadosFacade;
-import dados_instituicao.ColetorDadosFactory;
+import base_dados.DisciplinaDAO;
 import excecoes.DataException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,11 +25,11 @@ import modelo.MatrizDisciplina;
 public class CursoService {
     
     private static CursoService service = new CursoService();
-    private ColetorDadosFacade coletor;
-    
+    private DisciplinaDAO disciplinaDAO;
     private Curso curso;
+    
     private CursoService(){
-        coletor = ColetorDadosFactory.getInstance().getColetorInstance();
+        disciplinaDAO = DisciplinaDAO.getInstance();
     }
     
     public static CursoService getInstance(){
@@ -45,16 +44,16 @@ public class CursoService {
         this.curso = curso;
     }
     
-    public Disciplina[] getDisciplinasDoCurso(){
+    public Disciplina[] carregarDisciplinasDoCurso(){
         return curso.getDisciplinas();
     }
     
-    public String[] getDisciplinasDoCursoToString(){
+    public String[] carregarDisciplinasDoCursoToString(){
         return curso.getDisciplinasToString();
     }
     
-    public Disciplina getDisciplina(String disciplinaAutoComplete){
-        for (Disciplina disciplina: getDisciplinasDoCurso()){
+    public Disciplina carregarDisciplina(String disciplinaAutoComplete){
+        for (Disciplina disciplina: carregarDisciplinasDoCurso()){
             if (disciplina.toString().equals(disciplinaAutoComplete)){
                 return disciplina;
             }
@@ -62,8 +61,8 @@ public class CursoService {
         return null;
     }
     
-    public Disciplina getDisciplinaByCodigo(String codigo){
-        Disciplina[] disciplinas = getDisciplinasDoCurso();
+    public Disciplina carregarDisciplinaByCodigo(String codigo){
+        Disciplina[] disciplinas = carregarDisciplinasDoCurso();
         for (Disciplina disciplina: disciplinas){
             if (disciplina.getCodigo().equals(codigo)){
                 return disciplina;
@@ -72,11 +71,11 @@ public class CursoService {
         return null;
     }
     
-    public Double getMediaAprovacao(Disciplina disciplina) throws DataException {
-        return coletor.getMediaAprovacao(disciplina);
+    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException {
+        return disciplinaDAO.getMediaAprovacao(disciplina);
     }
     
-    public List<MatrizDisciplina> getDisciplinasDisponiveis(Aluno aluno){
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Aluno aluno){
         //Crio a lista com as disciplinas disponiveis
         List<MatrizDisciplina> disciplinasDisponiveis = new ArrayList<>();
         //Consulto a grade do aluno para considerar as sugestoes

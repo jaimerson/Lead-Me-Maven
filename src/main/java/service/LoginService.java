@@ -5,10 +5,10 @@
  */
 package service;
 
-import dados_instituicao.ColetorDadosFactory;
+import base_dados.AlunoDAO;
 import excecoes.DataException;
 import modelo.Aluno;
-import dados_instituicao.ColetorDadosFacade;
+import excecoes.AutenticacaoException;
 
 /**
  *
@@ -18,28 +18,23 @@ public class LoginService{
 
     private Aluno aluno;
     private static LoginService loginService = new LoginService();
-    private ColetorDadosFacade coletor;
+    private CursoService cursoService;
+    private AlunoDAO alunoDAO;
     
     private LoginService(){
-        coletor = ColetorDadosFactory.getInstance().getColetorInstance();
         aluno = null;
+        cursoService = CursoService.getInstance();
+        alunoDAO = AlunoDAO.getInstance();
     }
 
     public static LoginService getInstance(){
         return loginService;
     }
     
-    public Aluno autenticar(String usuario, String senha) throws DataException{
-        if (coletor.existeUsuario(usuario, senha)){
-            aluno = new Aluno();
-            aluno.setNumeroMatricula(usuario);
-            //Carregar informaçoes do historico do aluno
-            coletor.carregarHistoricoAluno(aluno);
-        }
-        else{
-            aluno = null;
-        }
-        return aluno;        
+    public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException{
+        aluno = alunoDAO.carregarAluno(usuario, senha);
+        cursoService.setCurso(aluno.getCurso());
+        return aluno;
     }
 
     public Aluno getAluno() {
@@ -49,5 +44,4 @@ public class LoginService{
     public void setAluno(Aluno aluno) {
         this.aluno = aluno;
     }
-    
 }

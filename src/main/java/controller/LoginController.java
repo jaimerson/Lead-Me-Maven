@@ -1,6 +1,8 @@
 package controller;
 
+import excecoes.AutenticacaoException;
 import excecoes.DataException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,32 +37,30 @@ public class LoginController extends Application {
 
     @FXML
     void entrar(ActionEvent event) {
-        Aluno aluno = null;
         serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
         try {
-            aluno = serviceFacade.autenticar(txtLogin.getText(), txtSenha.getText());
+            serviceFacade.autenticar(txtLogin.getText(), txtSenha.getText());
         } catch (DataException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             return;
-        }
-        if (aluno != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TelaPrincipal.fxml"));
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-//                    scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
-            } catch (Exception ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
+        } catch (AutenticacaoException ex) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Usuário/Senha inválida");
             alert.setHeaderText("Usuário/senha inválida");
             alert.setContentText("Verifique os dados e tente novamente");
             alert.showAndWait();
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TelaPrincipal.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+//                    scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

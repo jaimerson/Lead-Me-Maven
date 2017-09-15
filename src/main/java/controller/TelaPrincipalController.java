@@ -97,7 +97,7 @@ public class TelaPrincipalController extends Application implements Initializabl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
-        disciplinas = service.getDisciplinasDoCursoToString();
+        disciplinas = service.carregarDisciplinasDoCursoToString();
 
         final ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -107,11 +107,11 @@ public class TelaPrincipalController extends Application implements Initializabl
 
             @Override
             public void handle(AutoCompletionEvent<String> event) {
-                disciplinaSelecionada = service.getDisciplina(event.getCompletion());
+                disciplinaSelecionada = service.carregarDisciplinaByToString(event.getCompletion());
                 txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionada.getNome());
                 Double aprovacoes = 100.0;
                 try {
-                    aprovacoes = service.getMediaAprovacao(disciplinaSelecionada);
+                    aprovacoes = service.coletarMediaAprovacao(disciplinaSelecionada);
                 } catch (DataException ex) {
                     //Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);;
                 }
@@ -137,7 +137,7 @@ public class TelaPrincipalController extends Application implements Initializabl
         });
 
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
-        Aluno alunoLogado = service.getAlunoLogado();
+        Aluno alunoLogado = service.coletarAlunoLogado();
 
         //Tela inicial
         txtBemVindo.setText("Bem vindo(a), " + alunoLogado.getNome());
@@ -148,12 +148,12 @@ public class TelaPrincipalController extends Application implements Initializabl
         txtMCN.setText(alunoLogado.getMcn().toString());
 
         //Tela de estatísticas
-        disciplinas = service.getDisciplinasDoCursoToString();
-        disciplinaSelecionada = service.getDisciplinaByCodigo("IMD0040");
+        disciplinas = service.carregarDisciplinasDoCursoToString();
+        disciplinaSelecionada = service.carregarDisciplinaByCodigo("IMD0040");
         txtDisciplina.setText(disciplinaSelecionada.toString());
         txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionada.getNome());
         try {
-            Double aprovacoes = service.getMediaAprovacao(disciplinaSelecionada);
+            Double aprovacoes = service.coletarMediaAprovacao(disciplinaSelecionada);
             ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
                     new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
                     new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
@@ -163,7 +163,7 @@ public class TelaPrincipalController extends Application implements Initializabl
         }
 
         //Tela de sugestoes/simulacoes
-        List<MatrizDisciplina> disciplinasDisponiveis = service.getDisciplinasDisponiveis();
+        List<MatrizDisciplina> disciplinasDisponiveis = service.carregarDisciplinasDisponiveis();
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasDisponiveis);
       
         tableDisciplinasDisponiveis.setItems(listaObs);

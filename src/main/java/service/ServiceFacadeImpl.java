@@ -1,12 +1,11 @@
 package service;
 
-import dados_instituicao.ColetorDadosFactory;
 import excecoes.DataException;
 import java.util.List;
 import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
-import dados_instituicao.ColetorDadosFacade;
+import excecoes.AutenticacaoException;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -19,38 +18,38 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public Double getMediaAprovacao(Disciplina disciplina) throws DataException{
-        return cursoService.getMediaAprovacao(disciplina);
+    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException{
+        return cursoService.coletarMediaAprovacao(disciplina);
     }
 
     @Override
-    public Aluno autenticar(String usuario, String senha) throws DataException{
+    public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException{
         return loginService.autenticar(usuario, senha);
     }
 
     @Override
-    public Aluno getAlunoLogado() {
+    public Aluno coletarAlunoLogado() {
         return loginService.getAluno();
     }
 
     @Override
-    public String[] getDisciplinasDoCursoToString() {
-        return cursoService.getDisciplinasDoCursoToString();
+    public String[] carregarDisciplinasDoCursoToString() {
+        return cursoService.carregarDisciplinasDoCursoToString();
     }
 
     @Override
-    public Disciplina getDisciplinaByCodigo(String codigo) {
-        return cursoService.getDisciplinaByCodigo(codigo);
+    public Disciplina carregarDisciplinaByCodigo(String codigo) {
+        return cursoService.carregarDisciplinaByCodigo(codigo);
     }
 
     @Override
-    public Disciplina getDisciplina(String toString) {
-        return cursoService.getDisciplina(toString);
+    public Disciplina carregarDisciplinaByToString(String toString) {
+        return cursoService.carregarDisciplina(toString);
     }
 
     @Override
-    public List<MatrizDisciplina> getDisciplinasDisponiveis() {
-        return cursoService.getDisciplinasDisponiveis(getAlunoLogado());
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis() {
+        return cursoService.carregarDisciplinasDisponiveis(coletarAlunoLogado());
     }
 
 }
