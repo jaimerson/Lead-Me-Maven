@@ -30,7 +30,7 @@ public class DisciplinaDAO extends AbstractDAO{
         return instance;
     }
     
-    public Double getMediaAprovacao(Disciplina disciplina) throws DataException {
+    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException {
         String nomeCurso = disciplina.getCurso().getNome();
         String codigoDisciplina = disciplina.getCodigo();
         BufferedReader lerArq;
@@ -51,13 +51,10 @@ public class DisciplinaDAO extends AbstractDAO{
             resultado = soma / qtdeTurmas;
 
         } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataException(ex.getMessage());
         } catch (FileNotFoundException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataException(ex.getMessage());
         } catch (IOException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataException(ex.getMessage());
         }
         return resultado;

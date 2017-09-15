@@ -2,23 +2,17 @@ package controller;
 
 import excecoes.AutenticacaoException;
 import excecoes.DataException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import modelo.Aluno;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
 
@@ -34,7 +28,8 @@ public class LoginController extends Application {
     private Button btnEntrar;
 
     private ServiceFacade serviceFacade;
-
+    private ControllerUtil util = new ControllerUtil();
+    
     @FXML
     void entrar(ActionEvent event) {
         serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
@@ -51,32 +46,12 @@ public class LoginController extends Application {
             alert.showAndWait();
             return;
         }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TelaPrincipal.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-//                    scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        util.carregarTela("/fxml/TelaPrincipal.fxml");
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TelaLogin.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        util.carregarTela("/fxml/TelaLogin.fxml");
     }
 }

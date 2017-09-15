@@ -33,7 +33,6 @@ public class LoginService{
     
     public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException{
         aluno = alunoDAO.carregarAluno(usuario, senha);
-        cursoService.setCurso(aluno.getCurso());
         return aluno;
     }
 

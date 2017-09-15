@@ -6,6 +6,7 @@ import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import excecoes.AutenticacaoException;
+import modelo.Curso;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -18,7 +19,7 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException{
+    public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException{
         return cursoService.coletarMediaAprovacao(disciplina);
     }
 
@@ -33,22 +34,17 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public String[] carregarDisciplinasDoCursoToString() {
-        return cursoService.carregarDisciplinasDoCursoToString();
+    public String[] carregarDisciplinasDoCursoToString(Curso curso) {
+        return cursoService.carregarDisciplinasDoCursoToString(curso);
     }
 
     @Override
-    public Disciplina carregarDisciplinaByCodigo(String codigo) {
-        return cursoService.carregarDisciplinaByCodigo(codigo);
+    public Disciplina carregarDisciplina(Curso curso, String disciplina) {
+        return cursoService.carregarDisciplina(curso,disciplina);
     }
 
     @Override
-    public Disciplina carregarDisciplinaByToString(String toString) {
-        return cursoService.carregarDisciplina(toString);
-    }
-
-    @Override
-    public List<MatrizDisciplina> carregarDisciplinasDisponiveis() {
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso) {
         return cursoService.carregarDisciplinasDisponiveis(coletarAlunoLogado());
     }
 

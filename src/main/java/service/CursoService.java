@@ -18,15 +18,10 @@ import modelo.Disciplina;
 import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 
-/**
- *
- * @author rafao
- */
 public class CursoService {
     
     private static CursoService service = new CursoService();
     private DisciplinaDAO disciplinaDAO;
-    private Curso curso;
     
     private CursoService(){
         disciplinaDAO = DisciplinaDAO.getInstance();
@@ -35,36 +30,18 @@ public class CursoService {
     public static CursoService getInstance(){
         return service;
     }
-
-    public Curso getCurso() {
-        return curso;
-    }
-
-    public void setCurso(Curso curso) {
-        this.curso = curso;
-    }
     
-    public Disciplina[] carregarDisciplinasDoCurso(){
+    public Disciplina[] carregarDisciplinasDoCurso(Curso curso){
         return curso.getDisciplinas();
     }
     
-    public String[] carregarDisciplinasDoCursoToString(){
+    public String[] carregarDisciplinasDoCursoToString(Curso curso){
         return curso.getDisciplinasToString();
     }
     
-    public Disciplina carregarDisciplina(String disciplinaAutoComplete){
-        for (Disciplina disciplina: carregarDisciplinasDoCurso()){
-            if (disciplina.toString().equals(disciplinaAutoComplete)){
-                return disciplina;
-            }
-        }
-        return null;
-    }
-    
-    public Disciplina carregarDisciplinaByCodigo(String codigo){
-        Disciplina[] disciplinas = carregarDisciplinasDoCurso();
-        for (Disciplina disciplina: disciplinas){
-            if (disciplina.getCodigo().equals(codigo)){
+    public Disciplina carregarDisciplina(Curso curso, String disciplinaAutoComplete){
+        for (Disciplina disciplina: carregarDisciplinasDoCurso(curso)){
+            if (disciplina.toString().contains(disciplinaAutoComplete)){
                 return disciplina;
             }
         }
@@ -72,10 +49,11 @@ public class CursoService {
     }
     
     public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException {
-        return disciplinaDAO.getMediaAprovacao(disciplina);
+        return disciplinaDAO.coletarMediaAprovacao(disciplina);
     }
     
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Aluno aluno){
+        Curso curso = aluno.getCurso();
         //Crio a lista com as disciplinas disponiveis
         List<MatrizDisciplina> disciplinasDisponiveis = new ArrayList<>();
         //Consulto a grade do aluno para considerar as sugestoes

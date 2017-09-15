@@ -6,17 +6,17 @@ import excecoes.AutenticacaoException;
 import excecoes.DataException;
 import java.util.List;
 import modelo.Aluno;
+import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 
 public interface ServiceFacade {
 
-    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException;
+    public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException;
     public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException;
     public Aluno coletarAlunoLogado();
-    public Disciplina carregarDisciplinaByCodigo(String codigo);
-    public Disciplina carregarDisciplinaByToString(String toString);
-    public String[] carregarDisciplinasDoCursoToString();
-    public List<MatrizDisciplina> carregarDisciplinasDisponiveis();
+    public Disciplina carregarDisciplina(Curso curso, String toString);
+    public String[] carregarDisciplinasDoCursoToString(Curso curso);
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso);
     
 }

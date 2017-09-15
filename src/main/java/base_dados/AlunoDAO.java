@@ -8,26 +8,18 @@ package base_dados;
 import excecoes.DataException;
 import excecoes.AutenticacaoException;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.Aluno;
 import modelo.Curso;
-import modelo.Disciplina;
 import modelo.Matricula;
-import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
-import modelo.PossibilidadePreRequisito;
 import modelo.Turma;
-//import service.CursoService;
 
 /**
  *
@@ -54,10 +46,8 @@ public class AlunoDAO extends AbstractDAO{
                 existeUsuario = true;
             }
         } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataException(ex.getMessage());
         } catch (IOException ex) {
-//            Logger.getLogger(ColetorDadosImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataException(ex.getMessage());
         }
         return existeUsuario;
@@ -86,7 +76,7 @@ public class AlunoDAO extends AbstractDAO{
         return aluno;
     }
     
-    public void carregarHistoricoAluno(Aluno aluno) throws DataException {
+    private void carregarHistoricoAluno(Aluno aluno) throws DataException {
         try {
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "historicos/" + aluno.getNumeroMatricula() + "-historico.txt"), "UTF-8"));
             aluno.setNome(lerArq.readLine());
@@ -97,8 +87,6 @@ public class AlunoDAO extends AbstractDAO{
             Curso curso = cursoDAO.carregarCurso(nomeCurso);
             aluno.setCurso(curso);
             aluno.setMatrizCurricular(matrizCurricular);
-//            CursoService cursoService = CursoService.getInstance();
-//            cursoService.setCurso(curso);
             aluno.setIea(Double.parseDouble(lerArq.readLine()));
             aluno.setMcn(Double.parseDouble(lerArq.readLine()));
             String linha;
