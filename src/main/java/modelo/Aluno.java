@@ -3,9 +3,12 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import service.ProcessadorRequisitos;
 
 public class Aluno extends Pessoa {
 
+    public static final Double MEDIA_APROVACAO = 5.0;
+    
     private String numeroMatricula;
     private Curso curso;
     private String matrizCurricular;
@@ -120,33 +123,17 @@ public class Aluno extends Pessoa {
     }
     
     public boolean podePagar(Disciplina disciplina){
-        //Primeiro, devemos verificar se a disciplina já n foi paga
+        return !pagouMateria(disciplina) && ProcessadorRequisitos.satisfazRequisitos(this, disciplina.getPreRequisitos());
+    }
+    
+    public List<Disciplina> carregarDisciplinasPagas(){
+        List<Disciplina> disciplinasPagas = new ArrayList<>();
         for(Matricula matricula: this.matriculas){
-            if (matricula.getTurma().getDisciplina().equals(disciplina)){
-                return false;
+            if (matricula.getMedia() >= MEDIA_APROVACAO){
+                disciplinasPagas.add(matricula.getTurma().getDisciplina());
             }
         }
-        List<PossibilidadePreRequisito> preRequisitos = disciplina.getPreRequisitos();
-        //Para cada possibilidade de preRequisito
-        boolean podePagar = true;
-        boolean cumpriuPossibilidade;
-        for(PossibilidadePreRequisito possibilidade: preRequisitos){
-            podePagar = false;
-            cumpriuPossibilidade = true;
-            List<Disciplina> disciplinasPossibilidade = possibilidade.getPreRequisitos();
-            //Para cada disciplina da possibilidade
-            for (Disciplina disc: disciplinasPossibilidade){
-                //Se o nao aluno pagou a materia, não satisfaz a possibilidade de pre requisito
-                if (!this.pagouMateria(disc)){
-                    cumpriuPossibilidade = false;
-                    break;
-                }
-            }
-            if(cumpriuPossibilidade){
-                return true;
-            }
-        }
-        return podePagar;
+        return disciplinasPagas;
     }
 
 }

@@ -77,9 +77,9 @@ public class CursoDAO extends AbstractDAO{
         String linha;
         String codigoDisciplina, preRequisitos;
         Disciplina disciplina;
-        String[] possibilidades, disciplinasPossibilidade;
         //para cada disciplina
         while ((linha = lerArq.readLine()) != null) {
+            linha = linha.replace("\n", "");
             codigoDisciplina = linha.split(": ")[0];
             //Pego a referencia no hashmap
             disciplina = disciplinas.get(codigoDisciplina);
@@ -87,19 +87,7 @@ public class CursoDAO extends AbstractDAO{
                 continue;
             }
             preRequisitos = linha.split(": ")[1];
-            //Separo as possibilidades de pre requisito para adicioná-las na disciplina
-            possibilidades = preRequisitos.split(" OU ");
-            //Para cada possibilidade, eu tenho um conjunto de matérias que o aluno deve cumprir (uma ou mais)
-            for (String possibilidade : possibilidades) {
-                PossibilidadePreRequisito possibilidadePreRequisito = new PossibilidadePreRequisito();
-                disciplinasPossibilidade = possibilidade.split(" E ");
-                //Para cada matéria da possibilidade, adicionar no objeto possibilidade
-                for (String disciplinaPossibilidade : disciplinasPossibilidade) {
-                    possibilidadePreRequisito.adicionarPreRequisitoNaPossibilidade(disciplinas.get(disciplinaPossibilidade));
-                }
-                //Para cada possibilidade, adicionar na disciplina
-                disciplina.adicionarPossibilidadePreRequisito(possibilidadePreRequisito);
-            }
+            disciplina.setPreRequisitos(preRequisitos);
         }
         lerArq.close();
     }

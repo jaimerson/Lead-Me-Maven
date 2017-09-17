@@ -10,8 +10,9 @@ public class Disciplina {
     private String nome;
     private Integer cargaHoraria;
     private List<MatrizDisciplina> matrizesRelacionadas;
-
-    List<PossibilidadePreRequisito> preRequisitos;
+    
+    private String preRequisitos;
+//    List<PossibilidadePreRequisito> preRequisitos;
 //    List<Disciplina> coRequisitos;
 //    List<Disciplina> equivalentes;
 
@@ -20,7 +21,6 @@ public class Disciplina {
     public Disciplina() {
         turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
-        preRequisitos = new ArrayList<>();
     }
 
     public Disciplina(String codigo, String nome, Integer cargaHoraria) {
@@ -29,7 +29,6 @@ public class Disciplina {
         this.cargaHoraria = cargaHoraria;
         turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
-        preRequisitos = new ArrayList<>();
     }
 
     public String getCodigo() {
@@ -64,11 +63,11 @@ public class Disciplina {
         this.matrizesRelacionadas = matrizesRelacionadas;
     }
 
-    public List<PossibilidadePreRequisito> getPreRequisitos() {
+    public String getPreRequisitos() {
         return preRequisitos;
     }
 
-    public void setPreRequisitos(List<PossibilidadePreRequisito> preRequisitos) {
+    public void setPreRequisitos(String preRequisitos) {
         this.preRequisitos = preRequisitos;
     }
     
@@ -77,10 +76,6 @@ public class Disciplina {
         matrizRelacionada.setNaturezaDisciplina(natureza);
         matrizRelacionada.setSemestreIdeal(semestreIdeal);
         this.matrizesRelacionadas.add(matrizRelacionada);
-    }
-    
-    public void adicionarPossibilidadePreRequisito(PossibilidadePreRequisito possibilidade){
-        this.preRequisitos.add(possibilidade);
     }
 
     public Integer getCargaHoraria() {

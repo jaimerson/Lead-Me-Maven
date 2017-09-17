@@ -56,7 +56,7 @@ public class AlunoTest {
 
     @Test
     public void testCargaHoraria() {
-        assertEquals(aluno.getCargaTotalCumprida().intValue(), 750);
+        assertEquals(aluno.getCargaTotalCumprida().intValue(), 690);
     }
 
     @Test
