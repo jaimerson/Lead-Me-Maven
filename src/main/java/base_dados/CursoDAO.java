@@ -17,7 +17,6 @@ import java.util.Map;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizCurricular;
-import modelo.PossibilidadePreRequisito;
 
 /**
  *

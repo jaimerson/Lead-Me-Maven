@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -56,16 +57,16 @@ public class AlunoTest {
 
     @Test
     public void testCargaHoraria() {
-        assertEquals(aluno.getCargaTotalCumprida().intValue(), 690);
+        assertEquals(aluno.getCargaTotalCumprida().intValue(), 750);
     }
 
     @Test
     public void testDisciplinasPagas() {
         Disciplina disciplina = new Disciplina();
         disciplina.setCodigo("IMD0038");
-        assertTrue(aluno.pagouMateria(disciplina));
+        assertTrue(aluno.pagouMateria(disciplina,true));
         disciplina.setCodigo("IMD0040");
-        assertFalse(aluno.pagouMateria(disciplina));
+        assertTrue(aluno.pagouMateria(disciplina,true));
     }
 
     @Test
@@ -76,8 +77,8 @@ public class AlunoTest {
     @Test
     public void testPreRequisito() {
         Disciplina disciplina = aluno.getCurso().getDisciplina(aluno.getMatrizCurricular(), "IMD0040").getDisciplina();
-        assertTrue(aluno.podePagar(disciplina));
-        disciplina = aluno.getCurso().getDisciplina(aluno.getMatrizCurricular(), "DIM0600").getDisciplina();
         assertFalse(aluno.podePagar(disciplina));
+        disciplina = aluno.getCurso().getDisciplina(aluno.getMatrizCurricular(), "DIM0600").getDisciplina();
+        assertTrue(aluno.podePagar(disciplina));
     }
 }
