@@ -2,7 +2,6 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Disciplina {
 
@@ -12,6 +11,8 @@ public class Disciplina {
     private List<MatrizDisciplina> matrizesRelacionadas;
     
     private String preRequisitos;
+    private String equivalencias;
+    private String coRequisitos;
 //    List<PossibilidadePreRequisito> preRequisitos;
 //    List<Disciplina> coRequisitos;
 //    List<Disciplina> equivalentes;
@@ -69,6 +70,22 @@ public class Disciplina {
 
     public void setPreRequisitos(String preRequisitos) {
         this.preRequisitos = preRequisitos;
+    }
+
+    public String getEquivalencias() {
+        return equivalencias;
+    }
+
+    public void setEquivalencias(String equivalencias) {
+        this.equivalencias = equivalencias;
+    }
+
+    public String getCoRequisitos() {
+        return coRequisitos;
+    }
+
+    public void setCoRequisitos(String coRequisitos) {
+        this.coRequisitos = coRequisitos;
     }
     
     public void adicionarMatrizRelacionada(MatrizCurricular matriz, String natureza, Integer semestreIdeal) {

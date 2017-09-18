@@ -112,18 +112,23 @@ public class Aluno extends Pessoa {
             return 0.0;
         }
     }
+    //CUMPRE EQUIVALENCIA DEVE CHAMAR A FUNÇÃO DE SATISFAZREQUISITOS SEM USAR AS EQUIVALENCIAS, PQ N EH UMA PROPRIEDADE TRANSITIVA NA UFRN
+    public boolean cumpreEquivalencia(Disciplina disciplina){
+        return ProcessadorRequisitos.satisfazRequisitos(this, disciplina.getEquivalencias(),false, false);
+    }
     
-    public boolean pagouMateria(Disciplina disciplina){
+    public boolean pagouMateria(Disciplina disciplina, boolean considerarEquivalentes){
         for(Matricula matricula: this.matriculas){
             if (matricula.getTurma().getDisciplina().equals(disciplina) && matricula.getSituacao().contains("APR")){
                 return true;
             }
         }
-        return false;
+        //Se nao pagou a disciplina em questao, verificamos se pagou a equivalencia
+        return considerarEquivalentes && cumpreEquivalencia(disciplina);
     }
     
     public boolean podePagar(Disciplina disciplina){
-        return !pagouMateria(disciplina) && ProcessadorRequisitos.satisfazRequisitos(this, disciplina.getPreRequisitos());
+        return !pagouMateria(disciplina,true) && ProcessadorRequisitos.satisfazRequisitos(this, disciplina.getPreRequisitos(),true, true);
     }
     
     public List<Disciplina> carregarDisciplinasPagas(){

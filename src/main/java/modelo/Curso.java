@@ -56,6 +56,16 @@ public class Curso {
         MatrizCurricular matriz = this.matrizesCurricular.get(nomeMatriz);
         return matriz.getDisciplina(codigoDisciplina);
     }
+    
+    public Disciplina getDisciplina(String codigoDisciplina){
+        Disciplina[] disciplinas = getDisciplinas();
+        for (Disciplina disc: disciplinas){
+            if (disc.getCodigo().equals(codigoDisciplina)){
+                return disc;
+            }
+        }
+        return null;
+    }
 
     public Integer getCargaHoraria() {
         return cargaHoraria;
