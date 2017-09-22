@@ -4,6 +4,8 @@ import excecoes.DataException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -175,5 +177,14 @@ public class TelaPrincipalController extends Application implements Initializabl
         naturezaTabela.setCellValueFactory(new PropertyValueFactory("naturezaDisciplina"));
         semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
+    }
+    
+    public void carregarDisciplinasMaisDificeis(){
+        try {
+            List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis();
+            //Colocar em uma tabela
+        } catch (DataException ex) {
+            Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

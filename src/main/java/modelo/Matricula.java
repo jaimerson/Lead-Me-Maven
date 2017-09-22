@@ -7,7 +7,7 @@ public class Matricula {
 
     private Turma turma;
     private Aluno aluno;
-    private List<Frequencia> historicoFrequencia;
+    private Integer numeroPresencas;
 
     private Double nota1;
     private Double nota2;
@@ -19,7 +19,7 @@ public class Matricula {
     public Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
         this.aluno = aluno;
-        historicoFrequencia = new ArrayList<>();
+        numeroPresencas = 0;
     }
 
     public Turma getTurma() {
@@ -60,14 +60,6 @@ public class Matricula {
 
     public void setNota3(Double nota3) {
         this.nota3 = nota3;
-    }
-
-    public List<Frequencia> getHistoricoFrequencia() {
-        return historicoFrequencia;
-    }
-
-    public void setHistoricoFrequencia(List<Frequencia> historicoFrequencia) {
-        this.historicoFrequencia = historicoFrequencia;
     }
 
     public Double getMedia() {

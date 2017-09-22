@@ -106,6 +106,7 @@ public class Disciplina {
     public Curso getCurso(){
         return this.matrizesRelacionadas.get(0).getMatrizCurricular().getCurso();
     }
+    
 
     @Override
     public boolean equals(Object obj) {

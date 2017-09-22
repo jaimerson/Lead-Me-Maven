@@ -6,14 +6,21 @@ import java.util.List;
 public class Turma {
 
     private String periodoLetivo;
+    private String numeroTurma;
     private Disciplina disciplina;
     private List<Matricula> matriculas;
     private Professor professor;
+    
+    public Turma(){
+        this.matriculas = new ArrayList<>();
+        this.numeroTurma = "T01";
+    }
 
     public Turma(String periodoLetivo, Disciplina disciplina) {
         this.periodoLetivo = periodoLetivo;
         this.disciplina = disciplina;
         this.matriculas = new ArrayList<>();
+        this.numeroTurma = "T01";
     }
 
     public String getPeriodoLetivo() {
@@ -24,6 +31,14 @@ public class Turma {
         this.periodoLetivo = periodoLetivo;
     }
 
+    public String getNumeroTurma() {
+        return numeroTurma;
+    }
+
+    public void setNumeroTurma(String numeroTurma) {
+        this.numeroTurma = numeroTurma;
+    }
+    
     public Disciplina getDisciplina() {
         return disciplina;
     }
@@ -46,5 +61,9 @@ public class Turma {
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+    
+    public void adicionarMatricula(Matricula matricula){
+        this.matriculas.add(matricula);
     }
 }

@@ -40,7 +40,7 @@ public class ProcessadorRequisitos {
         for (String codigo: codigosExpressao){
             Disciplina disciplina = aluno.getCurso().getDisciplina(codigo);
             if (disciplina == null){
-                System.out.println("DISCIPLINA NUUULAAAAAAAA");
+                System.out.println("DISCIPLINA NUUULAAAAAAAA. Código: "+ codigo);
                 requisitos = requisitos.replace(codigo,"0");
             }
             else if (aluno.pagouMateria(disciplina,explorarEquivalentes)){

@@ -73,4 +73,9 @@ public class CursoService {
         return disciplinasDisponiveis;
     }
     
+    List<Disciplina> coletarDisciplinasMaisDificeis(){
+        List<Disciplina> disciplinas = new ArrayList<>();
+        return disciplinas;
+    }
+    
 }
