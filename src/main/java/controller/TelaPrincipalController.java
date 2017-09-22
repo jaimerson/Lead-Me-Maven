@@ -27,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import modelo.Aluno;
+import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import service.ServiceFacade;
@@ -179,10 +180,11 @@ public class TelaPrincipalController extends Application implements Initializabl
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
     }
     
-    public void carregarDisciplinasMaisDificeis(){
+    public void carregarDisciplinasMaisDificeis(Curso curso){
         try {
-            List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis();
+            List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis(curso);
             //Colocar em uma tabela
+            
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }

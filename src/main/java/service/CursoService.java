@@ -73,9 +73,16 @@ public class CursoService {
         return disciplinasDisponiveis;
     }
     
-    List<Disciplina> coletarDisciplinasMaisDificeis(){
-        List<Disciplina> disciplinas = new ArrayList<>();
-        return disciplinas;
+    List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
+        Disciplina[] todasDisciplinas = curso.getDisciplinas();
+        List<Disciplina> disciplinasDificeis = new ArrayList<>();
+        for (Disciplina disciplina: todasDisciplinas){
+            disciplinaDAO.carregarTurmasDaDisciplina(disciplina);
+            disciplinasDificeis.add(disciplina);
+        }
+        //Tratar o tamanho e ordenacao da lista
+        
+        return disciplinasDificeis;
     }
     
 }

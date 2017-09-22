@@ -49,8 +49,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public List<Disciplina> coletarDisciplinasMaisDificeis() throws DataException {
-        return cursoService.coletarDisciplinasMaisDificeis();
+    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException {
+        return cursoService.coletarDisciplinasMaisDificeis(curso);
     }
 
 }
