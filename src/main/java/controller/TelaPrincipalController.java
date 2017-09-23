@@ -4,6 +4,8 @@ import excecoes.DataException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import modelo.Aluno;
+import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import service.ServiceFacade;
@@ -175,5 +178,15 @@ public class TelaPrincipalController extends Application implements Initializabl
         naturezaTabela.setCellValueFactory(new PropertyValueFactory("naturezaDisciplina"));
         semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
+    }
+    
+    public void carregarDisciplinasMaisDificeis(Curso curso){
+        try {
+            List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis(curso);
+            //Colocar em uma tabela
+            
+        } catch (DataException ex) {
+            Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

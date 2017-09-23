@@ -13,9 +13,6 @@ public class Disciplina {
     private String preRequisitos;
     private String equivalencias;
     private String coRequisitos;
-//    List<PossibilidadePreRequisito> preRequisitos;
-//    List<Disciplina> coRequisitos;
-//    List<Disciplina> equivalentes;
 
     List<Turma> turmas;
 
@@ -106,6 +103,12 @@ public class Disciplina {
     public Curso getCurso(){
         return this.matrizesRelacionadas.get(0).getMatrizCurricular().getCurso();
     }
+    
+    //proporcao de 60h para 64 presencas
+    public Integer getNumeroMaximoPresencas(){
+        return (16*cargaHoraria)/15;
+    }
+    
 
     @Override
     public boolean equals(Object obj) {

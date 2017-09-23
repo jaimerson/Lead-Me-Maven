@@ -14,6 +14,7 @@ public interface ServiceFacade {
 
     public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException;
     public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException;
+    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
     public Aluno coletarAlunoLogado();
     public Disciplina carregarDisciplina(Curso curso, String toString);
     public String[] carregarDisciplinasDoCursoToString(Curso curso);
