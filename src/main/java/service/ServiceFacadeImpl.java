@@ -7,6 +7,7 @@ import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import excecoes.AutenticacaoException;
 import modelo.Curso;
+import modelo.Turma;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -51,6 +52,11 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException {
         return cursoService.coletarDisciplinasMaisDificeis(curso);
+    }
+    
+    @Override
+    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma){
+        return cursoService.coletarTurma(disciplina, periodoLetivo, numeroTurma);
     }
 
 }

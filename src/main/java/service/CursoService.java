@@ -108,7 +108,7 @@ public class CursoService {
      * @param curso
      * @return 
      */
-    List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
+    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
         Disciplina[] todasDisciplinas = curso.getDisciplinas();
         List<Disciplina> disciplinasDificeis = new ArrayList<>();
         disciplinasDificeis.addAll(Arrays.asList(todasDisciplinas));

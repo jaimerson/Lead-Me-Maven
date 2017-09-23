@@ -9,15 +9,16 @@ import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
+import modelo.Turma;
 
 public interface ServiceFacade {
-
-    public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException;
     public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException;
-    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
     public Aluno coletarAlunoLogado();
-    public Disciplina carregarDisciplina(Curso curso, String toString);
     public String[] carregarDisciplinasDoCursoToString(Curso curso);
-    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso);
+    public Disciplina carregarDisciplina(Curso curso, String toString);
+    public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException;
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso); 
+    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
+    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma);
     
 }
