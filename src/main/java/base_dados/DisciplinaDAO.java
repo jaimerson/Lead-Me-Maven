@@ -41,37 +41,12 @@ public class DisciplinaDAO extends AbstractDAO{
         return instance;
     }
     
-    public Double coletarMediaAprovacao(Disciplina disciplina) throws DataException {
-        String nomeCurso = disciplina.getCurso().getNome();
-        String codigoDisciplina = disciplina.getCodigo();
-        BufferedReader lerArq;
-        Double resultado = null;
-        try {
-            lerArq = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(DIRETORIO_RECURSOS + "turmas/" + nomeCurso + " - turmas - " + codigoDisciplina + ".txt"), "UTF-8"));
-            String linha; //2017.1:95
-            Double soma = 0.0;
-            Integer qtdeTurmas = 0;
-            while ((linha = lerArq.readLine()) != null) {
-                soma += Double.parseDouble(linha.split(":")[1]);
-                qtdeTurmas++;
-            }
-
-            lerArq.close();
-            resultado = soma / qtdeTurmas;
-
-        } catch (UnsupportedEncodingException ex) {
-            throw new DataException(ex.getMessage());
-        } catch (FileNotFoundException ex) {
-            throw new DataException(ex.getMessage());
-        } catch (IOException ex) {
-            throw new DataException(ex.getMessage());
-        }
-        return resultado;
-    }
     
     public List<Turma> carregarTurmasDaDisciplina(Disciplina disciplina){
+        //Se por acaso já carregou, nao tem o que fazer
+        if (disciplina.getTurmas() != null && !disciplina.getTurmas().isEmpty()){
+            return disciplina.getTurmas();
+        }
         Map<String,Turma> mapTurmas = new HashMap<>();
         List<Turma> turmas = new ArrayList<>();
         try {
@@ -122,6 +97,7 @@ public class DisciplinaDAO extends AbstractDAO{
             }
             
             lerArq.close();
+            disciplina.setTurmas(turmas);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DisciplinaDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
@@ -129,7 +105,7 @@ public class DisciplinaDAO extends AbstractDAO{
         } catch (IOException ex) { 
             Logger.getLogger(DisciplinaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        disciplina.setTurmas(turmas);
+        
         return turmas;
     }
 }

@@ -6,6 +6,7 @@
 package base_dados;
 
 import static base_dados.AbstractDAO.DIRETORIO_RECURSOS;
+import excecoes.DataException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,9 +25,9 @@ import modelo.MatrizCurricular;
  */
 public class CursoDAO extends AbstractDAO{
     private static CursoDAO instance = new CursoDAO();
-    
+    private DisciplinaDAO disciplinaDAO;
     private CursoDAO(){
-        
+        disciplinaDAO = DisciplinaDAO.getInstance();
     }
     
     public static CursoDAO getInstance(){
@@ -39,6 +40,7 @@ public class CursoDAO extends AbstractDAO{
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
         for (String arquivoGrade : arquivosGrade) {
             MatrizCurricular matriz = new MatrizCurricular(arquivoGrade.split(" - ")[2].replace(".txt", ""));
+            matriz.setCurso(curso);
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + arquivoGrade), "UTF-8"));
             String linha;
             String codigo, nomeDisciplina, naturezaDisciplina;
@@ -63,6 +65,7 @@ public class CursoDAO extends AbstractDAO{
                     disciplina = disciplinasDoCurso.get(codigo);
                 }
                 matriz.adicionarDisciplina(disciplina, naturezaDisciplina, semestreIdeal);
+                disciplinaDAO.carregarTurmasDaDisciplina(disciplina);
             }
             lerArq.close();
             curso.adicionarMatrizCurricular(matriz);

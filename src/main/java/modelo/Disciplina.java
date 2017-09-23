@@ -3,20 +3,20 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Disciplina {
+public class Disciplina implements Comparable{
 
     private String codigo;
     private String nome;
     private Integer cargaHoraria;
     private List<MatrizDisciplina> matrizesRelacionadas;
-    
+
     private String preRequisitos;
     private String equivalencias;
     private String coRequisitos;
 
     List<Turma> turmas;
 
-    public Disciplina() {
+    public Disciplina(){
         turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
     }
@@ -84,7 +84,7 @@ public class Disciplina {
     public void setCoRequisitos(String coRequisitos) {
         this.coRequisitos = coRequisitos;
     }
-    
+
     public void adicionarMatrizRelacionada(MatrizCurricular matriz, String natureza, Integer semestreIdeal) {
         MatrizDisciplina matrizRelacionada = new MatrizDisciplina(matriz, this);
         matrizRelacionada.setNaturezaDisciplina(natureza);
@@ -99,20 +99,48 @@ public class Disciplina {
     public void setCargaHoraria(Integer cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
-    
-    public Curso getCurso(){
+
+    public Curso getCurso() {
         return this.matrizesRelacionadas.get(0).getMatrizCurricular().getCurso();
     }
-    
+
     //proporcao de 60h para 64 presencas
-    public Integer getNumeroMaximoPresencas(){
-        return (16*cargaHoraria)/15;
+    public Integer getNumeroMaximoPresencas() {
+        return (16 * cargaHoraria) / 15;
     }
-    
+
+    public Turma coletarTurma(String periodoLetivo, String numeroTurma) {
+        for (Turma turma : turmas) {
+            if (turma.getPeriodoLetivo().equals(periodoLetivo) && turma.getNumeroTurma().equals(numeroTurma)) {
+                return turma;
+            }
+        }
+        return null;
+    }
+
+    public Double coletarMediaAprovacao() {
+        //Se nenhuma turma foi adicionada, nao podemos falar q houve reprovacoes
+        if (turmas == null || turmas.isEmpty()){
+            return 100.0;
+        }
+        Double somaAprovacoes = 0.0;
+        for (Turma turma : turmas) {
+            somaAprovacoes += turma.coletarMediaAprovacao();
+        }
+        return somaAprovacoes / turmas.size();
+    }
+
+    public List<String> coletarTurmasPeriodoENumeroString() {
+        List<String> turmasString = new ArrayList<>();
+        for (Turma turma : turmas) {
+            turmasString.add(turma.getPeriodoLetivo() + "-" + turma.getNumeroTurma());
+        }
+        return turmasString;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null){
+        if (obj == null) {
             return false;
         }
         final Disciplina other = (Disciplina) obj;
@@ -122,6 +150,14 @@ public class Disciplina {
     @Override
     public String toString() {
         return nome + " - " + codigo;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Disciplina other = (Disciplina) o;
+        Double mediaAprovacoes = coletarMediaAprovacao();
+        Double mediaAprovacoesOther = other.coletarMediaAprovacao();
+        return mediaAprovacoes.compareTo(mediaAprovacoesOther);
     }
 
 }
