@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 /**
@@ -23,7 +24,7 @@ public class ControllerUtil {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoTela));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(new ScrollPane(root));
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();
