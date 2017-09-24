@@ -72,6 +72,9 @@ public class Matricula {
     public void setNotaRecuperacao(Double notaRecuperacao) {
         this.notaRecuperacao = notaRecuperacao;
     }
+    public void setNotaRecuperacao() {
+        this.notaRecuperacao = 0.0;
+    }
     
     public Double getMedia() {
         return media;
@@ -99,33 +102,33 @@ public class Matricula {
     
     //Assume-se que as notas estao carregadas
     //Sao matriculas ja fechadas, com recuperacoes feitas, entao essa funcao deve retornar o estado final (APR, APRN, REPF, REPNF, etc)
-    public void calcularSituacao(){
-        if (nota1 == null || nota2 == null || nota3 == null || numeroPresencas == null){
+    public void calcularSituacao() {
+        if (nota1 == null || nota2 == null || nota3 == null || numeroPresencas == null) {
             return;
         }
         double unidade1 = nota1, unidade2 = nota2, unidade3 = nota3;
-        
-        //Substituir a nota minima abaixo de 3 pela nota de recuperacao
-        if (unidade1 < 3 && unidade1 <= unidade2 && unidade1 <= unidade3){
-            unidade1 = notaRecuperacao;
-        }
-        else if(unidade2 < 3 && unidade2 <= unidade1 && unidade2 <= unidade3){
-            unidade2 = notaRecuperacao;
-        }
-        else if(unidade3 < 3 && unidade3 <= unidade1 && unidade3 <= unidade2){
-            unidade3 = notaRecuperacao;
-        }
-            
         media = (unidade1 + unidade2 + unidade3) / 3;
+
+        if (media < 7.0) {
+            //Substituir a nota minima abaixo de 3 pela nota de recuperacao
+            if (unidade1 < 3 && unidade1 <= unidade2 && unidade1 <= unidade3) {
+                unidade1 = notaRecuperacao;
+            } else if (unidade2 < 3 && unidade2 <= unidade1 && unidade2 <= unidade3) {
+                unidade2 = notaRecuperacao;
+            } else if (unidade3 < 3 && unidade3 <= unidade1 && unidade3 <= unidade2) {
+                unidade3 = notaRecuperacao;
+            }
+            media = (unidade1 + unidade2 + unidade3) / 3;
+        }
         
         boolean ehAssiduo = ehAssiduo();
         boolean passouPorMedia = media >= 7;
         boolean notasAcimaDeTres = unidade1 >= 3 && unidade2 >= 3 && unidade3 >= 3;
         boolean mediaAcimaDeCinco = media >= 5 && media < 7;
-        
+
         definirSituacao(ehAssiduo, passouPorMedia, mediaAcimaDeCinco, notasAcimaDeTres);
-        
-     }
+
+    }
     
     private boolean ehAssiduo(){
         Double aulasAssistidas = numeroPresencas.doubleValue();
