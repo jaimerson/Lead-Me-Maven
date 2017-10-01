@@ -1,7 +1,9 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import service.ProcessadorRequisitos;
 
@@ -139,6 +141,37 @@ public class Aluno extends Pessoa {
             }
         }
         return disciplinasPagas;
+    }
+    
+    public List<Matricula> coletarMatriculasDoPeriodo(String periodoLetivo){
+        List<Matricula> matriculasDoPeriodo = new ArrayList<>();
+        for (Matricula matricula: matriculas){
+            if (matricula.getTurma().getPeriodoLetivo().equals(periodoLetivo)){
+                matriculasDoPeriodo.add(matricula);
+            }
+        }
+        return matriculasDoPeriodo;
+    }
+    
+    public Map<String,List<Disciplina>> coletarMatriculasAgrupadasPorPeriodoLetivo(boolean apenasAprovados){
+        Map<String,List<Disciplina>> disciplinasAgrupadas = new HashMap<>();
+        
+        List<Matricula> matriculas = new ArrayList<>();
+        List<Disciplina> disciplinasDoPeriodo;
+        String periodoLetivo;
+        for (Matricula matricula: matriculas){
+            if (apenasAprovados && !matricula.foiAprovado()){
+                continue;
+            }
+            periodoLetivo = matricula.getTurma().getPeriodoLetivo();
+            if (!disciplinasAgrupadas.containsKey(periodoLetivo)){
+                disciplinasAgrupadas.put(periodoLetivo, new ArrayList<Disciplina>());
+            }
+            disciplinasDoPeriodo = disciplinasAgrupadas.get(periodoLetivo);
+            disciplinasDoPeriodo.add(matricula.getTurma().getDisciplina());
+            disciplinasAgrupadas.put(periodoLetivo, disciplinasDoPeriodo);
+        }
+        return disciplinasAgrupadas;
     }
 
 }

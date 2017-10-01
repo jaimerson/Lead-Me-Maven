@@ -129,6 +129,10 @@ public class Disciplina implements Comparable{
         }
         return somaAprovacoes / turmas.size();
     }
+    
+    public Double coletarMediaReprovacao(){
+        return 100.0 - coletarMediaAprovacao();
+    }
 
     public List<String> coletarTurmasPeriodoENumeroString() {
         List<String> turmasString = new ArrayList<>();

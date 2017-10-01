@@ -15,14 +15,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
@@ -36,6 +37,7 @@ import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.Matricula;
+import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
 import service.ServiceFacade;
@@ -87,6 +89,18 @@ public class TelaPrincipalController extends Application implements Initializabl
     
     @FXML
     private Tab tabUmaDisciplina;
+    
+    @FXML
+    private ComboBox<MatrizCurricular> cbGradeCurricular;
+    
+    @FXML
+    private ListView<Disciplina> listDisciplinasSelecionadas;
+    
+    @FXML
+    private Button btnAdicionarDisciplina;
+    
+    @FXML
+    private Button btnRemoverDisciplina;
 
     private ServiceFacade service;
     //Possibilidades de resultado de busca de disciplina para consulta de estatisticas

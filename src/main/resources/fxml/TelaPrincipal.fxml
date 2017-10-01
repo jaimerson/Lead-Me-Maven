@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
    <children>
       <Label layoutX="14.0" layoutY="13.0" text="Lead Me" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
          <font>
@@ -19,7 +19,7 @@
             <Font name="Linux Biolinum G Regular" size="14.0" />
          </font>
       </Label>
-      <TabPane layoutY="59.0" prefHeight="509.0" prefWidth="788.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
+      <TabPane layoutY="59.0" prefHeight="557.0" prefWidth="973.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="59.0">
         <tabs>
           <Tab text="Início">
             <content>
@@ -64,15 +64,15 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ScrollPane layoutY="-5.0" prefHeight="487.0" prefWidth="796.0">
+                        <ScrollPane layoutY="-5.0" prefHeight="539.0" prefWidth="975.0">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="482.0" prefWidth="788.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="533.0" prefWidth="973.0">
                                  <children>
-                                    <TabPane layoutY="4.0" prefHeight="482.0" prefWidth="788.0" tabClosingPolicy="UNAVAILABLE">
+                                    <TabPane layoutY="2.0" prefHeight="535.0" prefWidth="971.0" tabClosingPolicy="UNAVAILABLE">
                                       <tabs>
                                         <Tab text="Sobre mim">
                                           <content>
-                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="496.0" prefWidth="964.0" />
                                           </content>
                                         </Tab>
                                         <Tab fx:id="tabUmaDisciplina" text="Sobre uma disciplina">
@@ -81,7 +81,7 @@
                                                    <children>
                                                       <ScrollPane layoutX="-1.0" prefHeight="453.0" prefWidth="788.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="745.0" prefWidth="786.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="745.0" prefWidth="974.0">
                                                                <children>
                                                                   <Label layoutX="11.0" layoutY="16.0" text="Selecione a disciplina">
                                                                      <font>
@@ -94,10 +94,10 @@
                                                                         <Font name="Linux Biolinum G Regular" size="14.0" />
                                                                      </font>
                                                                   </Label>
-                                                                  <PieChart fx:id="chartAprovacoes" layoutX="129.0" layoutY="107.0" prefHeight="320.0" prefWidth="528.0" />
+                                                                  <PieChart fx:id="chartAprovacoes" layoutX="228.0" layoutY="141.0" prefHeight="320.0" prefWidth="528.0" />
                                                                   <ComboBox fx:id="cbTurmas" layoutX="42.0" layoutY="459.0" onAction="#carregarGraficosTurma" prefHeight="25.0" prefWidth="150.0" />
                                                                   <Label layoutX="41.0" layoutY="439.0" text="Selecione a turma" />
-                                                                  <ScatterChart fx:id="graficoFrequenciaNotas" layoutX="171.0" layoutY="499.0" prefHeight="234.0" prefWidth="400.0" title="Frequência x Média">
+                                                                  <ScatterChart fx:id="graficoFrequenciaNotas" layoutX="282.0" layoutY="507.0" prefHeight="234.0" prefWidth="400.0" title="Frequência x Média">
                                                                     <xAxis>
                                                                       <NumberAxis label="Nº presenças" side="BOTTOM" />
                                                                     </xAxis>
@@ -117,11 +117,11 @@
                                              <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="171.0" prefWidth="230.0">
                                                    <children>
-                                                      <ScrollPane prefHeight="452.0" prefWidth="788.0">
+                                                      <ScrollPane prefHeight="507.0" prefWidth="976.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="785.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="503.0" prefWidth="972.0">
                                                                <children>
-                                                                  <TableView fx:id="tabelaDisciplinasDificeis" layoutX="21.0" layoutY="39.0" prefHeight="323.0" prefWidth="402.0">
+                                                                  <TableView fx:id="tabelaDisciplinasDificeis" layoutX="265.0" layoutY="44.0" prefHeight="418.0" prefWidth="429.0">
                                                                     <columns>
                                                                       <TableColumn editable="false" prefWidth="311.0" sortable="false" text="C1" />
                                                                       <TableColumn editable="false" minWidth="0.0" prefWidth="90.0" sortable="false" text="C2" />
@@ -129,7 +129,7 @@
                                                                   </TableView>
                                                                   <Label layoutX="21.0" layoutY="14.0" text="Disciplinas mais difíceis">
                                                                      <font>
-                                                                        <Font size="14.0" />
+                                                                        <Font size="18.0" />
                                                                      </font>
                                                                   </Label>
                                                                </children>
@@ -154,25 +154,39 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="345.0" prefWidth="788.0">
                      <children>
-                        <Label layoutX="310.0" layoutY="3.0" text="Disciplinas disponíveis">
+                        <Label layoutX="408.0" layoutY="3.0" text="Disciplinas disponíveis">
                            <font>
                               <Font name="Linux Biolinum G Regular" size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtBuscarDisciplina" layoutX="14.0" layoutY="48.0" />
-                        <Label layoutX="14.0" layoutY="25.0" text="Buscar disciplina">
+                        <TextField fx:id="txtBuscarDisciplina" layoutX="17.0" layoutY="60.0" />
+                        <Label layoutX="18.0" layoutY="42.0" text="Buscar disciplina">
                            <font>
                               <Font name="Linux Biolinum G Regular" size="14.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="tableDisciplinasDisponiveis" layoutX="29.0" layoutY="79.0" prefHeight="342.0" prefWidth="738.0">
+                        <TableView fx:id="tableDisciplinasDisponiveis" layoutX="20.0" layoutY="95.0" prefHeight="342.0" prefWidth="622.0">
                           <columns>
                             <TableColumn prefWidth="101.0" text="C1" />
-                            <TableColumn prefWidth="435.0" text="C2" />
-                              <TableColumn minWidth="0.0" prefWidth="128.0" text="C1" />
-                              <TableColumn prefWidth="73.0" text="C1" />
+                            <TableColumn prefWidth="312.3333435058594" text="C2" />
+                              <TableColumn minWidth="0.0" prefWidth="115.0" text="C1" />
+                              <TableColumn prefWidth="92.0" text="C1" />
                           </columns>
                         </TableView>
+                        <Label layoutX="742.0" layoutY="65.0" text="Disciplinas selecionadas">
+                           <font>
+                              <Font name="Linux Biolinum G Regular" size="14.0" />
+                           </font>
+                        </Label>
+                        <ListView fx:id="listDisciplinasSelecionadas" layoutX="659.0" layoutY="93.0" prefHeight="346.0" prefWidth="299.0" />
+                        <ComboBox fx:id="cbGradeCurricular" layoutX="492.0" layoutY="61.0" prefWidth="150.0" />
+                        <Label layoutX="488.0" layoutY="41.0" text="Selecionar grade curricular">
+                           <font>
+                              <Font name="Linux Biolinum G Regular" size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btnAdicionarDisciplina" layoutX="524.0" layoutY="445.0" mnemonicParsing="false" text="Adicionar disciplina" />
+                        <Button fx:id="btnRemoverDisciplina" layoutX="841.0" layoutY="445.0" mnemonicParsing="false" text="Remover disciplina" />
                      </children>
                   </AnchorPane>
                </content>
