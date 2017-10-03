@@ -5,7 +5,9 @@
  */
 package service;
 
+import excecoes.SemPeriodoLetivoException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import modelo.Aluno;
@@ -19,79 +21,142 @@ import modelo.MatrizDisciplina;
  * @author rafao
  */
 public class SimulacaoService {
+
+    public static final String ABAIXO_RECOMENDADO = "Carga horária abaixo do recomendado";
+    public static final String RECOMENDADO = "Carga horária recomendada";
+    public static final String AVISO_EXCEDENTE = "Carga horária um pouco acima do normal";
+    public static final String ACIMA_RECOMENDADO = "Carga horária acima do recomendado!";
+
+    public static final double PROPORCAO_MINIMA_CH = 0.7;
+    public static final double PROPORCAO_MAXIMA_IDEAL_CH = 1.1;
+    public static final double PROPORCAO_MINIMA_NAO_RECOMENDADA_CH = 1.3;
+
     private static SimulacaoService instance = new SimulacaoService();
-    
-    private SimulacaoService(){
-        
+
+    private Double pesoEstimadoAluno;
+
+    private SimulacaoService() {
+
     }
-    
-    public static SimulacaoService getInstance(){
+
+    public static SimulacaoService getInstance() {
         return instance;
     }
-            
+
     /**
-     * Função responsável em retornar o peso de uma disciplina em um semestre.
-     * A lógica usada leva em consideração a carga horária da disciplina e a média de reprovações
+     * Função responsável em retornar o peso de uma disciplina em um semestre. A
+     * lógica usada leva em consideração a carga horária da disciplina e a média
+     * de reprovações
+     *
      * @param disciplina
      * @return peso da disciplina no semestre
      */
-    public Double coletarPesoDisciplina(Disciplina disciplina){
-        return disciplina.getCargaHoraria()*(1 + disciplina.coletarMediaReprovacao()/100);
+    public Double coletarPesoDisciplina(Disciplina disciplina) {
+        return disciplina.getCargaHoraria() * (1 + disciplina.coletarMediaReprovacao() / 100);
     }
-    
-    public Double coletarPesoSemestre(List<Disciplina> disciplinas){
+
+    public Double coletarPesoSemestre(List<Disciplina> disciplinas) {
         Double pesoSemestre = 0.0;
-        for (Disciplina disciplina: disciplinas){
+        for (Disciplina disciplina : disciplinas) {
             pesoSemestre += coletarPesoDisciplina(disciplina);
         }
         return pesoSemestre;
     }
-    
-    public Double coletarPesoDoSemestre(List<MatrizDisciplina> disciplinas){
+
+    public Double coletarPesoDoSemestre(List<MatrizDisciplina> disciplinas) {
         List<Disciplina> disciplinasParaCalculo = new ArrayList<>();
-        for(MatrizDisciplina matrizDisciplina: disciplinas){
+        for (MatrizDisciplina matrizDisciplina : disciplinas) {
             disciplinasParaCalculo.add(matrizDisciplina.getDisciplina());
         }
         return coletarPesoSemestre(disciplinasParaCalculo);
     }
-    
-    public Double coletarPesoAproveitado(Aluno aluno, String periodoLetivo){
-        Double pesoAproveitado = 0.0;
-        List<Matricula> matriculasDoPeriodo = aluno.coletarMatriculasDoPeriodo(periodoLetivo);
-        for (Matricula matricula: matriculasDoPeriodo){
-            if (matricula.foiAprovado()){
-                pesoAproveitado += coletarPesoDisciplina(matricula.getTurma().getDisciplina());
-            }
+
+
+    /**
+     * Esse método serve simplesmente para fazer o cálculo com base no último ou
+     * nos dois últimos semestres Assume-se que o aluno tenha ao menos um
+     * período letivo cursado
+     *
+     * @param aluno
+     * @return o peso médio do(s) último(s) período(s) letivo(s)
+     */
+    private Double calcularPesoMedioDoAluno(Aluno aluno) throws SemPeriodoLetivoException {
+        Map<String, List<Disciplina>> matriculasAgrupadasPorPeriodoLetivo = aluno.coletarMatriculasAgrupadasPorPeriodoLetivo(true);
+        List<String> periodosLetivosCursados = new ArrayList(matriculasAgrupadasPorPeriodoLetivo.keySet());
+        //A partir desse momento, eu sei quais os últimos períodos
+        Collections.sort(periodosLetivosCursados);
+        List<Disciplina> disciplinasSemestre;
+        Double dificuldade = 0.0;
+        if (periodosLetivosCursados.isEmpty()) {
+            throw new SemPeriodoLetivoException("O aluno é ingressante e deve ter seu peso calculado com base nos demais");
         }
-        return pesoAproveitado;
+        disciplinasSemestre = matriculasAgrupadasPorPeriodoLetivo.get(periodosLetivosCursados.get(periodosLetivosCursados.size() - 1));
+        dificuldade = coletarPesoSemestre(disciplinasSemestre);
+        //Tem pelo menos dois semestres cursados: pode fazer a media
+        if (periodosLetivosCursados.size() > 1) {
+            disciplinasSemestre = matriculasAgrupadasPorPeriodoLetivo.get(periodosLetivosCursados.get(periodosLetivosCursados.size() - 2));
+            dificuldade += coletarPesoSemestre(disciplinasSemestre);
+            dificuldade /= 2;
+        }
+        return dificuldade;
     }
-    
-    
-    public Double coletarPesoMedioSuportado(Curso curso){
+
+    private Double coletarPesoMedioSuportado(Curso curso) throws SemPeriodoLetivoException {
         int qtdeAlunosParaMedia = 0;
         Double pesoAcumulado = 0.0;
-        
+
         List<Aluno> alunos = curso.getAlunos();
-        for (Aluno aluno: alunos){
+        for (Aluno aluno : alunos) {
             List<Matricula> matriculas = aluno.getMatriculas();
-            if (matriculas.isEmpty()){
+            if (matriculas.isEmpty()) {
                 continue;
             }
-            //Aqui eu espero facilmente coletar no máximo os dois ultimos semestres do aluno
-            Map<String, List<Disciplina>> matriculasAgrupadasPorPeriodoLetivo = aluno.coletarMatriculasAgrupadasPorPeriodoLetivo(true);
-            
+            pesoAcumulado += calcularPesoMedioDoAluno(aluno);
+            qtdeAlunosParaMedia++;
         }
         return pesoAcumulado / qtdeAlunosParaMedia;
     }
-    
-    //Podemos considerar a média, ou o ultimo semestre, ou os dois ultimos, 
-    //ou uma proporcao do peso do aluno com a media dos alunos
-    public Double coletarPesoSuportado(Aluno aluno){
+
+    /**
+     * Carrega o peso estimado para o aluno suportar no semestre 
+     * Deve ser chamado assim que a tela de sugestões for carregada
+     *
+     * @param aluno
+     */
+    public void carregarPesoMaximoParaAluno(Aluno aluno) {
         List<Matricula> matriculas = aluno.getMatriculas();
         //Se tiver vazia, eh pq eh um aluno ingressante, entao devemos calcular a media dos outros
-        if (matriculas.isEmpty()){
-            
+        if (matriculas.isEmpty()) {
+            try {
+                this.pesoEstimadoAluno = coletarPesoMedioSuportado(aluno.getCurso());
+            } catch (SemPeriodoLetivoException ex) {
+//                Logger.getLogger(SimulacaoService.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("O método de coletar peso médio do curso não obteve sucesso");
+            }
         }
-        return 0.0;
+        try {
+            this.pesoEstimadoAluno = calcularPesoMedioDoAluno(aluno);
+        } catch (SemPeriodoLetivoException ex) {
+            System.err.println("Houve erro ao calcular peso médio do aluno");
+        }
+    }
+
+    /**
+     * Retorna a recomendação do semestre em relação ao aluno 
+     * Deve ser chamada sempre que um aluno colocar ou retirar uma disciplina da simulação
+     * @param disciplinas
+     * @return uma string com a recomendação do semestre para o aluno (pouca matéria, ideal, um pouco acima ou muito acima)
+     */
+    public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas) {
+        Double pesoSemestre = coletarPesoDoSemestre(disciplinas);
+        if (pesoSemestre < PROPORCAO_MINIMA_CH * this.pesoEstimadoAluno) {
+            return ABAIXO_RECOMENDADO;
+        } else if (pesoSemestre <= PROPORCAO_MAXIMA_IDEAL_CH * this.pesoEstimadoAluno) {
+            return RECOMENDADO;
+        } else if (pesoSemestre < PROPORCAO_MINIMA_NAO_RECOMENDADA_CH * this.pesoEstimadoAluno) {
+            return AVISO_EXCEDENTE;
+        } else {
+            return ACIMA_RECOMENDADO;
+        }
     }
 }

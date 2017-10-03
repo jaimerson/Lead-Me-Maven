@@ -20,5 +20,7 @@ public interface ServiceFacade {
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso); 
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
     public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma);
+    public void carregarPesoMaximoParaAluno(Aluno aluno);
+    public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas);
     
 }

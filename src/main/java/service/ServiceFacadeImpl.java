@@ -13,10 +13,12 @@ public class ServiceFacadeImpl implements ServiceFacade {
 
     private LoginService loginService;
     private CursoService cursoService;
+    private SimulacaoService simulacaoService;
     
     public ServiceFacadeImpl() {
         loginService = LoginService.getInstance();
         cursoService = CursoService.getInstance();
+        simulacaoService = SimulacaoService.getInstance();
     }
 
     @Override
@@ -57,6 +59,16 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma){
         return cursoService.coletarTurma(disciplina, periodoLetivo, numeroTurma);
+    }
+
+    @Override
+    public void carregarPesoMaximoParaAluno(Aluno aluno) {
+        simulacaoService.carregarPesoMaximoParaAluno(aluno);
+    }
+
+    @Override
+    public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas) {
+        return simulacaoService.coletarRecomendacaoSemestre(disciplinas);
     }
 
 }
