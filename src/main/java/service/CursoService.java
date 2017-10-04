@@ -84,8 +84,8 @@ public class CursoService {
      * @param numeroTurma também escolhido na tela de estatísticas. (ex: 2017.1-T01)
      * @return a instância da turma do período letivo e número da turma escolhidos
      */
-    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma){
-        return disciplina.coletarTurma(periodoLetivo, numeroTurma);
+    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo){
+        return disciplina.coletarTurma(periodoLetivo);
     }
     
     /**

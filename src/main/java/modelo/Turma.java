@@ -63,9 +63,10 @@ public class Turma {
         this.professor = professor;
     }
     
-    public Matricula adicionarAluno(Aluno aluno){
+    public synchronized Matricula adicionarAluno(Aluno aluno){
         Matricula novaMatricula = new Matricula(this,aluno);
         this.matriculas.add(novaMatricula);
+        aluno.adicionarMatricula(novaMatricula);
         return novaMatricula;
     }
     

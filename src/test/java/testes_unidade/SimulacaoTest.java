@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import service.SimulacaoService;
 
 /**
@@ -35,7 +36,7 @@ public class SimulacaoTest {
     public static void setUpClass() throws DataException, AutenticacaoException {
         aluno = new Aluno();
         alunoDAO = AlunoDAO.getInstance();
-        aluno = alunoDAO.carregarAluno("201602345", "ciclano");
+//        aluno = alunoDAO.carregarAluno("201602345", "ciclano");
         simulacaoService = SimulacaoService.getInstance();
     }
     
@@ -51,7 +52,7 @@ public class SimulacaoTest {
     public void tearDown() {
     }
     
-    @Test
+    @Ignore @Test
     public void testCargaHorariaPonderada(){
         MatrizDisciplina matrizDisciplina = aluno.getCurso().getDisciplina(aluno.getMatrizCurricular(), "IMD0038");
         Double pesoPonderado = simulacaoService.coletarPesoDisciplina(matrizDisciplina.getDisciplina());

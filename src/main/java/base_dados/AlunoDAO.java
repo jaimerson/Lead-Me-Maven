@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Aluno;
 import modelo.Curso;
+import modelo.Disciplina;
 import modelo.Matricula;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
@@ -89,14 +90,82 @@ public class AlunoDAO extends AbstractDAO {
         return logins;
     }
 
-    public Aluno carregarAluno(String usuario, String senha) throws DataException, AutenticacaoException {
-        if (!existeUsuario(usuario, senha)) {
-            throw new AutenticacaoException("Usuário e/ou senha inválidos");
-        }
+//    public Aluno carregarAluno(String usuario, String senha) throws DataException, AutenticacaoException {
+//        if (!existeUsuario(usuario, senha)) {
+//            throw new AutenticacaoException("Usuário e/ou senha inválidos");
+//        }
+//        Aluno aluno = new Aluno();
+//        aluno.setNumeroMatricula(usuario);
+//        carregarHistoricoAluno(aluno);
+//        return aluno;
+//    }
+    
+    //Método utilizado pela funcionalidade de carregar curso
+    public void carregarAluno(String nomeArquivoHistorico, Curso curso) throws DataException{
         Aluno aluno = new Aluno();
-        aluno.setNumeroMatricula(usuario);
-        carregarHistoricoAluno(aluno);
-        return aluno;
+        try {
+            BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(nomeArquivoHistorico), "UTF-8"));
+            aluno.setNome(lerArq.readLine());
+            aluno.setNumeroMatricula(lerArq.readLine());
+            String cursoComMatriz = lerArq.readLine();
+            String nomeCurso = cursoComMatriz.split(" - ")[0];
+            //Se o nome do curso não for o mesmo.. nao temos pra que continuar a leitura do arquivo
+            if (!nomeCurso.equalsIgnoreCase(curso.getNome())){
+                lerArq.close();
+                return;
+            }
+            aluno.setCurso(curso);
+            
+            String matrizCurricular = cursoComMatriz.split(" - ")[1];
+            aluno.setMatrizCurricular(matrizCurricular);
+            aluno.setIea(Double.parseDouble(lerArq.readLine()));
+            aluno.setMcn(Double.parseDouble(lerArq.readLine()));
+            String linha;
+            //O aluno tem uma lista de matriculas
+            Matricula matricula;
+            MatrizDisciplina matrizDisciplina;
+            Disciplina disciplina;
+            Turma turma;
+            String[] dadosDisciplina;
+            while ((linha = lerArq.readLine()) != null) {
+                dadosDisciplina = linha.split(";");
+                matrizDisciplina = aluno.getCurso().getDisciplina(matrizCurricular, dadosDisciplina[1]);
+                if (matrizDisciplina == null) {
+                    continue;
+                }
+                disciplina = matrizDisciplina.getDisciplina();
+                synchronized(disciplina){
+                    if (disciplina.coletarTurma(dadosDisciplina[0]) == null){
+                        turma = new Turma(dadosDisciplina[0], disciplina);
+                        disciplina.adicionarTurma(turma);
+                    }
+                    else{
+                        turma = disciplina.coletarTurma(dadosDisciplina[0]);
+                    }
+                }
+                //Metodo synchronized
+                matricula = turma.adicionarAluno(aluno);
+                
+                matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
+                matricula.setSituacao(dadosDisciplina[5]);
+                
+                //Contando as horas cumpridas  
+                if (!matricula.getSituacao().contains("REP")) {
+                    if (matrizDisciplina.getNaturezaDisciplina().equals("OBRIGATORIO")) {
+                        aluno.setCargaObrigatoriaCumprida(aluno.getCargaObrigatoriaCumprida() + matrizDisciplina.getDisciplina().getCargaHoraria());
+                    } else {
+                        aluno.setCargaOptativaCumprida(aluno.getCargaOptativaCumprida() + matrizDisciplina.getDisciplina().getCargaHoraria());
+                    }
+                }
+            }
+            //Metodo synchronized
+            curso.adicionarAluno(aluno);
+            lerArq.close();
+        } catch (FileNotFoundException ex) {
+            System.err.println("FileNotFoundException");
+        } catch (IOException ex) {
+            System.err.println("IOException");
+        }
     }
 
     private void carregarHistoricoAluno(Aluno aluno) throws DataException {
@@ -105,11 +174,11 @@ public class AlunoDAO extends AbstractDAO {
             aluno.setNome(lerArq.readLine());
             lerArq.readLine(); //ignorando a matricula
             String cursoComMatriz = lerArq.readLine();
-            String nomeCurso = cursoComMatriz.split(" - ")[0];
+//            String nomeCurso = cursoComMatriz.split(" - ")[0];
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
-            Curso curso = cursoDAO.carregarCurso(nomeCurso);
-            aluno.setCurso(curso);
-            curso.adicionarAluno(aluno);
+//            Curso curso = cursoDAO.carregarCurso(nomeCurso);
+//            aluno.setCurso(curso);
+//            curso.adicionarAluno(aluno);
             aluno.setMatrizCurricular(matrizCurricular);
             aluno.setIea(Double.parseDouble(lerArq.readLine()));
             aluno.setMcn(Double.parseDouble(lerArq.readLine()));

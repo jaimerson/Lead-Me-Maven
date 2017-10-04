@@ -78,31 +78,31 @@ public class TelaPrincipalController extends Application implements Initializabl
 
     @FXML
     private TableView<MatrizDisciplina> tableDisciplinasDisponiveis;
-    
+
     @FXML
     private TableView<Disciplina> tabelaDisciplinasDificeis;
-    
+
     @FXML
     private ScatterChart<Integer, Double> graficoFrequenciaNotas;
 
     @FXML
     private ComboBox<String> cbTurmas;
-    
+
     @FXML
     private Tab tabUmaDisciplina;
-    
+
     @FXML
     private ComboBox<MatrizCurricular> cbGradeCurricular;
-    
+
     @FXML
     private ListView<MatrizDisciplina> listDisciplinasSelecionadas;
-    
+
     @FXML
     private Button btnAdicionarDisciplina;
-    
+
     @FXML
     private Button btnRemoverDisciplina;
-    
+
     @FXML
     private Label lbRecomendacao;
 
@@ -113,7 +113,7 @@ public class TelaPrincipalController extends Application implements Initializabl
     private Disciplina disciplinaSelecionadaEstatistica;
     private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         util.carregarTela("/fxml/TelaPrincipal.fxml");
@@ -131,7 +131,7 @@ public class TelaPrincipalController extends Application implements Initializabl
 
             @Override
             public void handle(AutoCompletionEvent<String> event) {
-                disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(),event.getCompletion());
+                disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(), event.getCompletion());
                 carregarGraficoAprovacoes();
                 event.consume();
             }
@@ -151,9 +151,9 @@ public class TelaPrincipalController extends Application implements Initializabl
         });
         //Tela inicial
         carregarInformacoesAluno(alunoLogado);
-        
+
         //Tela de estatísticas
-        disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(),"IMD0040");
+        disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(), "IMD0040");
         txtDisciplina.setText(disciplinaSelecionadaEstatistica.toString());
         carregarGraficoAprovacoes();
         carregarScatterDaTurma();
@@ -161,31 +161,26 @@ public class TelaPrincipalController extends Application implements Initializabl
         carregarSugestoes();
         carregarDisciplinasMaisDificeis(alunoLogado.getCurso());
     }
-    
+
     @FXML
     void carregarGraficosTurma(ActionEvent event) {
         carregarScatterDaTurma();
     }
-    
-    public void carregarScatterDaTurma(){
+
+    public void carregarScatterDaTurma() {
         String opcaoSelecionada = cbTurmas.getSelectionModel().getSelectedItem();
-            if (opcaoSelecionada == null){
-                return;
-            }
-        String periodoLetivo = opcaoSelecionada.split("-")[0];
-        String numeroTurma = opcaoSelecionada.split("-")[1];
-        Turma turmaSelecionada = service.coletarTurma(disciplinaSelecionadaEstatistica, periodoLetivo, numeroTurma);
-        if (turmaSelecionada == null){
+        if (opcaoSelecionada == null) {
+            return;
+        }
+        String periodoLetivo = opcaoSelecionada;
+        Turma turmaSelecionada = service.coletarTurma(disciplinaSelecionadaEstatistica, periodoLetivo);
+        if (turmaSelecionada == null) {
             System.err.println("Turma selecionada eh nula!");
             return;
         }
-//        NumberAxis xAxis = new NumberAxis();
-//        xAxis.setLabel("Nº presenças");
-//        NumberAxis yAxis = new NumberAxis();
-//        yAxis.setLabel("Nota final");
-        XYChart.Series<Integer, Double> series = new XYChart.Series<>() ;
-        for (Matricula matricula: turmaSelecionada.getMatriculas()){
-            series.getData().add(new XYChart.Data(matricula.getNumeroPresencas(),matricula.getMedia()));
+        XYChart.Series<Integer, Double> series = new XYChart.Series<>();
+        for (Matricula matricula : turmaSelecionada.getMatriculas()) {
+            series.getData().add(new XYChart.Data(matricula.getNumeroPresencas(), matricula.getMedia()));
         }
         graficoFrequenciaNotas.getData().setAll(series);
     }
@@ -203,27 +198,26 @@ public class TelaPrincipalController extends Application implements Initializabl
         Double aprovacoes;
         Aluno alunoLogado = service.coletarAlunoLogado();
         try {
-            aprovacoes = service.coletarMediaAprovacao(alunoLogado.getCurso(),disciplinaSelecionadaEstatistica);
+            aprovacoes = service.coletarMediaAprovacao(alunoLogado.getCurso(), disciplinaSelecionadaEstatistica);
             ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
                     new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
                     new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
             chartAprovacoes.setData(dadosPieChart);
             txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionadaEstatistica.getNome());
-            carregarListaTurmasSelecionavel(disciplinaSelecionadaEstatistica.coletarTurmasPeriodoENumeroString());
-            
+            carregarListaTurmasSelecionavel(disciplinaSelecionadaEstatistica.coletarTurmasPeriodoToString());
+
         } catch (DataException ex) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Erro");
             alert.setHeaderText("Erro ao acessar os dados");
             alert.setContentText("Houve um problema ao coletar a média da aprovação");
             alert.showAndWait();
-        }
-        finally{
+        } finally {
             txtDisciplina.clear();
         }
     }
-    
-    private void carregarListaTurmasSelecionavel(List<String> turmasSelecionaveis){
+
+    private void carregarListaTurmasSelecionavel(List<String> turmasSelecionaveis) {
         ObservableList<String> listaObs = FXCollections.observableArrayList(turmasSelecionaveis);
         cbTurmas.setItems(listaObs);
         cbTurmas.getSelectionModel().select(0);
@@ -231,7 +225,7 @@ public class TelaPrincipalController extends Application implements Initializabl
 
     private void carregarSugestoes() {
         Aluno alunoLogado = service.coletarAlunoLogado();
-        //service.carregarPesoMaximoParaAluno(alunoLogado);
+        service.carregarPesoMaximoParaAluno(alunoLogado);
         List<MatrizDisciplina> disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasDisponiveis);
         tableDisciplinasDisponiveis.setItems(listaObs);
@@ -255,51 +249,51 @@ public class TelaPrincipalController extends Application implements Initializabl
         semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
     }
-    
-    public void carregarDisciplinasMaisDificeis(Curso curso){
+
+    public void carregarDisciplinasMaisDificeis(Curso curso) {
         try {
             List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis(curso);
             ObservableList<Disciplina> listaDisciplinasTabela = FXCollections.observableList(disciplinasMaisDificeis);
             tabelaDisciplinasDificeis.setItems(listaDisciplinasTabela);
-            TableColumn<Disciplina,String> colunaNomeDisciplina = new TableColumn<>("Nome");
+            TableColumn<Disciplina, String> colunaNomeDisciplina = new TableColumn<>("Nome");
             colunaNomeDisciplina.setSortable(false);
             colunaNomeDisciplina.setEditable(false);
-            TableColumn<Disciplina,String> colunaAprovacoes = new TableColumn<>("% aprovados");
+            TableColumn<Disciplina, String> colunaAprovacoes = new TableColumn<>("% aprovados");
             colunaAprovacoes.setSortable(false);
             colunaAprovacoes.setEditable(false);
             colunaNomeDisciplina.setCellValueFactory(new PropertyValueFactory("nome"));
             colunaAprovacoes.setCellValueFactory(new Callback<CellDataFeatures<Disciplina, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
-                return new SimpleStringProperty(String.format("%.1f", c.getValue().coletarMediaAprovacao()));
-            }
-            
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
+                    return new SimpleStringProperty(String.format("%.1f", c.getValue().coletarMediaAprovacao()));
+                }
+
             });
-            tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina,colunaAprovacoes);
-            
+            tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina, colunaAprovacoes);
+
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void adicionarDisciplinaParaSimulacao(ActionEvent event){
-       MatrizDisciplina selectedItem = tableDisciplinasDisponiveis.getSelectionModel().getSelectedItem();
-        if(selectedItem != null){
+    public void adicionarDisciplinaParaSimulacao(ActionEvent event) {
+        MatrizDisciplina selectedItem = tableDisciplinasDisponiveis.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
             listDisciplinasSelecionadas.getItems().add(selectedItem);
             tableDisciplinasDisponiveis.getItems().remove(selectedItem);
-//            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
         }
-       }
-    
+    }
+
     @FXML
     void removerDisciplinaParaSimulacao(ActionEvent event) {
         MatrizDisciplina selectedItem = listDisciplinasSelecionadas.getSelectionModel().getSelectedItem();
-        if(selectedItem != null){
+        if (selectedItem != null) {
             listDisciplinasSelecionadas.getItems().remove(selectedItem);
             tableDisciplinasDisponiveis.getItems().add(selectedItem);
             Collections.sort(tableDisciplinasDisponiveis.getItems());
-  //          lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
         }
     }
 }
