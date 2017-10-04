@@ -65,7 +65,7 @@ public class CursoDAO extends AbstractDAO{
         String[] arquivosHistoricoAlunos = coletarArquivosHistoricoAlunos();
         List<Thread> threadsParaAlunos = new ArrayList<>();
         for (String arquivoHistoricoAluno: arquivosHistoricoAlunos){
-            Thread th = new CarregadorAluno(alunoDAO, DIRETORIO_RECURSOS + "historicos/" + arquivoHistoricoAluno, curso);
+            Thread th = new CarregadorAluno(arquivoHistoricoAluno, alunoDAO, DIRETORIO_RECURSOS + "historicos/" + arquivoHistoricoAluno, curso);
             th.start();
             threadsParaAlunos.add(th);
         }

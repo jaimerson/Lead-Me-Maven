@@ -157,7 +157,7 @@ public class Aluno extends Pessoa {
     public Map<String,List<Disciplina>> coletarMatriculasAgrupadasPorPeriodoLetivo(boolean apenasAprovados){
         Map<String,List<Disciplina>> disciplinasAgrupadas = new HashMap<>();
         
-        List<Matricula> matriculas = new ArrayList<>();
+//        List<Matricula> matriculas = new ArrayList<>();
         List<Disciplina> disciplinasDoPeriodo;
         String periodoLetivo;
         for (Matricula matricula: matriculas){

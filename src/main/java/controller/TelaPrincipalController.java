@@ -180,7 +180,7 @@ public class TelaPrincipalController extends Application implements Initializabl
         }
         XYChart.Series<Integer, Double> series = new XYChart.Series<>();
         for (Matricula matricula : turmaSelecionada.getMatriculas()) {
-            series.getData().add(new XYChart.Data(matricula.getNumeroPresencas(), matricula.getMedia()));
+            series.getData().add(new XYChart.Data(matricula.getPorcentagemFrequencia(), matricula.getMedia()));
         }
         graficoFrequenciaNotas.getData().setAll(series);
     }

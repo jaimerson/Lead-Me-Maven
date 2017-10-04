@@ -9,7 +9,7 @@ public class Matricula {
 
     private Turma turma;
     private Aluno aluno;
-    private Integer numeroPresencas;
+    private Double porcentagemFrequencia;
 
     private Double nota1;
     private Double nota2;
@@ -22,7 +22,7 @@ public class Matricula {
     public Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
         this.aluno = aluno;
-        numeroPresencas = 0;
+        porcentagemFrequencia = 0.0;
     }
 
     public Turma getTurma() {
@@ -92,18 +92,18 @@ public class Matricula {
         this.situacao = situacao;
     }
     
-    public Integer getNumeroPresencas() {
-        return numeroPresencas;
+    public Double getPorcentagemFrequencia() {
+        return porcentagemFrequencia;
     }
 
-    public void setNumeroPresencas(Integer numeroPresencas) {
-        this.numeroPresencas = numeroPresencas;
+    public void setPorcentagemPresencas(Double numeroPresencas) {
+        this.porcentagemFrequencia = numeroPresencas;
     }
     
     //Assume-se que as notas estao carregadas
     //Sao matriculas ja fechadas, com recuperacoes feitas, entao essa funcao deve retornar o estado final (APR, APRN, REPF, REPNF, etc)
     public void calcularSituacao() {
-        if (nota1 == null || nota2 == null || nota3 == null || numeroPresencas == null) {
+        if (nota1 == null || nota2 == null || nota3 == null || porcentagemFrequencia == null) {
             return;
         }
         double unidade1 = nota1, unidade2 = nota2, unidade3 = nota3;
@@ -131,7 +131,7 @@ public class Matricula {
     }
     
     private boolean ehAssiduo(){
-        Double aulasAssistidas = numeroPresencas.doubleValue();
+        Double aulasAssistidas = porcentagemFrequencia.doubleValue();
         Double numeroMinimoAulas = turma.getDisciplina().getNumeroMaximoPresencas().doubleValue()*0.75;
         return aulasAssistidas >= numeroMinimoAulas;
     }

@@ -64,7 +64,7 @@ public class MatriculaTest {
         matricula.setNota2(7.0);
         matricula.setNota3(0.0);
         matricula.setNotaRecuperacao(10.0); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertTrue(matricula.foiAprovado());
         
@@ -72,7 +72,7 @@ public class MatriculaTest {
         matricula.setNota2(3.0);
         matricula.setNota3(0.0);
         matricula.setNotaRecuperacao(5.0); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertTrue(matricula.foiAprovado());
         
@@ -80,7 +80,7 @@ public class MatriculaTest {
         matricula.setNota2(9.0);
         matricula.setNota3(2.0);
         matricula.setNotaRecuperacao(10.0); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertTrue(matricula.foiAprovado());
         
@@ -88,7 +88,7 @@ public class MatriculaTest {
         matricula.setNota2(0.0);
         matricula.setNota3(0.0);
         matricula.setNotaRecuperacao(10.0); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertFalse(matricula.foiAprovado());
         
@@ -96,7 +96,7 @@ public class MatriculaTest {
         matricula.setNota2(10.0);
         matricula.setNota3(10.0);
         matricula.setNotaRecuperacao(); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(47); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(47); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertFalse(matricula.foiAprovado());
         
@@ -104,7 +104,7 @@ public class MatriculaTest {
         matricula.setNota2(7.0);
         matricula.setNota3(0.0);
         matricula.setNotaRecuperacao(10.0); //so substitui se a media for menor que 7 e tiver alguma nota menor que 3
-        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
+//        matricula.setNumeroPresencas(48); //menor que 48 reprova por falta para matérias de 60
         matricula.calcularSituacao();
         assertFalse(matricula.foiAprovado());
     }

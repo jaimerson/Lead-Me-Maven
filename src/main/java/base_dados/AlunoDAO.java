@@ -131,6 +131,7 @@ public class AlunoDAO extends AbstractDAO {
                 dadosDisciplina = linha.split(";");
                 matrizDisciplina = aluno.getCurso().getDisciplina(matrizCurricular, dadosDisciplina[1]);
                 if (matrizDisciplina == null) {
+                    System.out.println("Thread " + Thread.currentThread().getName()+": Matriz nula! Disciplina "+ dadosDisciplina[1]);
                     continue;
                 }
                 disciplina = matrizDisciplina.getDisciplina();
@@ -148,6 +149,7 @@ public class AlunoDAO extends AbstractDAO {
                 
                 matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
                 matricula.setSituacao(dadosDisciplina[5]);
+                matricula.setPorcentagemPresencas(Double.parseDouble(dadosDisciplina[4]));
                 
                 //Contando as horas cumpridas  
                 if (!matricula.getSituacao().contains("REP")) {
@@ -160,6 +162,7 @@ public class AlunoDAO extends AbstractDAO {
             }
             //Metodo synchronized
             curso.adicionarAluno(aluno);
+            
             lerArq.close();
         } catch (FileNotFoundException ex) {
             System.err.println("FileNotFoundException");

@@ -20,7 +20,8 @@ public class CarregadorAluno extends Thread{
     private String arquivoHistorico;
     private Curso curso;
 
-    public CarregadorAluno(AlunoDAO alunoDAO, String arquivoHistorico, Curso curso) {
+    public CarregadorAluno(String nomeThread, AlunoDAO alunoDAO, String arquivoHistorico, Curso curso) {
+        super(nomeThread);
         this.alunoDAO = alunoDAO;
         this.arquivoHistorico = arquivoHistorico;
         this.curso = curso;
