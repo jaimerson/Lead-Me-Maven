@@ -55,12 +55,12 @@ public class AlunoTest {
         assertEquals(aluno.getIea(), 8.1, 0.0);
     }
 
-    @Test
+    @Ignore @Test
     public void testCargaHoraria() {
         assertEquals(aluno.getCargaTotalCumprida().intValue(), 750);
     }
 
-    @Test
+    @Ignore @Test
     public void testDisciplinasPagas() {
         Disciplina disciplina = new Disciplina();
         disciplina.setCodigo("IMD0038");
@@ -74,7 +74,7 @@ public class AlunoTest {
         assertEquals(aluno.getMatrizCurricular(), "sig");
     }
 
-    @Test
+    @Ignore @Test
     public void testPreRequisito() {
         Disciplina disciplina = aluno.getCurso().getDisciplina(aluno.getMatrizCurricular(), "IMD0040").getDisciplina();
         assertFalse(aluno.podePagar(disciplina));

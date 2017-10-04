@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Matricula;
@@ -25,20 +27,20 @@ import modelo.Turma;
  *
  * @author rafao
  */
-public class AlunoDAO extends AbstractDAO{
-    
+public class AlunoDAO extends AbstractDAO {
+
     private static AlunoDAO instance = new AlunoDAO();
     private CursoDAO cursoDAO;
-    
-    private AlunoDAO(){
+
+    private AlunoDAO() {
         cursoDAO = CursoDAO.getInstance();
     }
-    
-    public static AlunoDAO getInstance(){
+
+    public static AlunoDAO getInstance() {
         return instance;
     }
-    
-    private boolean existeUsuario(String usuario, String senha) throws DataException {
+
+    public boolean existeUsuario(String usuario, String senha) throws DataException {
         boolean existeUsuario = false;
         try {
             Map<String, String> logins = getLoginsESenhas();
@@ -51,6 +53,26 @@ public class AlunoDAO extends AbstractDAO{
             throw new DataException(ex.getMessage());
         }
         return existeUsuario;
+    }
+
+    public String carregarNomeCurso(String matriculaAluno) {
+        BufferedReader lerArq;
+        String nomeCurso = null;
+        try {
+            lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "historicos/" + matriculaAluno + "-historico.txt"), "UTF-8"));
+            lerArq.readLine();
+            lerArq.readLine(); //ignorando a matricula
+            String cursoComMatriz = lerArq.readLine();
+            nomeCurso = cursoComMatriz.split(" - ")[0];
+            lerArq.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AlunoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(AlunoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AlunoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nomeCurso;
     }
 
     private Map<String, String> getLoginsESenhas() throws FileNotFoundException, UnsupportedEncodingException, IOException {
@@ -66,16 +88,17 @@ public class AlunoDAO extends AbstractDAO{
         lerArq.close();
         return logins;
     }
-    public Aluno carregarAluno(String usuario, String senha) throws DataException, AutenticacaoException{
-        Aluno aluno = new Aluno();
-        if (!existeUsuario(usuario,senha)){
+
+    public Aluno carregarAluno(String usuario, String senha) throws DataException, AutenticacaoException {
+        if (!existeUsuario(usuario, senha)) {
             throw new AutenticacaoException("Usuário e/ou senha inválidos");
         }
+        Aluno aluno = new Aluno();
         aluno.setNumeroMatricula(usuario);
         carregarHistoricoAluno(aluno);
         return aluno;
     }
-    
+
     private void carregarHistoricoAluno(Aluno aluno) throws DataException {
         try {
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "historicos/" + aluno.getNumeroMatricula() + "-historico.txt"), "UTF-8"));
@@ -86,6 +109,7 @@ public class AlunoDAO extends AbstractDAO{
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
             Curso curso = cursoDAO.carregarCurso(nomeCurso);
             aluno.setCurso(curso);
+            curso.adicionarAluno(aluno);
             aluno.setMatrizCurricular(matrizCurricular);
             aluno.setIea(Double.parseDouble(lerArq.readLine()));
             aluno.setMcn(Double.parseDouble(lerArq.readLine()));
@@ -104,7 +128,7 @@ public class AlunoDAO extends AbstractDAO{
                 turma = new Turma(dadosDisciplina[0], matrizDisciplina.getDisciplina());
                 matricula = new Matricula(turma, aluno);
                 matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
-                matricula.setSituacao(dadosDisciplina[4]);
+                matricula.setSituacao(dadosDisciplina[5]);
                 //Contando as horas cumpridas  
                 if (matricula.getSituacao().contains("APR")) {
                     if (matrizDisciplina.getNaturezaDisciplina().equals("OBRIGATORIO")) {

@@ -105,7 +105,7 @@ public class SimulacaoService {
         int qtdeAlunosParaMedia = 0;
         Double pesoAcumulado = 0.0;
 
-        List<Aluno> alunos = curso.getAlunos();
+        List<Aluno> alunos = new ArrayList(curso.getAlunos().values());
         for (Aluno aluno : alunos) {
             List<Matricula> matriculas = aluno.getMatriculas();
             if (matriculas.isEmpty()) {

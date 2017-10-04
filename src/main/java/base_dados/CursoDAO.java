@@ -34,7 +34,7 @@ public class CursoDAO extends AbstractDAO{
         return instance;
     }
     public Curso carregarCurso(String nomeCurso) throws IOException {
-        Map<String, Disciplina> disciplinasDoCurso = new HashMap<String, Disciplina>();
+        Map<String, Disciplina> disciplinasDoCurso = new HashMap<>();
         Curso curso = new Curso(nomeCurso);
         System.out.println(System.getProperty("user.dir"));
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);

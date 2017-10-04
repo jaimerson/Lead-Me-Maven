@@ -32,8 +32,17 @@ public class LoginService{
     }
     
     public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException{
-        aluno = alunoDAO.carregarAluno(usuario, senha);
-        return aluno;
+        //Se existe esse usuario
+        if (alunoDAO.existeUsuario(usuario, senha)){
+            //Carregue o curso desse usuario
+            
+            //E depois colete o aluno com essa matricula
+            aluno = alunoDAO.carregarAluno(usuario, senha);
+            return aluno;
+        }
+        else{
+            throw new AutenticacaoException("Usuário e/ou senha inválidos");
+        }
     }
 
     public Aluno getAluno() {

@@ -10,13 +10,13 @@ public class Curso {
 
     private String nome;
     private Map<String,MatrizCurricular> matrizesCurricular;
-    private List<Aluno> alunos;
+    private Map<String,Aluno> alunos;
     private Integer cargaHoraria;
 
     public Curso(String nome) {
         this.nome = nome;
-        this.matrizesCurricular = new HashMap<String,MatrizCurricular>();
-        this.alunos = new ArrayList<>();
+        this.matrizesCurricular = new HashMap<>();
+        this.alunos = new HashMap<>();
     }
 
     public String getNome() {
@@ -40,16 +40,19 @@ public class Curso {
         this.matrizesCurricular.put(matriz.getNomeMatriz(),matriz);
     }
 
-    public List<Aluno> getAlunos() {
+    public Map<String,Aluno> getAlunos() {
         return alunos;
     }
 
-    public void setAlunos(List<Aluno> alunos) {
+    public void setAlunos(Map<String,Aluno> alunos) {
         this.alunos = alunos;
     }
 
-    public void adicionarAluno(Aluno aluno){
-        this.alunos.add(aluno);
+    //Synchronized pelo fato de existir várias threads carregando os alunos e adicionando-os no curso
+    public synchronized void adicionarAluno(Aluno aluno){
+        if(!this.alunos.containsKey(aluno.getNumeroMatricula())){
+            this.alunos.put(aluno.getNumeroMatricula(),aluno);
+        }
     }
     
     public MatrizDisciplina getDisciplina(String nomeMatriz, String codigoDisciplina){

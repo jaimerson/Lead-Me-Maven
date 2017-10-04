@@ -5,8 +5,10 @@
  */
 package service;
 
+import base_dados.CursoDAO;
 import base_dados.DisciplinaDAO;
 import excecoes.DataException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,14 +29,26 @@ public class CursoService {
     public static int NUMERO_DISCIPLINAS_DIFICEIS = 10;
     
     private static CursoService service = new CursoService();
+    private CursoDAO cursoDAO;
     private DisciplinaDAO disciplinaDAO;
     
     private CursoService(){
+        cursoDAO = CursoDAO.getInstance();
         disciplinaDAO = DisciplinaDAO.getInstance();
     }
     
     public static CursoService getInstance(){
         return service;
+    }
+    
+    public Curso carregarCurso(String nomeCurso){
+        Curso curso = null;
+        try{
+            curso = cursoDAO.carregarCurso(nomeCurso);
+        }catch(IOException e){
+            System.out.println("Erro ao carregar o curso");
+        }
+        return curso;
     }
     
     public Disciplina[] carregarDisciplinasDoCurso(Curso curso){
