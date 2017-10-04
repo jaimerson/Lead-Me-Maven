@@ -2,6 +2,7 @@ package controller;
 
 import excecoes.DataException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -94,19 +95,22 @@ public class TelaPrincipalController extends Application implements Initializabl
     private ComboBox<MatrizCurricular> cbGradeCurricular;
     
     @FXML
-    private ListView<Disciplina> listDisciplinasSelecionadas;
+    private ListView<MatrizDisciplina> listDisciplinasSelecionadas;
     
     @FXML
     private Button btnAdicionarDisciplina;
     
     @FXML
     private Button btnRemoverDisciplina;
+    
+    @FXML
+    private Label lbRecomendacao;
 
     private ServiceFacade service;
     //Possibilidades de resultado de busca de disciplina para consulta de estatisticas
     private String[] disciplinas;
     //Quando escolher a disciplina para verificar a taxa de aprovacao
-    private Disciplina disciplinaSelecionada;
+    private Disciplina disciplinaSelecionadaEstatistica;
     private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
     
@@ -127,7 +131,7 @@ public class TelaPrincipalController extends Application implements Initializabl
 
             @Override
             public void handle(AutoCompletionEvent<String> event) {
-                disciplinaSelecionada = service.carregarDisciplina(alunoLogado.getCurso(),event.getCompletion());
+                disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(),event.getCompletion());
                 carregarGraficoAprovacoes();
                 event.consume();
             }
@@ -149,8 +153,8 @@ public class TelaPrincipalController extends Application implements Initializabl
         carregarInformacoesAluno(alunoLogado);
         
         //Tela de estatísticas
-        disciplinaSelecionada = service.carregarDisciplina(alunoLogado.getCurso(),"IMD0040");
-        txtDisciplina.setText(disciplinaSelecionada.toString());
+        disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(),"IMD0040");
+        txtDisciplina.setText(disciplinaSelecionadaEstatistica.toString());
         carregarGraficoAprovacoes();
         carregarScatterDaTurma();
         //Tela de sugestoes/simulacoes
@@ -170,7 +174,7 @@ public class TelaPrincipalController extends Application implements Initializabl
             }
         String periodoLetivo = opcaoSelecionada.split("-")[0];
         String numeroTurma = opcaoSelecionada.split("-")[1];
-        Turma turmaSelecionada = service.coletarTurma(disciplinaSelecionada, periodoLetivo, numeroTurma);
+        Turma turmaSelecionada = service.coletarTurma(disciplinaSelecionadaEstatistica, periodoLetivo, numeroTurma);
         if (turmaSelecionada == null){
             System.err.println("Turma selecionada eh nula!");
             return;
@@ -199,13 +203,13 @@ public class TelaPrincipalController extends Application implements Initializabl
         Double aprovacoes;
         Aluno alunoLogado = service.coletarAlunoLogado();
         try {
-            aprovacoes = service.coletarMediaAprovacao(alunoLogado.getCurso(),disciplinaSelecionada);
+            aprovacoes = service.coletarMediaAprovacao(alunoLogado.getCurso(),disciplinaSelecionadaEstatistica);
             ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
                     new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
                     new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
             chartAprovacoes.setData(dadosPieChart);
-            txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionada.getNome());
-            carregarListaTurmasSelecionavel(disciplinaSelecionada.coletarTurmasPeriodoENumeroString());
+            txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionadaEstatistica.getNome());
+            carregarListaTurmasSelecionavel(disciplinaSelecionadaEstatistica.coletarTurmasPeriodoENumeroString());
             
         } catch (DataException ex) {
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -227,6 +231,7 @@ public class TelaPrincipalController extends Application implements Initializabl
 
     private void carregarSugestoes() {
         Aluno alunoLogado = service.coletarAlunoLogado();
+        //service.carregarPesoMaximoParaAluno(alunoLogado);
         List<MatrizDisciplina> disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasDisponiveis);
         tableDisciplinasDisponiveis.setItems(listaObs);
@@ -274,6 +279,27 @@ public class TelaPrincipalController extends Application implements Initializabl
             
         } catch (DataException ex) {
             Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML
+    public void adicionarDisciplinaParaSimulacao(ActionEvent event){
+       MatrizDisciplina selectedItem = tableDisciplinasDisponiveis.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            listDisciplinasSelecionadas.getItems().add(selectedItem);
+            tableDisciplinasDisponiveis.getItems().remove(selectedItem);
+//            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+        }
+       }
+    
+    @FXML
+    void removerDisciplinaParaSimulacao(ActionEvent event) {
+        MatrizDisciplina selectedItem = listDisciplinasSelecionadas.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            listDisciplinasSelecionadas.getItems().remove(selectedItem);
+            tableDisciplinasDisponiveis.getItems().add(selectedItem);
+            Collections.sort(tableDisciplinasDisponiveis.getItems());
+  //          lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
         }
     }
 }

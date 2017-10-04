@@ -61,4 +61,10 @@ public class MatrizDisciplina implements Comparable{
         }
     }
 
+    @Override
+    public String toString() {
+        return disciplina.getCodigo() + " - " + disciplina.getNome();
+    }
+
+    
 }
