@@ -13,11 +13,16 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizCurricular;
+import util.ThreadUtil;
 
 /**
  *
@@ -26,8 +31,11 @@ import modelo.MatrizCurricular;
 public class CursoDAO extends AbstractDAO{
     private static CursoDAO instance = new CursoDAO();
     private DisciplinaDAO disciplinaDAO;
+    private AlunoDAO alunoDAO;
+    
     private CursoDAO(){
         disciplinaDAO = DisciplinaDAO.getInstance();
+        alunoDAO = AlunoDAO.getInstance();
     }
     
     public static CursoDAO getInstance(){
@@ -36,44 +44,34 @@ public class CursoDAO extends AbstractDAO{
     public Curso carregarCurso(String nomeCurso) throws IOException {
         Map<String, Disciplina> disciplinasDoCurso = new HashMap<>();
         Curso curso = new Curso(nomeCurso);
-        System.out.println(System.getProperty("user.dir"));
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
+        List<Thread> listaThreadsParaCarregar = new ArrayList<>();
         for (String arquivoGrade : arquivosGrade) {
-            MatrizCurricular matriz = new MatrizCurricular(arquivoGrade.split(" - ")[2].replace(".txt", ""));
-            matriz.setCurso(curso);
-            BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + arquivoGrade), "UTF-8"));
-            String linha;
-            String codigo, nomeDisciplina, naturezaDisciplina;
-            Integer cargaHoraria, semestreIdeal;
-            String[] dadosLinha;
-            Disciplina disciplina;
-
-            matriz.setCargaHorariaObrigatoria(Integer.parseInt(lerArq.readLine()));
-            matriz.setCargaHorariaOptativa(Integer.parseInt(lerArq.readLine()));
-            while ((linha = lerArq.readLine()) != null) {
-                linha = linha.replace("\n", "");
-                dadosLinha = linha.split(";");
-                codigo = dadosLinha[0];
-                nomeDisciplina = dadosLinha[1];
-                cargaHoraria = Integer.parseInt(dadosLinha[2]);
-                naturezaDisciplina = dadosLinha[3];
-                semestreIdeal = Integer.parseInt(dadosLinha[4]);
-                if (!disciplinasDoCurso.containsKey(codigo)) {
-                    disciplina = new Disciplina(codigo, nomeDisciplina, cargaHoraria);
-                    disciplinasDoCurso.put(codigo, disciplina);
-                } else {
-                    disciplina = disciplinasDoCurso.get(codigo);
-                }
-                matriz.adicionarDisciplina(disciplina, naturezaDisciplina, semestreIdeal);
-                disciplinaDAO.carregarTurmasDaDisciplina(disciplina);
-            }
-            lerArq.close();
-            curso.adicionarMatrizCurricular(matriz);
+            Thread th = new CarregadorMatrizCurricular(curso, arquivoGrade.split(" - ")[2].replace(".txt", ""), DIRETORIO_RECURSOS + "grades/" + arquivoGrade, disciplinasDoCurso);
+            th.start();
+            listaThreadsParaCarregar.add(th);
         }
+        ThreadUtil.esperarThreads(listaThreadsParaCarregar);
         carregarPreRequisitos(nomeCurso, disciplinasDoCurso);
+        
+        //Agora que carregamos as matrizes curriculares com suas respectivas disciplinas
+        //Podemos carregar os alunos do curso
+        carregarAlunosDoCurso(curso);
+        //As turmas ja foram carregadas com o carregamento dos alunos
         return curso;
     }
-
+    
+    private void carregarAlunosDoCurso(Curso curso){
+        String[] arquivosHistoricoAlunos = coletarArquivosHistoricoAlunos();
+        List<Thread> threadsParaAlunos = new ArrayList<>();
+        for (String arquivoHistoricoAluno: arquivosHistoricoAlunos){
+            Thread th = new CarregadorAluno(alunoDAO, DIRETORIO_RECURSOS + "historicos/" + arquivoHistoricoAluno, curso);
+            th.start();
+            threadsParaAlunos.add(th);
+        }
+        ThreadUtil.esperarThreads(threadsParaAlunos);
+    }
+    
     private void carregarPreRequisitos(String nomeCurso, Map<String, Disciplina> disciplinas) throws IOException {
         BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + nomeCurso + " - pre requisitos.txt"), "UTF-8"));
         String linha;
@@ -94,6 +92,16 @@ public class CursoDAO extends AbstractDAO{
         lerArq.close();
     }
 
+    private String[] coletarArquivosHistoricoAlunos() {
+        File file = new File(DIRETORIO_RECURSOS + "historicos/");
+        return file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith("-historico.txt");
+            }
+        });
+    }
+    
     private String[] getArquivosMatrizesCurricularesDoCurso(String nomeCurso) {
         File file = new File(DIRETORIO_RECURSOS + "grades/");
         final String nomeDoCurso = nomeCurso;

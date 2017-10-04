@@ -19,7 +19,7 @@ public interface ServiceFacade {
     public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException;
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso); 
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
-    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma);
+    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo);
     public void carregarPesoMaximoParaAluno(Aluno aluno);
     public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas);
     

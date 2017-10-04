@@ -63,7 +63,7 @@ public class MatrizCurricular {
         disciplinaRelacionada.setNaturezaDisciplina(natureza);
         disciplinaRelacionada.setSemestreIdeal(semestreIdeal);
         this.disciplinasNaMatriz.put(disciplinaRelacionada.getDisciplina().getCodigo(),disciplinaRelacionada);
-        disciplina.adicionarMatrizRelacionada(this, natureza, semestreIdeal);
+        disciplina.adicionarMatrizRelacionada(disciplinaRelacionada);
     }
     
     public MatrizDisciplina getDisciplina(String codigo){

@@ -57,8 +57,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
     
     @Override
-    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo, String numeroTurma){
-        return cursoService.coletarTurma(disciplina, periodoLetivo, numeroTurma);
+    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo){
+        return cursoService.coletarTurma(disciplina, periodoLetivo);
     }
 
     @Override

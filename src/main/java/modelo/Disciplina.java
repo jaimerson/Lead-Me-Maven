@@ -1,7 +1,9 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Disciplina implements Comparable{
 
@@ -14,10 +16,10 @@ public class Disciplina implements Comparable{
     private String equivalencias;
     private String coRequisitos;
 
-    List<Turma> turmas;
+    Map<String,Turma> turmas;
 
     public Disciplina(){
-        turmas = new ArrayList<>();
+        turmas = new HashMap<>();
         matrizesRelacionadas = new ArrayList<>();
     }
 
@@ -25,7 +27,7 @@ public class Disciplina implements Comparable{
         this.codigo = codigo;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
-        turmas = new ArrayList<>();
+        turmas = new HashMap<>();
         matrizesRelacionadas = new ArrayList<>();
     }
 
@@ -45,11 +47,11 @@ public class Disciplina implements Comparable{
         this.nome = nome;
     }
 
-    public List<Turma> getTurmas() {
+    public Map<String,Turma> getTurmas() {
         return turmas;
     }
 
-    public void setTurmas(List<Turma> turmas) {
+    public void setTurmas(Map<String,Turma> turmas) {
         this.turmas = turmas;
     }
 
@@ -85,10 +87,7 @@ public class Disciplina implements Comparable{
         this.coRequisitos = coRequisitos;
     }
 
-    public void adicionarMatrizRelacionada(MatrizCurricular matriz, String natureza, Integer semestreIdeal) {
-        MatrizDisciplina matrizRelacionada = new MatrizDisciplina(matriz, this);
-        matrizRelacionada.setNaturezaDisciplina(natureza);
-        matrizRelacionada.setSemestreIdeal(semestreIdeal);
+    public void adicionarMatrizRelacionada(MatrizDisciplina matrizRelacionada) {
         this.matrizesRelacionadas.add(matrizRelacionada);
     }
 
@@ -108,14 +107,19 @@ public class Disciplina implements Comparable{
     public Integer getNumeroMaximoPresencas() {
         return (16 * cargaHoraria) / 15;
     }
+    
+    public void adicionarTurma(Turma turma){
+        this.turmas.put(turma.getPeriodoLetivo(), turma);
+    }
 
-    public Turma coletarTurma(String periodoLetivo, String numeroTurma) {
-        for (Turma turma : turmas) {
-            if (turma.getPeriodoLetivo().equals(periodoLetivo) && turma.getNumeroTurma().equals(numeroTurma)) {
-                return turma;
-            }
-        }
-        return null;
+    public Turma coletarTurma(String periodoLetivo) {
+        return this.turmas.getOrDefault(periodoLetivo,null);
+//        for (Turma turma : turmas) {
+//            if (turma.getPeriodoLetivo().equals(periodoLetivo) && turma.getNumeroTurma().equals(numeroTurma)) {
+//                return turma;
+//            }
+//        }
+//        return null;
     }
 
     public Double coletarMediaAprovacao() {
@@ -124,7 +128,7 @@ public class Disciplina implements Comparable{
             return 100.0;
         }
         Double somaAprovacoes = 0.0;
-        for (Turma turma : turmas) {
+        for (Turma turma : new ArrayList<>(turmas.values())) {
             somaAprovacoes += turma.coletarMediaAprovacao();
         }
         return somaAprovacoes / turmas.size();
@@ -134,10 +138,10 @@ public class Disciplina implements Comparable{
         return 100.0 - coletarMediaAprovacao();
     }
 
-    public List<String> coletarTurmasPeriodoENumeroString() {
+    public List<String> coletarTurmasPeriodoToString() {
         List<String> turmasString = new ArrayList<>();
-        for (Turma turma : turmas) {
-            turmasString.add(turma.getPeriodoLetivo() + "-" + turma.getNumeroTurma());
+        for (Turma turma : new ArrayList<>(turmas.values())) {
+            turmasString.add(turma.getPeriodoLetivo());
         }
         return turmasString;
     }

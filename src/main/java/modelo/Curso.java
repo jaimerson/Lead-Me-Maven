@@ -35,7 +35,7 @@ public class Curso {
         this.matrizesCurricular = matrizesCurricular;
     }
 
-    public void adicionarMatrizCurricular(MatrizCurricular matriz) {
+    public synchronized void adicionarMatrizCurricular(MatrizCurricular matriz) {
         matriz.setCurso(this);
         this.matrizesCurricular.put(matriz.getNomeMatriz(),matriz);
     }
@@ -53,6 +53,10 @@ public class Curso {
         if(!this.alunos.containsKey(aluno.getNumeroMatricula())){
             this.alunos.put(aluno.getNumeroMatricula(),aluno);
         }
+    }
+    
+    public Aluno coletarAluno(String matricula){
+        return this.alunos.getOrDefault(matricula, null);
     }
     
     public MatrizDisciplina getDisciplina(String nomeMatriz, String codigoDisciplina){

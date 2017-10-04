@@ -9,6 +9,7 @@ import base_dados.AlunoDAO;
 import excecoes.DataException;
 import modelo.Aluno;
 import excecoes.AutenticacaoException;
+import modelo.Curso;
 
 /**
  *
@@ -31,13 +32,17 @@ public class LoginService{
         return loginService;
     }
     
-    public Aluno autenticar(String usuario, String senha) throws DataException, AutenticacaoException{
+    public Aluno autenticar(String matricula, String senha) throws DataException, AutenticacaoException{
         //Se existe esse usuario
-        if (alunoDAO.existeUsuario(usuario, senha)){
+        if (alunoDAO.existeUsuario(matricula, senha)){
             //Carregue o curso desse usuario
-            
+            String nomeCurso = alunoDAO.carregarNomeCurso(matricula);
+            Curso curso = cursoService.carregarCurso(nomeCurso);
             //E depois colete o aluno com essa matricula
-            aluno = alunoDAO.carregarAluno(usuario, senha);
+            aluno = curso.coletarAluno(matricula);
+            if (aluno == null){
+                System.out.println("ALUNO NULO!!!");
+            }
             return aluno;
         }
         else{
