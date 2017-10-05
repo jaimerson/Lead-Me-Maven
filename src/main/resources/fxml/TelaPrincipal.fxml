@@ -17,19 +17,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
    <children>
-      <Label layoutX="14.0" layoutY="13.0" text="Lead Me" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
+      <Label layoutX="14.0" layoutY="13.0" prefHeight="48.0" prefWidth="106.0" text="Lead Me" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
          <font>
-            <Font name="Linux Biolinum G Regular" size="24.0" />
+            <Font name="Linux Biolinum G Regular" size="28.0" />
          </font>
       </Label>
-      <Label fx:id="txtBemVindo" layoutX="480.0" layoutY="19.0" text="Bem vindo, fulano" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="19.0">
+      <Label fx:id="txtBemVindo" layoutX="852.0" layoutY="14.0" text="Bem vindo, fulano" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <font>
             <Font name="Linux Biolinum G Regular" size="14.0" />
          </font>
       </Label>
-      <TabPane layoutY="59.0" prefHeight="557.0" prefWidth="973.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="59.0">
+      <TabPane layoutY="78.0" prefHeight="557.0" prefWidth="973.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="78.0">
         <tabs>
           <Tab text="Início">
             <content>
@@ -192,12 +192,16 @@
                         </Label>
                         <Button fx:id="btnAdicionarDisciplina" layoutX="524.0" layoutY="445.0" mnemonicParsing="false" onAction="#adicionarDisciplinaParaSimulacao" text="Adicionar disciplina" />
                         <Button fx:id="btnRemoverDisciplina" layoutX="841.0" layoutY="445.0" mnemonicParsing="false" onAction="#removerDisciplinaParaSimulacao" text="Remover disciplina" />
-                        <Label fx:id="lbRecomendacao" layoutX="484.0" layoutY="490.0" prefHeight="17.0" prefWidth="458.0" text="Label" />
+                        <Label fx:id="lbRecomendacao" layoutX="495.0" layoutY="490.0" prefHeight="17.0" prefWidth="293.0" text="Selecione as disciplinas para simulação" textAlignment="RIGHT" AnchorPane.rightAnchor="31.0">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></Label>
                      </children>
                   </AnchorPane>
                </content>
             </Tab>
         </tabs>
       </TabPane>
+      <Button fx:id="btnSair" layoutX="905.0" layoutY="37.0" mnemonicParsing="false" onAction="#sair" prefHeight="25.0" prefWidth="52.0" text="Sair" />
    </children>
 </AnchorPane>

@@ -16,6 +16,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import modelo.Aluno;
 import modelo.Disciplina;
+import modelo.MatrizDisciplina;
 
 /**
  *
@@ -40,7 +41,6 @@ public class ProcessadorRequisitos {
         for (String codigo: codigosExpressao){
             Disciplina disciplina = aluno.getCurso().getDisciplina(codigo);
             if (disciplina == null){
-                System.out.println("DISCIPLINA NUUULAAAAAAAA. Código: "+ codigo);
                 requisitos = requisitos.replace(codigo,"0");
             }
             else if (aluno.pagouMateria(disciplina,explorarEquivalentes)){
@@ -52,7 +52,7 @@ public class ProcessadorRequisitos {
         }
         return requisitos;
     }
-
+    
     //Para essa implementação, assumimos que a disciplina ja tem os requisitos carregados
     public static boolean satisfazRequisitos(Aluno aluno, String requisitos, boolean cumpreAutomatico, boolean exploraEquivalentes) {
         if (requisitos == null || requisitos.isEmpty()) {
@@ -83,15 +83,24 @@ public class ProcessadorRequisitos {
         }
     }
     
-    public static boolean cumpreCoRequisito(Aluno aluno, String codigoDisciplina, List<String> codigosSimulacao){
-        Disciplina disciplina = aluno.getCurso().getDisciplina(codigoDisciplina);
-        String coRequisitos = disciplina.getCoRequisitos();
-        for (String codigoSimulacao: codigosSimulacao){
-            if(!codigoSimulacao.equals(codigoDisciplina)){
-                coRequisitos = coRequisitos.replace(codigoSimulacao, "1");
+    public static boolean cumpreCoRequisitos(Aluno aluno, MatrizDisciplina disciplinaAAdicionar, List<MatrizDisciplina> disciplinasM){
+        String coRequisitos = disciplinaAAdicionar.getDisciplina().getCoRequisitos();
+        
+        if (coRequisitos == null || coRequisitos.isEmpty() || coRequisitos.equals(" ")){
+            return true;
+        }
+        //Se ja pagou a disciplina do co requisito, ta de boa
+        if (satisfazRequisitos(aluno, coRequisitos, true, false)){
+            return true;
+        }
+        //Senao, precisa verificar se as disciplinas que estao na lista do semestre satisfazem
+        for (MatrizDisciplina disciplinaM: disciplinasM){
+            if(coRequisitos.contains(disciplinaM.getDisciplina().getCodigo())){
+                coRequisitos = coRequisitos.replace(disciplinaM.getDisciplina().getCodigo(), "1");
             }
         }
-        coRequisitos = prepararExpressaoRequisitos(aluno, coRequisitos, false);
+        coRequisitos = coRequisitos.replaceAll("[A-Z]{3}[0-9]{4}", "0");
+//        coRequisitos = prepararExpressaoRequisitos(aluno, coRequisitos, false);
         return calcularExpressao(coRequisitos) > 0;
     }
 }

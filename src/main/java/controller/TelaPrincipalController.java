@@ -1,8 +1,10 @@
 package controller;
 
 import excecoes.DataException;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -46,8 +48,9 @@ import service.ServiceFacadeFactory;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
 import org.controlsfx.control.textfield.TextFields;
+import service.ProcessadorRequisitos;
 
-public class TelaPrincipalController extends Application implements Initializable {
+public class TelaPrincipalController implements Initializable {
 
     @FXML
     private Label lbProgresso;
@@ -106,6 +109,9 @@ public class TelaPrincipalController extends Application implements Initializabl
     @FXML
     private Label lbRecomendacao;
 
+    @FXML
+    private Button btnSair;
+
     private ServiceFacade service;
     //Possibilidades de resultado de busca de disciplina para consulta de estatisticas
     private String[] disciplinas;
@@ -113,11 +119,6 @@ public class TelaPrincipalController extends Application implements Initializabl
     private Disciplina disciplinaSelecionadaEstatistica;
     private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        util.carregarTela("/fxml/TelaPrincipal.fxml");
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -248,6 +249,25 @@ public class TelaPrincipalController extends Application implements Initializabl
         naturezaTabela.setCellValueFactory(new PropertyValueFactory("naturezaDisciplina"));
         semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
+
+        tableDisciplinasDisponiveis.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    adicionarDisciplinaParaSimulacao(null);
+                }
+            }
+
+        });
+        listDisciplinasSelecionadas.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    removerDisciplinaParaSimulacao(null);
+                }
+            }
+
+        });
     }
 
     public void carregarDisciplinasMaisDificeis(Curso curso) {
@@ -280,9 +300,17 @@ public class TelaPrincipalController extends Application implements Initializabl
     public void adicionarDisciplinaParaSimulacao(ActionEvent event) {
         MatrizDisciplina selectedItem = tableDisciplinasDisponiveis.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            listDisciplinasSelecionadas.getItems().add(selectedItem);
-            tableDisciplinasDisponiveis.getItems().remove(selectedItem);
-            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            if (ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), selectedItem, listDisciplinasSelecionadas.getItems())) {
+                listDisciplinasSelecionadas.getItems().add(selectedItem);
+                tableDisciplinasDisponiveis.getItems().remove(selectedItem);
+                lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            } else {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Aviso");
+                alert.setHeaderText("Você não atendeu os co-requisitos");
+                alert.setContentText("Para inserir a disciplina " + selectedItem.getDisciplina().getCodigo() + ", deverá cumprir os co-requisitos: " + selectedItem.getDisciplina().getCoRequisitos());
+                alert.showAndWait();
+            }
         }
     }
 
@@ -292,8 +320,26 @@ public class TelaPrincipalController extends Application implements Initializabl
         if (selectedItem != null) {
             listDisciplinasSelecionadas.getItems().remove(selectedItem);
             tableDisciplinasDisponiveis.getItems().add(selectedItem);
+            Iterator<MatrizDisciplina> it = listDisciplinasSelecionadas.getItems().iterator();
+            while(it.hasNext()){
+                MatrizDisciplina disciplina = it.next();
+                if (!ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), disciplina, listDisciplinasSelecionadas.getItems())) {
+                    it.remove();
+                    tableDisciplinasDisponiveis.getItems().add(disciplina);
+                }
+            }
             Collections.sort(tableDisciplinasDisponiveis.getItems());
-            lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            if (!listDisciplinasSelecionadas.getItems().isEmpty()) {
+                lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
+            }   
+            else{
+                lbRecomendacao.setText("Selecione as disciplinas para simulação");
+            }
         }
+    }
+
+    @FXML
+    void sair(ActionEvent event) {
+        ((Stage) btnSair.getScene().getWindow()).close();
     }
 }

@@ -20,13 +20,14 @@ import javafx.stage.Stage;
  */
 public class ControllerUtil {
     
-    public void carregarTela(String caminhoTela){
+    public void carregarTela(String caminhoTela, String titulo){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoTela));
             Parent root = loader.load();
             Scene scene = new Scene(new ScrollPane(root));
             Stage stage = new Stage();
             stage.setScene(scene);
+            stage.setTitle(titulo);
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

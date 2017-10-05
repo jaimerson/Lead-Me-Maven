@@ -69,7 +69,6 @@ public class CarregadorMatrizCurricular extends Thread{
                     }
                 }
                 matriz.adicionarDisciplina(disciplina, naturezaDisciplina, semestreIdeal);
-//                disciplinaDAO.carregarTurmasDaDisciplina(disciplina);
             }
             lerArq.close();
             curso.adicionarMatrizCurricular(matriz);

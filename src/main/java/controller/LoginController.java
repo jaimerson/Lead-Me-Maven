@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
 
-public class LoginController extends Application {
+public class LoginController {
 
     @FXML
     private TextField txtLogin;
@@ -46,12 +46,12 @@ public class LoginController extends Application {
             alert.showAndWait();
             return;
         }
-        util.carregarTela("/fxml/TelaPrincipal.fxml");
+        util.carregarTela("/fxml/TelaPrincipal.fxml","Lead Me");
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
-        util.carregarTela("/fxml/TelaLogin.fxml");
-    }
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//        serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
+////        util.carregarTela("/fxml/TelaLogin.fxml");
+//    }
 }

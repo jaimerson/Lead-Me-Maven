@@ -154,9 +154,9 @@ public class AlunoDAO extends AbstractDAO {
                 //Contando as horas cumpridas  
                 if (!matricula.getSituacao().contains("REP")) {
                     if (matrizDisciplina.getNaturezaDisciplina().equals("OBRIGATORIO")) {
-                        aluno.setCargaObrigatoriaCumprida(aluno.getCargaObrigatoriaCumprida() + matrizDisciplina.getDisciplina().getCargaHoraria());
+                        aluno.incrementarCargaObrigatoriaCumprida(matrizDisciplina.getDisciplina().getCargaHoraria());
                     } else {
-                        aluno.setCargaOptativaCumprida(aluno.getCargaOptativaCumprida() + matrizDisciplina.getDisciplina().getCargaHoraria());
+                        aluno.incrementarCargaOptativaCumprida(matrizDisciplina.getDisciplina().getCargaHoraria());
                     }
                 }
             }

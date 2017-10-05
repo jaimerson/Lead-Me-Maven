@@ -71,6 +71,10 @@ public class Aluno extends Pessoa {
     public void setCargaObrigatoriaCumprida(Integer cargaObrigatoriaCumprida) {
         this.cargaObrigatoriaCumprida = cargaObrigatoriaCumprida;
     }
+    
+    public void incrementarCargaObrigatoriaCumprida(Integer cargaHoraria){
+        this.cargaObrigatoriaCumprida += cargaHoraria;
+    }
 
     public Integer getCargaOptativaCumprida() {
         return cargaOptativaCumprida;
@@ -78,6 +82,10 @@ public class Aluno extends Pessoa {
 
     public void setCargaOptativaCumprida(Integer cargaOptativaCumprida) {
         this.cargaOptativaCumprida = cargaOptativaCumprida;
+    }
+    
+    public void incrementarCargaOptativaCumprida(Integer cargaHoraria){
+        this.cargaOptativaCumprida += cargaHoraria;
     }
     
     public Integer getCargaTotalCumprida(){

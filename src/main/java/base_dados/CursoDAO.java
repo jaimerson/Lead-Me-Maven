@@ -41,12 +41,17 @@ public class CursoDAO extends AbstractDAO{
     public static CursoDAO getInstance(){
         return instance;
     }
+    
+    //Média concorrente:55,06
+    //Média sequencial:102,06
+
     public Curso carregarCurso(String nomeCurso) throws IOException {
         Map<String, Disciplina> disciplinasDoCurso = new HashMap<>();
         Curso curso = new Curso(nomeCurso);
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
         List<Thread> listaThreadsParaCarregar = new ArrayList<>();
-        for (String arquivoGrade : arquivosGrade) {
+        long tempoInicial = System.currentTimeMillis();
+        for (String arquivoGrade :arquivosGrade) {
             Thread th = new CarregadorMatrizCurricular(curso, arquivoGrade.split(" - ")[2].replace(".txt", ""), DIRETORIO_RECURSOS + "grades/" + arquivoGrade, disciplinasDoCurso);
             th.start();
             listaThreadsParaCarregar.add(th);
@@ -57,14 +62,16 @@ public class CursoDAO extends AbstractDAO{
         //Agora que carregamos as matrizes curriculares com suas respectivas disciplinas
         //Podemos carregar os alunos do curso
         carregarAlunosDoCurso(curso);
-        //As turmas ja foram carregadas com o carregamento dos alunos
+        
+        long tempoFinal = System.currentTimeMillis();
+        System.out.println("Tempo gasto para carregar:" + (tempoFinal - tempoInicial) + " milisegundos");
         return curso;
     }
     
     private void carregarAlunosDoCurso(Curso curso){
         String[] arquivosHistoricoAlunos = coletarArquivosHistoricoAlunos();
         List<Thread> threadsParaAlunos = new ArrayList<>();
-        for (String arquivoHistoricoAluno: arquivosHistoricoAlunos){
+        for (String arquivoHistoricoAluno:arquivosHistoricoAlunos){
             Thread th = new CarregadorAluno(arquivoHistoricoAluno, alunoDAO, DIRETORIO_RECURSOS + "historicos/" + arquivoHistoricoAluno, curso);
             th.start();
             threadsParaAlunos.add(th);
@@ -75,19 +82,23 @@ public class CursoDAO extends AbstractDAO{
     private void carregarPreRequisitos(String nomeCurso, Map<String, Disciplina> disciplinas) throws IOException {
         BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(DIRETORIO_RECURSOS + "grades/" + nomeCurso + " - pre requisitos.txt"), "UTF-8"));
         String linha;
-        String codigoDisciplina, preRequisitos;
+        String codigoDisciplina, preRequisitos, coRequisitos;
         Disciplina disciplina;
+        String[] dadosLinha;
         //para cada disciplina
         while ((linha = lerArq.readLine()) != null) {
             linha = linha.replace("\n", "");
-            codigoDisciplina = linha.split(": ")[0];
+            dadosLinha = linha.split(":");
+            codigoDisciplina = dadosLinha[0];
             //Pego a referencia no hashmap
             disciplina = disciplinas.get(codigoDisciplina);
             if (disciplina == null) {
                 continue;
             }
-            preRequisitos = linha.split(": ")[1];
+            preRequisitos = dadosLinha[1];
+            coRequisitos = dadosLinha[2];
             disciplina.setPreRequisitos(preRequisitos);
+            disciplina.setCoRequisitos(coRequisitos);
         }
         lerArq.close();
     }
