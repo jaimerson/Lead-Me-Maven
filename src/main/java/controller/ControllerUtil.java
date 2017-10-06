@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  */
 public class ControllerUtil {
     
-    public void carregarTela(String caminhoTela, String titulo){
+    public Stage carregarTela(String caminhoTela, String titulo){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoTela));
             Parent root = loader.load();
@@ -29,8 +29,10 @@ public class ControllerUtil {
             stage.setScene(scene);
             stage.setTitle(titulo);
             stage.show();
+            return stage;
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }
