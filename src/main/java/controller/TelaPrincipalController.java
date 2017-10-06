@@ -3,8 +3,10 @@ package controller;
 import excecoes.DataException;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -34,6 +36,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import modelo.Aluno;
@@ -117,9 +120,10 @@ public class TelaPrincipalController implements Initializable {
     private String[] disciplinas;
     //Quando escolher a disciplina para verificar a taxa de aprovacao
     private Disciplina disciplinaSelecionadaEstatistica;
-    private AutoCompletionBinding<String> autoCompleteSimulacao, autoCompleteEstatistica;
+    private AutoCompletionBinding<String> autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
-
+    private List<MatrizDisciplina> disciplinasDisponiveis ;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
@@ -137,19 +141,7 @@ public class TelaPrincipalController implements Initializable {
                 event.consume();
             }
         });
-        /*simulação*/
-        final ObservableList<String> items = FXCollections.observableArrayList();
-        autoCompleteSimulacao = TextFields.bindAutoCompletion(txtBuscarDisciplina, disciplinas);
-        autoCompleteSimulacao.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
-
-            @Override
-            public void handle(AutoCompletionEvent<String> event) {
-                items.add(event.getCompletion());
-//                listDisciplinas.setItems(items);
-                txtBuscarDisciplina.clear();
-                event.consume();
-            }
-        });
+        
         //Tela inicial
         carregarInformacoesAluno(alunoLogado);
 
@@ -227,8 +219,10 @@ public class TelaPrincipalController implements Initializable {
     private void carregarSugestoes() {
         Aluno alunoLogado = service.coletarAlunoLogado();
         service.carregarPesoMaximoParaAluno(alunoLogado);
-        List<MatrizDisciplina> disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
-        ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasDisponiveis);
+        disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
+        List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
+        disciplinasParaTabela.addAll(disciplinasDisponiveis);
+        ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
         tableDisciplinasDisponiveis.setItems(listaObs);
         TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<MatrizDisciplina, String>("Código");
         TableColumn<MatrizDisciplina, String> nomeTabela = new TableColumn<MatrizDisciplina, String>("Nome");
@@ -303,6 +297,7 @@ public class TelaPrincipalController implements Initializable {
             if (ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), selectedItem, listDisciplinasSelecionadas.getItems())) {
                 listDisciplinasSelecionadas.getItems().add(selectedItem);
                 tableDisciplinasDisponiveis.getItems().remove(selectedItem);
+                disciplinasDisponiveis.remove(selectedItem);
                 lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
             } else {
                 Alert alert = new Alert(AlertType.INFORMATION);
@@ -319,15 +314,16 @@ public class TelaPrincipalController implements Initializable {
         MatrizDisciplina selectedItem = listDisciplinasSelecionadas.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             listDisciplinasSelecionadas.getItems().remove(selectedItem);
-            tableDisciplinasDisponiveis.getItems().add(selectedItem);
+            disciplinasDisponiveis.add(selectedItem);
             Iterator<MatrizDisciplina> it = listDisciplinasSelecionadas.getItems().iterator();
             while(it.hasNext()){
                 MatrizDisciplina disciplina = it.next();
                 if (!ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), disciplina, listDisciplinasSelecionadas.getItems())) {
                     it.remove();
-                    tableDisciplinasDisponiveis.getItems().add(disciplina);
+                    disciplinasDisponiveis.add(disciplina);
                 }
             }
+            atualizarTabela(null);
             Collections.sort(tableDisciplinasDisponiveis.getItems());
             if (!listDisciplinasSelecionadas.getItems().isEmpty()) {
                 lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
@@ -341,5 +337,25 @@ public class TelaPrincipalController implements Initializable {
     @FXML
     void sair(ActionEvent event) {
         ((Stage) btnSair.getScene().getWindow()).close();
+    }
+    
+      @FXML
+    void atualizarTabela(KeyEvent event) {
+        String busca = txtBuscarDisciplina.getText().toLowerCase();
+        
+        
+        tableDisciplinasDisponiveis.getItems().clear();
+        List<MatrizDisciplina> disciplinasPelaBusca = new ArrayList<>();
+        for(MatrizDisciplina md : disciplinasDisponiveis){
+            String codigo = md.getDisciplina().getCodigo().toLowerCase();
+            String nomeDisciplina = md.getDisciplina().getNome().toLowerCase();
+            
+            if(codigo.contains(busca)|| nomeDisciplina.contains(busca) ){
+                
+                disciplinasPelaBusca.add(md);
+            }
+        }
+        tableDisciplinasDisponiveis.setItems(FXCollections.observableArrayList(disciplinasPelaBusca));
+        Collections.sort(tableDisciplinasDisponiveis.getItems());
     }
 }
