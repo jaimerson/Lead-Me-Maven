@@ -5,8 +5,6 @@
  */
 package base_dados;
 
-import static base_dados.AbstractDAO.DIRETORIO_RECURSOS;
-import excecoes.DataException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,11 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import minerador.GeradorCSV;
 import modelo.Curso;
 import modelo.Disciplina;
-import modelo.MatrizCurricular;
 import util.ThreadUtil;
 
 /**
@@ -62,9 +58,13 @@ public class CursoDAO extends AbstractDAO{
         //Agora que carregamos as matrizes curriculares com suas respectivas disciplinas
         //Podemos carregar os alunos do curso
         carregarAlunosDoCurso(curso);
-        
         long tempoFinal = System.currentTimeMillis();
         System.out.println("Tempo gasto para carregar:" + (tempoFinal - tempoInicial) + " milisegundos");
+        
+        //Com os alunos carregados, podemos gerar o arquivo dos seus periodos letivos
+        //para que o weka possa ser utilizado para encontrar associacoes
+        GeradorCSV.gerarCSVDosPeriodosLetivos(curso);
+        
         return curso;
     }
     

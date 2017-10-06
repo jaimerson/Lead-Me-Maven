@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import service.ServiceFacade;
 import service.ServiceFacadeFactory;
 
@@ -46,12 +48,13 @@ public class LoginController {
             alert.showAndWait();
             return;
         }
-        util.carregarTela("/fxml/TelaPrincipal.fxml","Lead Me");
+        Stage stage = util.carregarTela("/fxml/TelaPrincipal.fxml","Lead Me");
+        stage.setOnHiding(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                util.carregarTela("/fxml/TelaLogin.fxml", "Lead Me - Login");
+            }
+        });
+        ((Stage) btnEntrar.getScene().getWindow()).close();
     }
-
-//    @Override
-//    public void start(Stage primaryStage) throws Exception {
-//        serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
-////        util.carregarTela("/fxml/TelaLogin.fxml");
-//    }
 }
