@@ -63,8 +63,8 @@ public class CursoDAO extends AbstractDAO{
         
         //Com os alunos carregados, podemos gerar o arquivo dos seus periodos letivos
         //para que o weka possa ser utilizado para encontrar associacoes
-        GeradorCSV.gerarCSVDosPeriodosLetivos(curso);
-        
+//        GeradorCSV.gerarCSVDosPeriodosLetivos(curso);
+        GeradorCSV.gerarCSVBinarioDosPeriodosLetivos(curso);
         return curso;
     }
     

@@ -1,0 +1,169 @@
+@relation associacaoBinaria
+
+@attribute IMD0017 {y,n}
+@attribute IMD0018 {y,n}
+@attribute IMD0019 {y,n}
+@attribute IMD0020 {y,n}
+@attribute IMD0405 {n,y}
+@attribute IMD0012 {n,y}
+@attribute IMD0027 {n,y}
+@attribute IMD0028 {n,y}
+@attribute IMD0034 {n,y}
+@attribute IMD0523 {n,y}
+@attribute IMD0725 {n,y}
+@attribute ADM0065 {n,y}
+@attribute IMD0510 {n,y}
+@attribute IMD0038 {n,y}
+@attribute IMD0024 {n,y}
+@attribute IMD0029 {n,y}
+@attribute IMD0030 {n,y}
+@attribute IMD0039 {n,y}
+@attribute IMD0040 {n,y}
+@attribute IMD0411 {n,y}
+@attribute IMD0404 {n,y}
+@attribute IMD0423 {n,y}
+@attribute IMD0524 {n,y}
+@attribute IMD0513 {n,y}
+@attribute IMD0519 {n,y}
+@attribute IMD0704 {n,y}
+@attribute DIM0546 {n,y}
+
+@data
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,y,y,n,n,n,n,n
+n,n,n,n,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,y,n,y,y,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,n,n,n,y,y,n,n,n,n,y,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
+n,n,n,n,n,n,n,n,n,n,n,y,y,n,n,y,y,n,n,n,n,n,n,n,n,y,n
+n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n,y,y,y,n,y,n,n,n,n,y
+n,n,n,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,y,n,n
+n,n,n,n,n,y,n,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
