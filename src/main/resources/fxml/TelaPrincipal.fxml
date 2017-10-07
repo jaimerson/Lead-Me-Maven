@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.chart.ScatterChart?>
@@ -17,7 +22,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
    <children>
       <Label layoutX="14.0" layoutY="13.0" prefHeight="48.0" prefWidth="136.0" text="Lead Me" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
          <font>
@@ -191,7 +196,7 @@
                            </font>
                         </Label>
                         <Button fx:id="btnAdicionarDisciplina" layoutX="524.0" layoutY="445.0" mnemonicParsing="false" onAction="#adicionarDisciplinaParaSimulacao" text="Adicionar disciplina" />
-                        <Button fx:id="btnRemoverDisciplina" layoutX="841.0" layoutY="445.0" mnemonicParsing="false" onAction="#removerDisciplinaParaSimulacao" text="Remover disciplina" />
+                        <Button fx:id="btnRemoverDisciplina" layoutX="841.0" layoutY="445.0" mnemonicParsing="false" onAction="#removerDisciplinaDaSimulacao" text="Remover disciplina" />
                         <Label fx:id="lbRecomendacao" layoutX="495.0" layoutY="490.0" prefHeight="17.0" prefWidth="293.0" text="Selecione as disciplinas para simulação" textAlignment="RIGHT" AnchorPane.rightAnchor="31.0">
                            <font>
                               <Font name="System Bold" size="14.0" />

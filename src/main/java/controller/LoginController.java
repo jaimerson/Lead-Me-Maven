@@ -4,7 +4,6 @@ import excecoes.AutenticacaoException;
 import excecoes.DataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -38,7 +37,11 @@ public class LoginController {
         try {
             serviceFacade.autenticar(txtLogin.getText(), txtSenha.getText());
         } catch (DataException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Erro ao acessar as informações");
+            alert.setHeaderText("Houve um problema para acessar os dados");
+            alert.setContentText("Detalhes: " + ex.getLocalizedMessage());
+            alert.showAndWait();
             return;
         } catch (AutenticacaoException ex) {
             Alert alert = new Alert(AlertType.INFORMATION);

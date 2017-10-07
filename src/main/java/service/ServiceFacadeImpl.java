@@ -13,17 +13,19 @@ public class ServiceFacadeImpl implements ServiceFacade {
 
     private LoginService loginService;
     private CursoService cursoService;
+    private DisciplinaService disciplinaService;
     private SimulacaoService simulacaoService;
     
     public ServiceFacadeImpl() {
         loginService = LoginService.getInstance();
-        cursoService = CursoService.getInstance();
+        cursoService = new CursoService();
+        disciplinaService = new DisciplinaService();
         simulacaoService = SimulacaoService.getInstance();
     }
 
     @Override
     public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException{
-        return cursoService.coletarMediaAprovacao(disciplina);
+        return disciplinaService.coletarMediaAprovacao(disciplina);
     }
 
     @Override
@@ -37,18 +39,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public String[] carregarDisciplinasDoCursoToString(Curso curso) {
-        return cursoService.carregarDisciplinasDoCursoToString(curso);
-    }
-
-    @Override
-    public Disciplina carregarDisciplina(Curso curso, String disciplina) {
-        return cursoService.carregarDisciplina(curso,disciplina);
-    }
-
-    @Override
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso) {
-        return cursoService.carregarDisciplinasDisponiveis(coletarAlunoLogado());
+        return cursoService.coletarDisciplinasDisponiveis(coletarAlunoLogado());
     }
 
     @Override
@@ -56,11 +48,6 @@ public class ServiceFacadeImpl implements ServiceFacade {
         return cursoService.coletarDisciplinasMaisDificeis(curso);
     }
     
-    @Override
-    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo){
-        return cursoService.coletarTurma(disciplina, periodoLetivo);
-    }
-
     @Override
     public void carregarPesoMaximoParaAluno(Aluno aluno) {
         simulacaoService.carregarPesoMaximoParaAluno(aluno);
@@ -71,4 +58,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
         return simulacaoService.coletarRecomendacaoSemestre(disciplinas);
     }
 
+    @Override
+    public List<Disciplina> carregarDisciplinasDoCurso(Curso curso) {
+        return cursoService.carregarDisciplinasDoCurso(curso);
+    }
 }

@@ -24,7 +24,7 @@ public class LoginService{
     
     private LoginService(){
         aluno = null;
-        cursoService = CursoService.getInstance();
+        cursoService = new CursoService();
         alunoDAO = AlunoDAO.getInstance();
     }
 

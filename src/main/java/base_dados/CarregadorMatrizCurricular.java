@@ -29,6 +29,9 @@ public class CarregadorMatrizCurricular extends Thread{
     private String nomeArquivoMatrizCurricular;
     private Map<String,Disciplina> disciplinasDoCurso;
     
+    public static final String NATUREZA_OPTATIVA = "OPTATIVO";
+    public static final String NATUREZA_OBRIGATORIA = "OBRIGATORIO";
+    
     public CarregadorMatrizCurricular(Curso curso, String nomeMatriz, String nomeArquivoMatrizCurricular, Map<String,Disciplina> disciplinasDoCurso){
         this.curso = curso;
         this.nomeMatriz = nomeMatriz;
@@ -59,6 +62,9 @@ public class CarregadorMatrizCurricular extends Thread{
                 cargaHoraria = Integer.parseInt(dadosLinha[2]);
                 naturezaDisciplina = dadosLinha[3];
                 semestreIdeal = Integer.parseInt(dadosLinha[4]);
+                if (naturezaDisciplina.equals(NATUREZA_OPTATIVA)){
+                    semestreIdeal = Integer.MAX_VALUE;
+                }
                 synchronized (disciplinasDoCurso){
                     if(!disciplinasDoCurso.containsKey(codigo)){
                         disciplina = new Disciplina(codigo, nomeDisciplina, cargaHoraria);

@@ -71,7 +71,6 @@ public class SimulacaoService {
         return coletarPesoSemestre(disciplinasParaCalculo);
     }
 
-
     /**
      * Esse método serve simplesmente para fazer o cálculo com base no último ou
      * nos dois últimos semestres Assume-se que o aluno tenha ao menos um
@@ -101,25 +100,24 @@ public class SimulacaoService {
         return dificuldade;
     }
 
-    private Double coletarPesoMedioSuportado(Curso curso) throws SemPeriodoLetivoException {
+    private Double coletarPesoMedioSuportado(Curso curso) {
         int qtdeAlunosParaMedia = 0;
         Double pesoAcumulado = 0.0;
-
         List<Aluno> alunos = new ArrayList(curso.getAlunos().values());
         for (Aluno aluno : alunos) {
-            List<Matricula> matriculas = aluno.getMatriculas();
-            if (matriculas.isEmpty()) {
-                continue;
+            try {
+                pesoAcumulado += calcularPesoMedioDoAluno(aluno);
+                qtdeAlunosParaMedia++;
+            } catch (SemPeriodoLetivoException ex) {
+                System.out.println("Aluno sem periodo letivo, e assim nao estará na conta do peso medio");
             }
-            pesoAcumulado += calcularPesoMedioDoAluno(aluno);
-            qtdeAlunosParaMedia++;
         }
         return pesoAcumulado / qtdeAlunosParaMedia;
     }
 
     /**
-     * Carrega o peso estimado para o aluno suportar no semestre 
-     * Deve ser chamado assim que a tela de sugestões for carregada
+     * Carrega o peso estimado para o aluno suportar no semestre Deve ser
+     * chamado assim que a tela de sugestões for carregada
      *
      * @param aluno
      */
@@ -127,25 +125,23 @@ public class SimulacaoService {
         List<Matricula> matriculas = aluno.getMatriculas();
         //Se tiver vazia, eh pq eh um aluno ingressante, entao devemos calcular a media dos outros
         if (matriculas.isEmpty()) {
+            this.pesoEstimadoAluno = coletarPesoMedioSuportado(aluno.getCurso());
+        } else {
             try {
-                this.pesoEstimadoAluno = coletarPesoMedioSuportado(aluno.getCurso());
+                this.pesoEstimadoAluno = calcularPesoMedioDoAluno(aluno);
             } catch (SemPeriodoLetivoException ex) {
-//                Logger.getLogger(SimulacaoService.class.getName()).log(Level.SEVERE, null, ex);
-                System.err.println("O método de coletar peso médio do curso não obteve sucesso");
+                System.err.println("Houve erro ao calcular peso médio do aluno");
             }
-        }
-        try {
-            this.pesoEstimadoAluno = calcularPesoMedioDoAluno(aluno);
-        } catch (SemPeriodoLetivoException ex) {
-            System.err.println("Houve erro ao calcular peso médio do aluno");
         }
     }
 
     /**
-     * Retorna a recomendação do semestre em relação ao aluno 
-     * Deve ser chamada sempre que um aluno colocar ou retirar uma disciplina da simulação
+     * Retorna a recomendação do semestre em relação ao aluno Deve ser chamada
+     * sempre que um aluno colocar ou retirar uma disciplina da simulação
+     *
      * @param disciplinas
-     * @return uma string com a recomendação do semestre para o aluno (pouca matéria, ideal, um pouco acima ou muito acima)
+     * @return uma string com a recomendação do semestre para o aluno (pouca
+     * matéria, ideal, um pouco acima ou muito acima)
      */
     public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas) {
         Double pesoSemestre = coletarPesoDoSemestre(disciplinas);
