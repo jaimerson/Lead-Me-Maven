@@ -51,13 +51,14 @@ public class MatrizDisciplina implements Comparable{
     @Override
     public int compareTo(Object o) {
         MatrizDisciplina outra = (MatrizDisciplina) o;
-        //OBRIGATORIO < OPTATIVO, ainda bem, pois facilita a comparacao
-        int comparacaoNatureza = this.naturezaDisciplina.compareTo(outra.getNaturezaDisciplina());
-        if (comparacaoNatureza != 0){
-            return comparacaoNatureza;
+        
+        int comparacaoPeriodo = this.semestreIdeal.compareTo(outra.getSemestreIdeal());
+        if (comparacaoPeriodo != 0){
+            return comparacaoPeriodo;
         }
         else{
-            return this.semestreIdeal.compareTo(outra.getSemestreIdeal());
+            //OBRIGATORIO < OPTATIVO, ainda bem, pois facilita a comparacao
+            return this.naturezaDisciplina.compareTo(outra.getNaturezaDisciplina());
         }
     }
 

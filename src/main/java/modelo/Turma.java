@@ -80,4 +80,8 @@ public class Turma {
         }
         return 100*(aprovados/matriculas.size());
     }
+    
+    public String toString(){
+        return this.disciplina.getCodigo() + " - " + this.periodoLetivo;
+    }
 }

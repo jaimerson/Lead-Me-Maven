@@ -5,6 +5,7 @@
  */
 package base_dados;
 
+import excecoes.DataException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import minerador.GeradorCSV;
 import modelo.Curso;
 import modelo.Disciplina;
@@ -26,11 +29,9 @@ import util.ThreadUtil;
  */
 public class CursoDAO extends AbstractDAO{
     private static CursoDAO instance = new CursoDAO();
-    private DisciplinaDAO disciplinaDAO;
     private AlunoDAO alunoDAO;
     
     private CursoDAO(){
-        disciplinaDAO = DisciplinaDAO.getInstance();
         alunoDAO = AlunoDAO.getInstance();
     }
     
@@ -41,7 +42,7 @@ public class CursoDAO extends AbstractDAO{
     //Média concorrente:55,06
     //Média sequencial:102,06
 
-    public Curso carregarCurso(String nomeCurso) throws IOException {
+    public Curso carregarCurso(String nomeCurso) throws DataException {
         Map<String, Disciplina> disciplinasDoCurso = new HashMap<>();
         Curso curso = new Curso(nomeCurso);
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
@@ -53,18 +54,17 @@ public class CursoDAO extends AbstractDAO{
             listaThreadsParaCarregar.add(th);
         }
         ThreadUtil.esperarThreads(listaThreadsParaCarregar);
-        carregarPreRequisitos(nomeCurso, disciplinasDoCurso);
+        try {
+            carregarPreRequisitos(nomeCurso, disciplinasDoCurso);
+        } catch (IOException ex) {
+            throw new DataException(ex.getLocalizedMessage());
+        }
         
         //Agora que carregamos as matrizes curriculares com suas respectivas disciplinas
         //Podemos carregar os alunos do curso
         carregarAlunosDoCurso(curso);
         long tempoFinal = System.currentTimeMillis();
         System.out.println("Tempo gasto para carregar:" + (tempoFinal - tempoInicial) + " milisegundos");
-        
-        //Com os alunos carregados, podemos gerar o arquivo dos seus periodos letivos
-        //para que o weka possa ser utilizado para encontrar associacoes
-//        GeradorCSV.gerarCSVDosPeriodosLetivos(curso);
-        GeradorCSV.gerarCSVBinarioDosPeriodosLetivos(curso);
         return curso;
     }
     

@@ -1,5 +1,7 @@
 package minerador;
 
-public interface BibliotecaMineracao {
+import modelo.Curso;
 
+public interface BibliotecaMineracao {
+    public void gerarArquivoParaAssociarDisciplinas(Curso curso);
 }

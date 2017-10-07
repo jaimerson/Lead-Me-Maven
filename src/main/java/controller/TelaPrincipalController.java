@@ -51,7 +51,7 @@ import service.ServiceFacadeFactory;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
 import org.controlsfx.control.textfield.TextFields;
-import service.ProcessadorRequisitos;
+import util.ProcessadorRequisitos;
 
 public class TelaPrincipalController implements Initializable {
 
@@ -92,7 +92,7 @@ public class TelaPrincipalController implements Initializable {
     private ScatterChart<Integer, Double> graficoFrequenciaNotas;
 
     @FXML
-    private ComboBox<String> cbTurmas;
+    private ComboBox<Turma> cbTurmas;
 
     @FXML
     private Tab tabUmaDisciplina;
@@ -117,10 +117,10 @@ public class TelaPrincipalController implements Initializable {
 
     private ServiceFacade service;
     //Possibilidades de resultado de busca de disciplina para consulta de estatisticas
-    private String[] disciplinas;
+    private List<Disciplina> disciplinas;
     //Quando escolher a disciplina para verificar a taxa de aprovacao
     private Disciplina disciplinaSelecionadaEstatistica;
-    private AutoCompletionBinding<String> autoCompleteEstatistica;
+    private AutoCompletionBinding<Disciplina> autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
     private List<MatrizDisciplina> disciplinasDisponiveis ;
     
@@ -128,16 +128,16 @@ public class TelaPrincipalController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
         final Aluno alunoLogado = service.coletarAlunoLogado();
-        disciplinas = service.carregarDisciplinasDoCursoToString(alunoLogado.getCurso());
+        disciplinas = service.carregarDisciplinasDoCurso(alunoLogado.getCurso());
 
         /*estatistica*/
         autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
-        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
+        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<Disciplina>>() {
 
             @Override
-            public void handle(AutoCompletionEvent<String> event) {
-                disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(), event.getCompletion());
-                carregarGraficoAprovacoes();
+            public void handle(AutoCompletionEvent<Disciplina> event) {
+                disciplinaSelecionadaEstatistica = event.getCompletion();
+                carregarGraficoAprovacoes(alunoLogado.getCurso());
                 event.consume();
             }
         });
@@ -146,12 +146,10 @@ public class TelaPrincipalController implements Initializable {
         carregarInformacoesAluno(alunoLogado);
 
         //Tela de estatísticas
-        disciplinaSelecionadaEstatistica = service.carregarDisciplina(alunoLogado.getCurso(), "IMD0040");
-        txtDisciplina.setText(disciplinaSelecionadaEstatistica.toString());
-        carregarGraficoAprovacoes();
+        carregarGraficoAprovacoes(alunoLogado.getCurso());
         carregarScatterDaTurma();
         //Tela de sugestoes/simulacoes
-        carregarSugestoes();
+        carregarSugestoes(alunoLogado);
         carregarDisciplinasMaisDificeis(alunoLogado.getCurso());
     }
 
@@ -161,14 +159,8 @@ public class TelaPrincipalController implements Initializable {
     }
 
     public void carregarScatterDaTurma() {
-        String opcaoSelecionada = cbTurmas.getSelectionModel().getSelectedItem();
-        if (opcaoSelecionada == null) {
-            return;
-        }
-        String periodoLetivo = opcaoSelecionada;
-        Turma turmaSelecionada = service.coletarTurma(disciplinaSelecionadaEstatistica, periodoLetivo);
-        if (turmaSelecionada == null) {
-            System.err.println("Turma selecionada eh nula!");
+        Turma turmaSelecionada = cbTurmas.getSelectionModel().getSelectedItem();
+        if (turmaSelecionada == null || disciplinaSelecionadaEstatistica == null) {
             return;
         }
         XYChart.Series<Integer, Double> series = new XYChart.Series<>();
@@ -187,17 +179,19 @@ public class TelaPrincipalController implements Initializable {
         txtMCN.setText(alunoLogado.getMcn().toString());
     }
 
-    private void carregarGraficoAprovacoes() {
+    private void carregarGraficoAprovacoes(Curso curso) {
         Double aprovacoes;
-        Aluno alunoLogado = service.coletarAlunoLogado();
+        if (disciplinaSelecionadaEstatistica == null){
+            return;
+        }
         try {
-            aprovacoes = service.coletarMediaAprovacao(alunoLogado.getCurso(), disciplinaSelecionadaEstatistica);
+            aprovacoes = service.coletarMediaAprovacao(curso, disciplinaSelecionadaEstatistica);
             ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
                     new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
                     new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
             chartAprovacoes.setData(dadosPieChart);
             txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionadaEstatistica.getNome());
-            carregarListaTurmasSelecionavel(disciplinaSelecionadaEstatistica.coletarTurmasPeriodoToString());
+            carregarListaTurmasSelecionavel(new ArrayList<>(disciplinaSelecionadaEstatistica.getTurmas().values()));
 
         } catch (DataException ex) {
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -210,14 +204,13 @@ public class TelaPrincipalController implements Initializable {
         }
     }
 
-    private void carregarListaTurmasSelecionavel(List<String> turmasSelecionaveis) {
-        ObservableList<String> listaObs = FXCollections.observableArrayList(turmasSelecionaveis);
+    private void carregarListaTurmasSelecionavel(List<Turma> turmasSelecionaveis) {
+        ObservableList<Turma> listaObs = FXCollections.observableArrayList(turmasSelecionaveis);
         cbTurmas.setItems(listaObs);
         cbTurmas.getSelectionModel().select(0);
     }
 
-    private void carregarSugestoes() {
-        Aluno alunoLogado = service.coletarAlunoLogado();
+    private void carregarSugestoes(Aluno alunoLogado) {
         service.carregarPesoMaximoParaAluno(alunoLogado);
         disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
         List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
@@ -227,7 +220,7 @@ public class TelaPrincipalController implements Initializable {
         TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<MatrizDisciplina, String>("Código");
         TableColumn<MatrizDisciplina, String> nomeTabela = new TableColumn<MatrizDisciplina, String>("Nome");
         TableColumn<MatrizDisciplina, String> naturezaTabela = new TableColumn<MatrizDisciplina, String>("Natureza");
-        TableColumn<MatrizDisciplina, Integer> semestreTabela = new TableColumn<MatrizDisciplina, Integer>("Semestre");
+        TableColumn<MatrizDisciplina, String> semestreTabela = new TableColumn<MatrizDisciplina, String>("Semestre");
         codigoTabela.setCellValueFactory(new Callback<CellDataFeatures<MatrizDisciplina, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(CellDataFeatures<MatrizDisciplina, String> c) {
@@ -241,7 +234,13 @@ public class TelaPrincipalController implements Initializable {
             }
         });
         naturezaTabela.setCellValueFactory(new PropertyValueFactory("naturezaDisciplina"));
-        semestreTabela.setCellValueFactory(new PropertyValueFactory("semestreIdeal"));
+        semestreTabela.setCellValueFactory(new Callback<CellDataFeatures<MatrizDisciplina, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<MatrizDisciplina, String> c) {
+                //Ele exibirá "-" caso a optativa nao essteja associada com nenhum periodo letivo e tiver MAX_VALUE como valor
+                return new SimpleStringProperty(c.getValue().getSemestreIdeal() == Integer.MAX_VALUE ? "-" : c.getValue().getSemestreIdeal().toString());
+            }
+        });
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
 
         tableDisciplinasDisponiveis.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -257,7 +256,7 @@ public class TelaPrincipalController implements Initializable {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (event.getClickCount() == 2) {
-                    removerDisciplinaParaSimulacao(null);
+                    removerDisciplinaDaSimulacao(null);
                 }
             }
 
@@ -310,7 +309,7 @@ public class TelaPrincipalController implements Initializable {
     }
 
     @FXML
-    void removerDisciplinaParaSimulacao(ActionEvent event) {
+    void removerDisciplinaDaSimulacao(ActionEvent event) {
         MatrizDisciplina selectedItem = listDisciplinasSelecionadas.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             listDisciplinasSelecionadas.getItems().remove(selectedItem);
@@ -342,8 +341,6 @@ public class TelaPrincipalController implements Initializable {
       @FXML
     void atualizarTabela(KeyEvent event) {
         String busca = txtBuscarDisciplina.getText().toLowerCase();
-        
-        
         tableDisciplinasDisponiveis.getItems().clear();
         List<MatrizDisciplina> disciplinasPelaBusca = new ArrayList<>();
         for(MatrizDisciplina md : disciplinasDisponiveis){
@@ -351,7 +348,6 @@ public class TelaPrincipalController implements Initializable {
             String nomeDisciplina = md.getDisciplina().getNome().toLowerCase();
             
             if(codigo.contains(busca)|| nomeDisciplina.contains(busca) ){
-                
                 disciplinasPelaBusca.add(md);
             }
         }

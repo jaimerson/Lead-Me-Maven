@@ -6,7 +6,6 @@
 package service;
 
 import base_dados.CursoDAO;
-import base_dados.DisciplinaDAO;
 import excecoes.DataException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,77 +14,35 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import minerador.BibliotecaMineracao;
+import minerador.BibliotecaMineracaoFactory;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
-import modelo.Turma;
 
 public class CursoService {
     
     public static int NUMERO_DISCIPLINAS_DIFICEIS = 10;
     
-    private static CursoService service = new CursoService();
     private CursoDAO cursoDAO;
-    private DisciplinaDAO disciplinaDAO;
+    private BibliotecaMineracao bibliotecaMineracao;
     
-    private CursoService(){
+    public CursoService(){
         cursoDAO = CursoDAO.getInstance();
-        disciplinaDAO = DisciplinaDAO.getInstance();
+        bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
     }
     
-    public static CursoService getInstance(){
-        return service;
-    }
     
-    public Curso carregarCurso(String nomeCurso){
-        Curso curso = null;
-        try{
-            curso = cursoDAO.carregarCurso(nomeCurso);
-        }catch(IOException e){
-            System.out.println("Erro ao carregar o curso");
-        }
+    public Curso carregarCurso(String nomeCurso) throws DataException{
+        Curso curso = cursoDAO.carregarCurso(nomeCurso);
+        bibliotecaMineracao.gerarArquivoParaAssociarDisciplinas(curso);
         return curso;
     }
     
-    public Disciplina[] carregarDisciplinasDoCurso(Curso curso){
+    public List<Disciplina> carregarDisciplinasDoCurso(Curso curso){
         return curso.getDisciplinas();
-    }
-    
-    public String[] carregarDisciplinasDoCursoToString(Curso curso){
-        return curso.getDisciplinasToString();
-    }
-    
-    public Disciplina carregarDisciplina(Curso curso, String disciplinaAutoComplete){
-        for (Disciplina disciplina: carregarDisciplinasDoCurso(curso)){
-            if (disciplina.toString().contains(disciplinaAutoComplete)){
-                return disciplina;
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Retorna a média de aprovações das turmas da disciplina. Serve para carregar o gráfico pizza com as aprovações.
-     * @param disciplina disciplina que o usuário escolheu para ver as estatísticas
-     * @return média de aprovações dessa disciplina
-     */
-    public Double coletarMediaAprovacao(Disciplina disciplina){
-        return disciplina.coletarMediaAprovacao();
-    }
-    
-    /**
-     * Retorna a turma escolhida pelo usuário para ver estatísticas específicas para essa turma
-     * @param disciplina disciplina escolhida na tela de estatísticas
-     * @param periodoLetivo semestre da turma escolhido na tela de esstatísticas
-     * @param numeroTurma também escolhido na tela de estatísticas. (ex: 2017.1-T01)
-     * @return a instância da turma do período letivo e número da turma escolhidos
-     */
-    public Turma coletarTurma(Disciplina disciplina, String periodoLetivo){
-        return disciplina.coletarTurma(periodoLetivo);
     }
     
     /**
@@ -95,7 +52,7 @@ public class CursoService {
      * @param aluno aluno interessado em receber as sugestões de disciplinas
      * @return Lista de disciplinas que pode pagar, ordenada pela relevância (obrigatório e dos primeiros períodos)
      */
-    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Aluno aluno){
+    public List<MatrizDisciplina> coletarDisciplinasDisponiveis(Aluno aluno){
         Curso curso = aluno.getCurso();
         //Crio a lista com as disciplinas disponiveis
         List<MatrizDisciplina> disciplinasDisponiveis = new ArrayList<>();
@@ -123,9 +80,7 @@ public class CursoService {
      * @return 
      */
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
-        Disciplina[] todasDisciplinas = curso.getDisciplinas();
-        List<Disciplina> disciplinasDificeis = new ArrayList<>();
-        disciplinasDificeis.addAll(Arrays.asList(todasDisciplinas));
+        List<Disciplina> disciplinasDificeis = curso.getDisciplinas();
         //As mais dificeis primeiro
         Collections.sort(disciplinasDificeis);
         //Só interessa o número de disciplinas para a tabela
@@ -134,5 +89,4 @@ public class CursoService {
         }
         return disciplinasDificeis;
     }
-    
 }

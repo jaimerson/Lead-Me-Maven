@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import service.ProcessadorRequisitos;
+import util.ProcessadorRequisitos;
 
 public class Aluno extends Pessoa {
 

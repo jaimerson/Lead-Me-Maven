@@ -114,12 +114,6 @@ public class Disciplina implements Comparable{
 
     public Turma coletarTurma(String periodoLetivo) {
         return this.turmas.getOrDefault(periodoLetivo,null);
-//        for (Turma turma : turmas) {
-//            if (turma.getPeriodoLetivo().equals(periodoLetivo) && turma.getNumeroTurma().equals(numeroTurma)) {
-//                return turma;
-//            }
-//        }
-//        return null;
     }
 
     public Double coletarMediaAprovacao() {
@@ -136,14 +130,6 @@ public class Disciplina implements Comparable{
     
     public Double coletarMediaReprovacao(){
         return 100.0 - coletarMediaAprovacao();
-    }
-
-    public List<String> coletarTurmasPeriodoToString() {
-        List<String> turmasString = new ArrayList<>();
-        for (Turma turma : new ArrayList<>(turmas.values())) {
-            turmasString.add(turma.getPeriodoLetivo());
-        }
-        return turmasString;
     }
 
     @Override

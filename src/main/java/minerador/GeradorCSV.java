@@ -26,32 +26,18 @@ public class GeradorCSV {
     public static final String NOME_ARQUIVO_CSV_ASSOCIACAO = "associacao.csv";
     public static final String NOME_ARQUIVO_CSV_ASSOCIACAO_BINARIA = "associacaoBinaria.csv";
     public static final String DELIMITADOR_CSV = ",";
-
-    public static void gerarCSVDosPeriodosLetivos(Curso curso) {
-        try {
-            FileWriter writer = new FileWriter(NOME_ARQUIVO_CSV_ASSOCIACAO);
-            Map<String, Aluno> alunos = curso.getAlunos();
-            Map<String, List<Disciplina>> matriculasAgrupadasPorPeriodoLetivo;
-            String linhaPeriodo;
-            for (Aluno aluno : new ArrayList<>(alunos.values())) {
-                System.out.println(aluno.getNome());
-                matriculasAgrupadasPorPeriodoLetivo = aluno.coletarMatriculasAgrupadasPorPeriodoLetivo(true);
-                for (List<Disciplina> disciplinasDoPeriodo : new ArrayList<>(matriculasAgrupadasPorPeriodoLetivo.values())) {
-                    linhaPeriodo = "";
-                    for (Disciplina disciplina : disciplinasDoPeriodo) {
-                        linhaPeriodo += disciplina.getCodigo() + DELIMITADOR_CSV;
-                    }
-                    writer.append(linhaPeriodo.substring(0, linhaPeriodo.length())+"\n");
-                }
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(GeradorCSV.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    
+    private static GeradorCSV instance = new GeradorCSV();
+    
+    public static GeradorCSV getInstance(){
+        return instance;
     }
     
-    public static void gerarCSVBinarioDosPeriodosLetivos(Curso curso) {
+    private GeradorCSV(){
+        
+    }
+
+    public void gerarCSVBinarioDosPeriodosLetivos(Curso curso) {
         List<Disciplina> disciplinas = new ArrayList<>();
         String cabecalho = "";
         try {
