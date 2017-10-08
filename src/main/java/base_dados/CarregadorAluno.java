@@ -8,7 +8,6 @@ package base_dados;
 import excecoes.DataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.Aluno;
 import modelo.Curso;
 
 /**
@@ -28,7 +27,7 @@ public class CarregadorAluno extends Thread{
     }
     
     @Override
-    public void run(){
+    public void run(){       
         try {
             alunoDAO.carregarAluno(arquivoHistorico, curso);
         } catch (DataException ex) {
