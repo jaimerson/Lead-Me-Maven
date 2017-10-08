@@ -31,7 +31,7 @@ public class BibliotecaMineracaoImpl implements BibliotecaMineracao {
         geradorCSV.gerarCSVBinarioDosPeriodosLetivos(curso);
     
     }
-    public ArrayList<String> minerarComWeka(){
+    private ArrayList<String> minerarComWeka(){
         ArrayList<String> linhas = new ArrayList<>();
         try {            
             File arff = new File("teste.arff");
@@ -54,7 +54,7 @@ public class BibliotecaMineracaoImpl implements BibliotecaMineracao {
             
             FPGrowth growth = new FPGrowth();
             growth.setMinMetric(0.7);
-            growth.setNumRulesToFind(500);
+            growth.setNumRulesToFind(1700);
             growth.buildAssociations(data);
                       
             String resultado = growth.toString();
@@ -94,9 +94,7 @@ public class BibliotecaMineracaoImpl implements BibliotecaMineracao {
         return linhas;
     }
     
-    public ArrayList<Disciplina> getAssociadas(Disciplina disciplina, List<MatrizDisciplina> disponiveis){
-        /*Esta função retorna todas as DISCIPLINAS (em um array) não pagas pelo aluno ainda 
-        mas estão disponíveis no semestre e que estão associadas a uma CERTA DISCIPLINA */
+    /*public ArrayList<Disciplina> getAssociadas(Disciplina disciplina, List<MatrizDisciplina> disponiveis){
         ArrayList<Disciplina> resultado = new ArrayList<>();
         ArrayList<String> linhas = minerarComWeka();
         if(!linhas.isEmpty()){
@@ -116,6 +114,33 @@ public class BibliotecaMineracaoImpl implements BibliotecaMineracao {
             }            
         }        
         return resultado;
-        /*Pode retornar array vazio*/
+    }*/
+    public void associar(List<MatrizDisciplina> disponiveis){
+        /*Esta função atribui o semestre ideal as disciplinas */
+        ArrayList<String> linhas = minerarComWeka();
+        for(int i = 0;i < disponiveis.size();i++){
+            if("OBRIGATORIO".equals(disponiveis.get(i).getNaturezaDisciplina())){
+                Disciplina disciplina = disponiveis.get(i).getDisciplina();
+                String codigo = disciplina.getCodigo();
+            
+                for(int j = 0; j < linhas.size(); j++){
+                    String temp = linhas.get(j);
+                    if(temp.contains(codigo)){
+                        String[] split = temp.split(","); //pego a linha que a disciplina está ,
+                        
+                        for (String split_ : split) { //comparo todas disciplinas da associação ,
+                            if(!split_.equals(codigo)){
+                                
+                                for(int k = 0;k < disponiveis.size(); k++){ //com todas disponiveis .
+                                    if(split_.equals(disponiveis.get(k).getDisciplina().getCodigo()))
+                                        disponiveis.get(k).setSemestreIdeal(disponiveis.get(i).getSemestreIdeal());
+                                        //se o código das disciplinas forem iguais e se ela já não estiver no array resultado ,
+                                }
+                            }
+                        }    
+                    }            
+                }
+            }
+        }
     }
 }

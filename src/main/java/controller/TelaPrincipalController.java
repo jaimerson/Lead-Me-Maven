@@ -39,6 +39,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import minerador.BibliotecaMineracaoImpl;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
@@ -213,6 +214,9 @@ public class TelaPrincipalController implements Initializable {
     private void carregarSugestoes(Aluno alunoLogado) {
         service.carregarPesoMaximoParaAluno(alunoLogado);
         disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
+        BibliotecaMineracaoImpl teste = new BibliotecaMineracaoImpl();//teste
+        teste.associar(disciplinasDisponiveis);//teste
+        
         List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
         disciplinasParaTabela.addAll(disciplinasDisponiveis);
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
