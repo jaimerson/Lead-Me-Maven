@@ -50,10 +50,7 @@ public class SimulacaoTest {
     public static void tearDownClass() {
     }
     
-    @Before
-    public void setUp() {
-    }
-    
+   
     @After
     public void tearDown() {
     }
@@ -66,6 +63,8 @@ public class SimulacaoTest {
          
         assertTrue(90 <= pesoDisciplina);
     }
+    
+    
     
    @Test
     public void testCargaHorariaPonderada(){
