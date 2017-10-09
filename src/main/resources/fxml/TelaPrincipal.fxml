@@ -189,12 +189,6 @@
                            </font>
                         </Label>
                         <ListView fx:id="listDisciplinasSelecionadas" layoutX="659.0" layoutY="93.0" prefHeight="346.0" prefWidth="299.0" />
-                        <ComboBox fx:id="cbGradeCurricular" layoutX="492.0" layoutY="61.0" prefWidth="150.0" />
-                        <Label layoutX="488.0" layoutY="41.0" text="Selecionar grade curricular">
-                           <font>
-                              <Font name="Linux Biolinum G Regular" size="14.0" />
-                           </font>
-                        </Label>
                         <Button fx:id="btnAdicionarDisciplina" layoutX="524.0" layoutY="445.0" mnemonicParsing="false" onAction="#adicionarDisciplinaParaSimulacao" text="Adicionar disciplina" />
                         <Button fx:id="btnRemoverDisciplina" layoutX="841.0" layoutY="445.0" mnemonicParsing="false" onAction="#removerDisciplinaDaSimulacao" text="Remover disciplina" />
                         <Label fx:id="lbRecomendacao" layoutX="495.0" layoutY="490.0" prefHeight="17.0" prefWidth="293.0" text="Selecione as disciplinas para simulação" textAlignment="RIGHT" AnchorPane.rightAnchor="31.0">

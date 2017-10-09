@@ -1,17 +1,14 @@
 package controller;
 
 import excecoes.DataException;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -39,12 +36,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import minerador.BibliotecaMineracaoImpl;
+import minerador.BibliotecaMineracao;
+import minerador.BibliotecaMineracaoFactory;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
 import modelo.Matricula;
-import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
 import service.ServiceFacade;
@@ -99,9 +96,6 @@ public class TelaPrincipalController implements Initializable {
     private Tab tabUmaDisciplina;
 
     @FXML
-    private ComboBox<MatrizCurricular> cbGradeCurricular;
-
-    @FXML
     private ListView<MatrizDisciplina> listDisciplinasSelecionadas;
 
     @FXML
@@ -123,11 +117,13 @@ public class TelaPrincipalController implements Initializable {
     private Disciplina disciplinaSelecionadaEstatistica;
     private AutoCompletionBinding<Disciplina> autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
-    private List<MatrizDisciplina> disciplinasDisponiveis ;
+    private List<MatrizDisciplina> disciplinasDisponiveis;
+    private BibliotecaMineracao bibliotecaMineracao;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = ServiceFacadeFactory.getInstance().getServiceInstance();
+        bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
         final Aluno alunoLogado = service.coletarAlunoLogado();
         disciplinas = service.carregarDisciplinasDoCurso(alunoLogado.getCurso());
 
@@ -145,7 +141,6 @@ public class TelaPrincipalController implements Initializable {
         
         //Tela inicial
         carregarInformacoesAluno(alunoLogado);
-
         //Tela de estatísticas
         carregarGraficoAprovacoes(alunoLogado.getCurso());
         carregarScatterDaTurma();
@@ -214,17 +209,16 @@ public class TelaPrincipalController implements Initializable {
     private void carregarSugestoes(Aluno alunoLogado) {
         service.carregarPesoMaximoParaAluno(alunoLogado);
         disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
-        BibliotecaMineracaoImpl teste = new BibliotecaMineracaoImpl();//teste
-        teste.associar(disciplinasDisponiveis);//teste
+        bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
         
         List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
         disciplinasParaTabela.addAll(disciplinasDisponiveis);
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
         tableDisciplinasDisponiveis.setItems(listaObs);
-        TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<MatrizDisciplina, String>("Código");
-        TableColumn<MatrizDisciplina, String> nomeTabela = new TableColumn<MatrizDisciplina, String>("Nome");
-        TableColumn<MatrizDisciplina, String> naturezaTabela = new TableColumn<MatrizDisciplina, String>("Natureza");
-        TableColumn<MatrizDisciplina, String> semestreTabela = new TableColumn<MatrizDisciplina, String>("Semestre");
+        TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<>("Código");
+        TableColumn<MatrizDisciplina, String> nomeTabela = new TableColumn<>("Nome");
+        TableColumn<MatrizDisciplina, String> naturezaTabela = new TableColumn<>("Natureza");
+        TableColumn<MatrizDisciplina, String> semestreTabela = new TableColumn<>("Semestre");
         codigoTabela.setCellValueFactory(new Callback<CellDataFeatures<MatrizDisciplina, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(CellDataFeatures<MatrizDisciplina, String> c) {
@@ -246,7 +240,6 @@ public class TelaPrincipalController implements Initializable {
             }
         });
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
-
         tableDisciplinasDisponiveis.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
@@ -263,7 +256,6 @@ public class TelaPrincipalController implements Initializable {
                     removerDisciplinaDaSimulacao(null);
                 }
             }
-
         });
     }
 
@@ -284,7 +276,6 @@ public class TelaPrincipalController implements Initializable {
                 public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
                     return new SimpleStringProperty(String.format("%.1f", c.getValue().coletarMediaAprovacao()));
                 }
-
             });
             tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina, colunaAprovacoes);
 
