@@ -63,7 +63,7 @@ public class GeradorCSV {
                 for (List<Disciplina> disciplinasDoPeriodo : new ArrayList<>(matriculasAgrupadasPorPeriodoLetivo.values())) {
                     linhaPeriodo = "";
                     for(Disciplina disciplina: disciplinas){
-                        linhaPeriodo += disciplinasDoPeriodo.contains(disciplina) ? "y" : "n";
+                        linhaPeriodo += disciplinasDoPeriodo.contains(disciplina) ? "y" : "?";
                         linhaPeriodo += DELIMITADOR_CSV;
                     }
                     writer.append(linhaPeriodo.substring(0, linhaPeriodo.length()-1)+"\n");
