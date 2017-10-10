@@ -5,7 +5,6 @@
  */
 package testes_unidade;
 
-import base_dados.AlunoDAO;
 import excecoes.AutenticacaoException;
 import excecoes.DataException;
 import modelo.Aluno;
@@ -17,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import service.LoginService;
 
 /**
  *
@@ -25,7 +25,7 @@ import org.junit.Ignore;
 public class AlunoTest {
 
     private Aluno aluno;
-    private AlunoDAO alunoDAO;
+     private static LoginService loginService;
 
     @BeforeClass
     public static void setUpClass() {
@@ -38,8 +38,8 @@ public class AlunoTest {
 
     @Before
     public void setUp() throws DataException, AutenticacaoException {
-        alunoDAO = AlunoDAO.getInstance();
-//        aluno = alunoDAO.carregarAluno("201602345", "ciclano");
+        loginService = LoginService.getInstance();
+         aluno = loginService.autenticar("201602345", "ciclano");
     }
 
     @After
@@ -69,7 +69,7 @@ public class AlunoTest {
         assertTrue(aluno.pagouMateria(disciplina,true));
     }
 
-    @Ignore @Test
+    @Test
     public void testMatrizCurricular() {
         assertEquals(aluno.getMatrizCurricular(), "sig");
     }
