@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import sincronizacao.RecursoCompartilhado;
 
 public class Turma {
 
@@ -11,9 +12,12 @@ public class Turma {
     private List<Matricula> matriculas;
     private Professor professor;
     
+    private RecursoCompartilhado recurso;
+    
     public Turma(){
         this.matriculas = new ArrayList<>();
         this.numeroTurma = "T01";
+        this.recurso = new RecursoCompartilhado();
     }
 
     public Turma(String periodoLetivo, Disciplina disciplina) {
@@ -21,6 +25,7 @@ public class Turma {
         this.disciplina = disciplina;
         this.matriculas = new ArrayList<>();
         this.numeroTurma = "T01";
+        this.recurso = new RecursoCompartilhado();
     }
 
     public String getPeriodoLetivo() {
@@ -63,9 +68,12 @@ public class Turma {
         this.professor = professor;
     }
     
-    public synchronized Matricula adicionarAluno(Aluno aluno){
+    //Utiliza o lock para adicionar a matricula na lista
+    public Matricula adicionarAluno(Aluno aluno){
         Matricula novaMatricula = new Matricula(this,aluno);
+        recurso.requisitarAcesso();
         this.matriculas.add(novaMatricula);
+        recurso.liberarAcesso();
         aluno.adicionarMatricula(novaMatricula);
         return novaMatricula;
     }

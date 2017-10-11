@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import sincronizacao.RecursoCompartilhado;
 
 public class Disciplina implements Comparable{
 
@@ -17,10 +18,13 @@ public class Disciplina implements Comparable{
     private String coRequisitos;
 
     Map<String,Turma> turmas;
+    
+    private RecursoCompartilhado recurso;
 
     public Disciplina(){
         turmas = new HashMap<>();
         matrizesRelacionadas = new ArrayList<>();
+        recurso = new RecursoCompartilhado();
     }
 
     public Disciplina(String codigo, String nome, Integer cargaHoraria) {
@@ -29,6 +33,7 @@ public class Disciplina implements Comparable{
         this.cargaHoraria = cargaHoraria;
         turmas = new HashMap<>();
         matrizesRelacionadas = new ArrayList<>();
+        recurso = new RecursoCompartilhado();
     }
 
     public String getCodigo() {
@@ -112,8 +117,16 @@ public class Disciplina implements Comparable{
         this.turmas.put(turma.getPeriodoLetivo(), turma);
     }
 
-    public Turma coletarTurma(String periodoLetivo) {
-        return this.turmas.getOrDefault(periodoLetivo,null);
+    //equivalente ao usar synchronized, porem com politica justa (fifo)
+    public Turma coletarOuCriarTurma(String periodoLetivo) {
+        recurso.requisitarAcesso();
+        Turma turma = this.turmas.getOrDefault(periodoLetivo,null);
+        if (turma == null){
+            turma = new Turma(periodoLetivo,this);
+            adicionarTurma(turma);
+        }
+        recurso.liberarAcesso();
+        return turma;
     }
 
     public Double coletarMediaAprovacao() {
