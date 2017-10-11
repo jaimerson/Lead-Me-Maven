@@ -114,22 +114,18 @@ public class AlunoDAO extends AbstractDAO {
             String[] dadosDisciplina;
             while ((linha = lerArq.readLine()) != null) {
                 dadosDisciplina = linha.split(";");
+                //Para acessar as disciplinas não preciso usar exclusao mutua, por se tratar de somente leitura
                 matrizDisciplina = aluno.getCurso().getDisciplina(matrizCurricular, dadosDisciplina[1]);
                 if (matrizDisciplina == null) {
                     System.out.println("Thread " + Thread.currentThread().getName()+": Matriz nula! Disciplina "+ dadosDisciplina[1]);
                     continue;
                 }
                 disciplina = matrizDisciplina.getDisciplina();
-                synchronized(disciplina){
-                    if (disciplina.coletarTurma(dadosDisciplina[0]) == null){
-                        turma = new Turma(dadosDisciplina[0], disciplina);
-                        disciplina.adicionarTurma(turma);
-                    }
-                    else{
-                        turma = disciplina.coletarTurma(dadosDisciplina[0]);
-                    }
-                }
-                //Metodo synchronized
+                
+                //Metodo que utiliza o lock
+                turma = disciplina.coletarOuCriarTurma(dadosDisciplina[0]);
+
+                //Metodo que utiliza o lock
                 matricula = turma.adicionarAluno(aluno);
                 
                 matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
@@ -145,7 +141,7 @@ public class AlunoDAO extends AbstractDAO {
                     }
                 }
             }
-            //Metodo synchronized
+            //Metodo que utiliza o lock
             curso.adicionarAluno(aluno);
             
             lerArq.close();

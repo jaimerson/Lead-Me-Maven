@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import sincronizacao.RecursoCompartilhado;
 
 public class Curso {
 
@@ -12,11 +13,13 @@ public class Curso {
     private Map<String,MatrizCurricular> matrizesCurricular;
     private Map<String,Aluno> alunos;
     private Integer cargaHoraria;
+    private RecursoCompartilhado recurso;
 
     public Curso(String nome) {
         this.nome = nome;
         this.matrizesCurricular = new HashMap<>();
         this.alunos = new HashMap<>();
+        recurso = new RecursoCompartilhado();
     }
 
     public String getNome() {
@@ -35,9 +38,11 @@ public class Curso {
         this.matrizesCurricular = matrizesCurricular;
     }
 
-    public synchronized void adicionarMatrizCurricular(MatrizCurricular matriz) {
+    public void adicionarMatrizCurricular(MatrizCurricular matriz) {
         matriz.setCurso(this);
+        recurso.requisitarAcesso();
         this.matrizesCurricular.put(matriz.getNomeMatriz(),matriz);
+        recurso.liberarAcesso();
     }
 
     public Map<String,Aluno> getAlunos() {
@@ -48,11 +53,13 @@ public class Curso {
         this.alunos = alunos;
     }
 
-    //Synchronized pelo fato de existir várias threads carregando os alunos e adicionando-os no curso
-    public synchronized void adicionarAluno(Aluno aluno){
+    //Equivalente a metodo synchronized
+    public void adicionarAluno(Aluno aluno){
+        recurso.requisitarAcesso(); //Exclusao mutua
         if(!this.alunos.containsKey(aluno.getNumeroMatricula())){
             this.alunos.put(aluno.getNumeroMatricula(),aluno);
         }
+        recurso.liberarAcesso();
     }
     
     public Aluno coletarAluno(String matricula){

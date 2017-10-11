@@ -13,9 +13,11 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minerador.GeradorCSV;
@@ -39,11 +41,11 @@ public class CursoDAO extends AbstractDAO{
         return instance;
     }
     
-    //Média concorrente:55,06
-    //Média sequencial:102,06
-
+ 
     public Curso carregarCurso(String nomeCurso) throws DataException {
-        Map<String, Disciplina> disciplinasDoCurso = new HashMap<>();
+        //Synchronized map pelo fato de muitas threads acessarem esse objeto
+//        Map<String, Disciplina> disciplinasDoCurso = Collections.synchronizedMap(new HashMap<String,Disciplina>());
+        Map<String, Disciplina> disciplinasDoCurso = new ConcurrentHashMap<>();
         Curso curso = new Curso(nomeCurso);
         String[] arquivosGrade = getArquivosMatrizesCurricularesDoCurso(nomeCurso);
         List<Thread> listaThreadsParaCarregar = new ArrayList<>();
