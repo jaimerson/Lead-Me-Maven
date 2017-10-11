@@ -27,11 +27,13 @@ public class CarregadorAluno extends Thread{
     }
     
     @Override
-    public void run(){       
+    public void run(){
+        System.out.println("Thread " + getName() + " iniciada");
         try {
             alunoDAO.carregarAluno(arquivoHistorico, curso);
         } catch (DataException ex) {
             Logger.getLogger(CarregadorAluno.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Thread " + getName() + " finalizada");
     }
 }
