@@ -7,9 +7,7 @@ package service;
 
 import base_dados.CursoDAO;
 import excecoes.DataException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +25,14 @@ public class CursoService {
     public static int NUMERO_DISCIPLINAS_DIFICEIS = 10;
     
     private CursoDAO cursoDAO;
+    private RequisitosService requisitosService;
     private BibliotecaMineracao bibliotecaMineracao;
-    
+    private DisciplinaService disciplinaService;
     public CursoService(){
         cursoDAO = CursoDAO.getInstance();
+        requisitosService = new RequisitosServiceUFRN();
         bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
+        disciplinaService = new DisciplinaService();
     }
     
     
@@ -64,12 +65,12 @@ public class CursoService {
         MatrizDisciplina disciplinaNaMatriz;
         for (String codigoDisciplina: codigoDisciplinas){
             disciplinaNaMatriz = disciplinasNaMatriz.get(codigoDisciplina);
-            if (aluno.podePagar(disciplinaNaMatriz.getDisciplina())){
+            if (requisitosService.podePagar(aluno, disciplinaNaMatriz.getDisciplina())){
                 disciplinasDisponiveis.add(disciplinaNaMatriz);
             }
         }
         //Ordena pela ordem de prioridade das disciplinas a serem pagas
-        Collections.sort(disciplinasDisponiveis);
+        disciplinaService.ordenarDisciplinas(disciplinasDisponiveis);
         return disciplinasDisponiveis;
     }
     
@@ -81,8 +82,9 @@ public class CursoService {
      */
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
         List<Disciplina> disciplinasDificeis = curso.getDisciplinas();
+        ComparadorDisciplinaDificil comparador = new ComparadorDisciplinaDificil();
         //As mais dificeis primeiro
-        Collections.sort(disciplinasDificeis);
+        Collections.sort(disciplinasDificeis,comparador);
         //Só interessa o número de disciplinas para a tabela
         if (disciplinasDificeis.size() > NUMERO_DISCIPLINAS_DIFICEIS){
             disciplinasDificeis = disciplinasDificeis.subList(0, NUMERO_DISCIPLINAS_DIFICEIS);

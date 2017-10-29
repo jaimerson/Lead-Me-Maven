@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import sincronizacao.RecursoCompartilhado;
 
-public class Disciplina implements Comparable{
+public class Disciplina{
 
     private String codigo;
     private String nome;
@@ -129,22 +129,6 @@ public class Disciplina implements Comparable{
         return turma;
     }
 
-    public Double coletarMediaAprovacao() {
-        //Se nenhuma turma foi adicionada, nao podemos falar q houve reprovacoes
-        if (turmas == null || turmas.isEmpty()){
-            return 100.0;
-        }
-        Double somaAprovacoes = 0.0;
-        for (Turma turma : new ArrayList<>(turmas.values())) {
-            somaAprovacoes += turma.coletarMediaAprovacao();
-        }
-        return somaAprovacoes / turmas.size();
-    }
-    
-    public Double coletarMediaReprovacao(){
-        return 100.0 - coletarMediaAprovacao();
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -158,13 +142,4 @@ public class Disciplina implements Comparable{
     public String toString() {
         return nome + " - " + codigo;
     }
-
-    @Override
-    public int compareTo(Object o) {
-        Disciplina other = (Disciplina) o;
-        Double mediaAprovacoes = coletarMediaAprovacao();
-        Double mediaAprovacoesOther = other.coletarMediaAprovacao();
-        return mediaAprovacoes.compareTo(mediaAprovacoesOther);
-    }
-
 }

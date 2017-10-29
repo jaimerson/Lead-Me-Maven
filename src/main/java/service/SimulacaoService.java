@@ -32,11 +32,13 @@ public class SimulacaoService {
     public static final double PROPORCAO_MINIMA_NAO_RECOMENDADA_CH = 1.3;
 
     private static SimulacaoService instance = new SimulacaoService();
-
+    private DisciplinaService disciplinaService;
+    
+    
     private Double pesoEstimadoAluno;
 
     private SimulacaoService() {
-
+        disciplinaService = new DisciplinaService();
     }
 
     public static SimulacaoService getInstance() {
@@ -52,7 +54,7 @@ public class SimulacaoService {
      * @return peso da disciplina no semestre
      */
     public Double coletarPesoDisciplina(Disciplina disciplina) {
-        return disciplina.getCargaHoraria() * (1 + disciplina.coletarMediaReprovacao() / 100);
+        return disciplina.getCargaHoraria() * (1 + disciplinaService.coletarMediaReprovacao(disciplina) / 100);
     }
 
     public Double coletarPesoSemestre(List<Disciplina> disciplinas) {

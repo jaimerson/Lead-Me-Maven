@@ -8,13 +8,14 @@ package minerador;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
-import util.ProcessadorRequisitos;
+import service.ComparadorMatrizDisciplina;
 import weka.associations.AssociationRule;
+import weka.associations.Item;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -27,8 +28,7 @@ public class AssociadorWeka {
     
     public static final String ARQUIVO_ASSOCIACAO = "associacao.arff";
     public static final Integer NUMERO_REGRAS = 1000;
-    private static AssociadorWeka instance = new AssociadorWeka();
-    
+    private static AssociadorWeka instance;
     private AssociacaoStrategy associacaoStrategy;
     
     private AssociadorWeka(){
@@ -36,6 +36,9 @@ public class AssociadorWeka {
     }
     
     public static AssociadorWeka getInstance(){
+        if (instance == null){
+            instance = new AssociadorWeka();
+        }
         return instance;
     }
     
@@ -51,19 +54,12 @@ public class AssociadorWeka {
 
     private void removerAssociacoesIrrelevantes(List<AssociationRule> associacoes) {
         Iterator<AssociationRule> linhasIterator = associacoes.iterator();
-        String[] divisaoRegraAssociacao;
-        String regraDisciplinasPremissa;
-        List<String> disciplinasPremissa;
-
         while (linhasIterator.hasNext()) {
             AssociationRule regra = linhasIterator.next();
             String regraString = regra.toString();
             System.out.println(regraString);
-            divisaoRegraAssociacao = regraString.split("==>");
-            regraDisciplinasPremissa = divisaoRegraAssociacao[0];
-            disciplinasPremissa = ProcessadorRequisitos.coletarDisciplinasDaExpressao(regraDisciplinasPremissa);
             //Se tiver varias disciplinas do lado esquerdo, nao ajuda muito
-            if (disciplinasPremissa.size() > 1){
+            if (regra.getPremise().size() > 1){
                 linhasIterator.remove();
             }
         }
@@ -95,36 +91,31 @@ public class AssociadorWeka {
         List<AssociationRule> associacoes = coletarRegrasDeAssociacao();
         String[] divisaoRegraAssociacao;
         String regraDisciplinasPremissa;
-        String regraDisciplinasEnvolvidas;
-        List<String> disciplinasEnvolvidas;
-        
         //Para cada disciplina disponivel
         for (MatrizDisciplina materiaDisponivel : disciplinasDisponiveis){
             //Se for uma obrigatoria
             if (materiaDisponivel.getNaturezaDisciplina().equalsIgnoreCase("OBRIGATORIO")){
                 Disciplina disciplina = materiaDisponivel.getDisciplina();
-                String codigo = disciplina.getCodigo();
-                
+                String codigoDisciplinaObrigatoria = disciplina.getCodigo();
                 //percorro cada regra buscando essa disciplina obrigatoria
                 for (AssociationRule associacao: associacoes){
                     String associacaoString = associacao.toString();
                     divisaoRegraAssociacao = associacaoString.split("==>");
                     regraDisciplinasPremissa = divisaoRegraAssociacao[0];
                     //Se a premissa tiver o codigo da disciplina, entao podemos procurar uma optativa associada
-                    if (regraDisciplinasPremissa.contains(codigo)){
-                        regraDisciplinasEnvolvidas = divisaoRegraAssociacao[1];
-                        disciplinasEnvolvidas = ProcessadorRequisitos.coletarDisciplinasDaExpressao(regraDisciplinasEnvolvidas);
+                    if (regraDisciplinasPremissa.contains(codigoDisciplinaObrigatoria)){
                         //Para cada disciplina envolvida com a obrigatoria em questao
-                        for (String codigoDisciplinaEnvolvida: disciplinasEnvolvidas){
-                            //Coleto a disciplina envolvida 
+                        Collection<Item> disciplinasEnvolvidasItems = associacao.getConsequence();
+                        
+                        for(Item disc: disciplinasEnvolvidasItems){
                             MatrizDisciplina disciplinaEnvolvida = null;
                             for (MatrizDisciplina disciplinaM: disciplinasDisponiveis){
-                                if (disciplinaM.getDisciplina().getCodigo().equals(codigoDisciplinaEnvolvida)){
+                                
+                                if (disc.getItemValueAsString().contains(disciplinaM.getDisciplina().getCodigo())){
                                     disciplinaEnvolvida = disciplinaM;
                                     break;
                                 }
                             }
-                            
                             //Verifico se eh optativa e nenhuma associaçao foi feita com ela
                             //Se for positivo, associo com a materia obrigatoria do laço externo
                             if (disciplinaEnvolvida != null && disciplinaEnvolvida.getNaturezaDisciplina().equalsIgnoreCase("OPTATIVO") && disciplinaEnvolvida.getSemestreIdeal().equals(Integer.MAX_VALUE)){
@@ -135,6 +126,5 @@ public class AssociadorWeka {
                 }
             }
         }
-        Collections.sort(disciplinasDisponiveis);
     }
 }

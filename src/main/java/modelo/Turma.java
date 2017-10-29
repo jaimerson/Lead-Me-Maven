@@ -10,7 +10,6 @@ public class Turma {
     private String numeroTurma;
     private Disciplina disciplina;
     private List<Matricula> matriculas;
-    private Professor professor;
     
     private RecursoCompartilhado recurso;
     
@@ -60,14 +59,6 @@ public class Turma {
         this.matriculas = matriculas;
     }
 
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
-    
     //Utiliza o lock para adicionar a matricula na lista
     public Matricula adicionarAluno(Aluno aluno){
         Matricula novaMatricula = new Matricula(this,aluno);

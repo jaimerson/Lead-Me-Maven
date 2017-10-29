@@ -103,8 +103,8 @@ public class AlunoDAO extends AbstractDAO {
             
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
             aluno.setMatrizCurricular(matrizCurricular);
-            aluno.setIea(Double.parseDouble(lerArq.readLine()));
-            aluno.setMcn(Double.parseDouble(lerArq.readLine()));
+            lerArq.readLine();
+            lerArq.readLine();
             String linha;
             //O aluno tem uma lista de matriculas
             Matricula matricula;
@@ -131,15 +131,6 @@ public class AlunoDAO extends AbstractDAO {
                 matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
                 matricula.setSituacao(dadosDisciplina[5]);
                 matricula.setPorcentagemPresencas(Double.parseDouble(dadosDisciplina[4]));
-                
-                //Contando as horas cumpridas  
-                if (!matricula.getSituacao().contains("REP")) {
-                    if (matrizDisciplina.getNaturezaDisciplina().equals("OBRIGATORIO")) {
-                        aluno.incrementarCargaObrigatoriaCumprida(matrizDisciplina.getDisciplina().getCargaHoraria());
-                    } else {
-                        aluno.incrementarCargaOptativaCumprida(matrizDisciplina.getDisciplina().getCargaHoraria());
-                    }
-                }
             }
             //Metodo que utiliza o lock
             curso.adicionarAluno(aluno);

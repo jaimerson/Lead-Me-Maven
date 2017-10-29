@@ -7,7 +7,6 @@ import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import excecoes.AutenticacaoException;
 import modelo.Curso;
-import modelo.Turma;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -15,16 +14,18 @@ public class ServiceFacadeImpl implements ServiceFacade {
     private CursoService cursoService;
     private DisciplinaService disciplinaService;
     private SimulacaoService simulacaoService;
+    private RequisitosService requisitosService;
     
     public ServiceFacadeImpl() {
         loginService = LoginService.getInstance();
         cursoService = new CursoService();
         disciplinaService = new DisciplinaService();
         simulacaoService = SimulacaoService.getInstance();
+        requisitosService = new RequisitosServiceUFRN();
     }
 
     @Override
-    public Double coletarMediaAprovacao(Curso curso, Disciplina disciplina) throws DataException{
+    public Double coletarMediaAprovacao(Disciplina disciplina){
         return disciplinaService.coletarMediaAprovacao(disciplina);
     }
 
@@ -61,5 +62,15 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public List<Disciplina> carregarDisciplinasDoCurso(Curso curso) {
         return cursoService.carregarDisciplinasDoCurso(curso);
+    }
+
+    @Override
+    public boolean cumpreCoRequisitos(Aluno aluno, MatrizDisciplina disciplinaAAdicionar, List<MatrizDisciplina> disciplinasM) {
+        return requisitosService.cumpreCoRequisitos(aluno, disciplinaAAdicionar, disciplinasM);
+    }
+
+    @Override
+    public void ordenarDisciplinas(List<MatrizDisciplina> disciplinas) {
+        disciplinaService.ordenarDisciplinas(disciplinas);
     }
 }

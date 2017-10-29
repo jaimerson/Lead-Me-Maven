@@ -45,34 +45,21 @@ import modelo.Matricula;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
 import service.ServiceFacade;
-import service.ServiceFacadeFactory;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
 import org.controlsfx.control.textfield.TextFields;
-import util.ProcessadorRequisitos;
+import service.ServiceFacadeImpl;
 
 public class TelaPrincipalController implements Initializable {
 
     @FXML
-    private Label lbProgresso;
-
-    @FXML
     private TextField txtBuscarDisciplina;
-
-    @FXML
-    private ProgressBar progressBarCurso;
-
-    @FXML
-    private Label txtIEA;
 
     @FXML
     private TextField txtDisciplina;
 
     @FXML
     private PieChart chartAprovacoes;
-
-    @FXML
-    private Label txtMCN;
 
     @FXML
     private Label txtBemVindo;
@@ -119,10 +106,10 @@ public class TelaPrincipalController implements Initializable {
     private ControllerUtil util = new ControllerUtil();
     private List<MatrizDisciplina> disciplinasDisponiveis;
     private BibliotecaMineracao bibliotecaMineracao;
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        service = ServiceFacadeFactory.getInstance().getServiceInstance();
+        service = new ServiceFacadeImpl();
         bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
         final Aluno alunoLogado = service.coletarAlunoLogado();
         disciplinas = service.carregarDisciplinasDoCurso(alunoLogado.getCurso());
@@ -134,15 +121,13 @@ public class TelaPrincipalController implements Initializable {
             @Override
             public void handle(AutoCompletionEvent<Disciplina> event) {
                 disciplinaSelecionadaEstatistica = event.getCompletion();
-                carregarGraficoAprovacoes(alunoLogado.getCurso());
+                carregarGraficoAprovacoes();
                 event.consume();
             }
         });
-        
-        //Tela inicial
-        carregarInformacoesAluno(alunoLogado);
+
         //Tela de estatísticas
-        carregarGraficoAprovacoes(alunoLogado.getCurso());
+        carregarGraficoAprovacoes();
         carregarScatterDaTurma();
         //Tela de sugestoes/simulacoes
         carregarSugestoes(alunoLogado);
@@ -166,38 +151,19 @@ public class TelaPrincipalController implements Initializable {
         graficoFrequenciaNotas.getData().setAll(series);
     }
 
-    private void carregarInformacoesAluno(Aluno alunoLogado) {
-        txtBemVindo.setText("Bem vindo(a), " + alunoLogado.getNome());
-        Double progresso = alunoLogado.getProgresso();
-        progressBarCurso.setProgress(progresso);
-        lbProgresso.setText("Progresso no curso: " + String.format("%.2f", progresso * 100) + "%");
-        txtIEA.setText(alunoLogado.getIea().toString());
-        txtMCN.setText(alunoLogado.getMcn().toString());
-    }
-
-    private void carregarGraficoAprovacoes(Curso curso) {
+    private void carregarGraficoAprovacoes() {
         Double aprovacoes;
-        if (disciplinaSelecionadaEstatistica == null){
+        if (disciplinaSelecionadaEstatistica == null) {
             return;
         }
-        try {
-            aprovacoes = service.coletarMediaAprovacao(curso, disciplinaSelecionadaEstatistica);
-            ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
-                    new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
-                    new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
-            chartAprovacoes.setData(dadosPieChart);
-            txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionadaEstatistica.getNome());
-            carregarListaTurmasSelecionavel(new ArrayList<>(disciplinaSelecionadaEstatistica.getTurmas().values()));
-
-        } catch (DataException ex) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao acessar os dados");
-            alert.setContentText("Houve um problema ao coletar a média da aprovação");
-            alert.showAndWait();
-        } finally {
-            txtDisciplina.clear();
-        }
+        aprovacoes = service.coletarMediaAprovacao(disciplinaSelecionadaEstatistica);
+        ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
+                new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),
+                new PieChart.Data("Reprovados: " + String.format("%.2f", 100.0 - aprovacoes) + "%", 100.0 - aprovacoes));
+        chartAprovacoes.setData(dadosPieChart);
+        txtTituloPieChart.setText("Aprovações de " + disciplinaSelecionadaEstatistica.getNome());
+        carregarListaTurmasSelecionavel(new ArrayList<>(disciplinaSelecionadaEstatistica.getTurmas().values()));
+        txtDisciplina.clear();
     }
 
     private void carregarListaTurmasSelecionavel(List<Turma> turmasSelecionaveis) {
@@ -210,6 +176,7 @@ public class TelaPrincipalController implements Initializable {
         service.carregarPesoMaximoParaAluno(alunoLogado);
         disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
         bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
+        service.ordenarDisciplinas(disciplinasDisponiveis);
         
         List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
         disciplinasParaTabela.addAll(disciplinasDisponiveis);
@@ -274,7 +241,7 @@ public class TelaPrincipalController implements Initializable {
             colunaAprovacoes.setCellValueFactory(new Callback<CellDataFeatures<Disciplina, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
-                    return new SimpleStringProperty(String.format("%.1f", c.getValue().coletarMediaAprovacao()));
+                    return new SimpleStringProperty(String.format("%.1f", service.coletarMediaAprovacao(c.getValue())));
                 }
             });
             tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina, colunaAprovacoes);
@@ -288,7 +255,7 @@ public class TelaPrincipalController implements Initializable {
     public void adicionarDisciplinaParaSimulacao(ActionEvent event) {
         MatrizDisciplina selectedItem = tableDisciplinasDisponiveis.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            if (ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), selectedItem, listDisciplinasSelecionadas.getItems())) {
+            if (service.cumpreCoRequisitos(service.coletarAlunoLogado(), selectedItem, listDisciplinasSelecionadas.getItems())) {
                 listDisciplinasSelecionadas.getItems().add(selectedItem);
                 tableDisciplinasDisponiveis.getItems().remove(selectedItem);
                 disciplinasDisponiveis.remove(selectedItem);
@@ -310,19 +277,18 @@ public class TelaPrincipalController implements Initializable {
             listDisciplinasSelecionadas.getItems().remove(selectedItem);
             disciplinasDisponiveis.add(selectedItem);
             Iterator<MatrizDisciplina> it = listDisciplinasSelecionadas.getItems().iterator();
-            while(it.hasNext()){
+            while (it.hasNext()) {
                 MatrizDisciplina disciplina = it.next();
-                if (!ProcessadorRequisitos.cumpreCoRequisitos(service.coletarAlunoLogado(), disciplina, listDisciplinasSelecionadas.getItems())) {
+                if (!service.cumpreCoRequisitos(service.coletarAlunoLogado(), disciplina, listDisciplinasSelecionadas.getItems())) {
                     it.remove();
                     disciplinasDisponiveis.add(disciplina);
                 }
             }
             atualizarTabela(null);
-            Collections.sort(tableDisciplinasDisponiveis.getItems());
+            service.ordenarDisciplinas(disciplinasDisponiveis);
             if (!listDisciplinasSelecionadas.getItems().isEmpty()) {
                 lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
-            }   
-            else{
+            } else {
                 lbRecomendacao.setText("Selecione as disciplinas para simulação");
             }
         }
@@ -332,21 +298,21 @@ public class TelaPrincipalController implements Initializable {
     void sair(ActionEvent event) {
         ((Stage) btnSair.getScene().getWindow()).close();
     }
-    
-      @FXML
+
+    @FXML
     void atualizarTabela(KeyEvent event) {
         String busca = txtBuscarDisciplina.getText().toLowerCase();
         tableDisciplinasDisponiveis.getItems().clear();
         List<MatrizDisciplina> disciplinasPelaBusca = new ArrayList<>();
-        for(MatrizDisciplina md : disciplinasDisponiveis){
+        for (MatrizDisciplina md : disciplinasDisponiveis) {
             String codigo = md.getDisciplina().getCodigo().toLowerCase();
             String nomeDisciplina = md.getDisciplina().getNome().toLowerCase();
-            
-            if(codigo.contains(busca)|| nomeDisciplina.contains(busca) ){
+
+            if (codigo.contains(busca) || nomeDisciplina.contains(busca)) {
                 disciplinasPelaBusca.add(md);
             }
         }
         tableDisciplinasDisponiveis.setItems(FXCollections.observableArrayList(disciplinasPelaBusca));
-        Collections.sort(tableDisciplinasDisponiveis.getItems());
+        service.ordenarDisciplinas(disciplinasPelaBusca);
     }
 }

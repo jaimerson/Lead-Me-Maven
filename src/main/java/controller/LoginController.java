@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import service.ServiceFacade;
-import service.ServiceFacadeFactory;
+import service.ServiceFacadeImpl;
 
 public class LoginController {
 
@@ -33,7 +33,7 @@ public class LoginController {
     
     @FXML
     void entrar(ActionEvent event) {
-        serviceFacade = ServiceFacadeFactory.getInstance().getServiceInstance();
+        serviceFacade = new ServiceFacadeImpl();
         try {
             serviceFacade.autenticar(txtLogin.getText(), txtSenha.getText());
         } catch (DataException ex) {
