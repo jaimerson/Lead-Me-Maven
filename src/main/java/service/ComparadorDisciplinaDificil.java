@@ -12,19 +12,14 @@ import modelo.Disciplina;
  *
  * @author rafao
  */
-public class ComparadorDisciplinaDificil implements Comparator<Disciplina>{
+public abstract class ComparadorDisciplinaDificil implements Comparator<Disciplina>{
 
-    private DisciplinaService disciplinaService;
+    protected DisciplinaService disciplinaService;
     
     public ComparadorDisciplinaDificil(){
         this.disciplinaService = new DisciplinaService();
     }
     
-    @Override
-    public int compare(Disciplina d1, Disciplina d2) {
-        Double mediaAprovacoes = disciplinaService.coletarMediaAprovacao(d1);
-        Double mediaAprovacoesOther = disciplinaService.coletarMediaAprovacao(d2);
-        return mediaAprovacoes.compareTo(mediaAprovacoesOther);
-    }
+    abstract public int compare(Disciplina d1, Disciplina d2);
     
 }

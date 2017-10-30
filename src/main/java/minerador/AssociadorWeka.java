@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
-import service.ComparadorMatrizDisciplina;
 import weka.associations.AssociationRule;
 import weka.associations.Item;
 import weka.core.Instances;

@@ -8,8 +8,6 @@ public class MatrizCurricular {
     private String nomeMatriz;
     private Curso curso;
     private Map<String,MatrizDisciplina> disciplinasNaMatriz;
-    private Integer cargaHorariaObrigatoria;
-    private Integer cargaHorariaOptativa;
     
     public MatrizCurricular(String nomeMatriz) {
         this.nomeMatriz = nomeMatriz;
@@ -32,24 +30,6 @@ public class MatrizCurricular {
         this.curso = curso;
     }
 
-    public Integer getCargaHorariaObrigatoria() {
-        return cargaHorariaObrigatoria;
-    }
-
-    public void setCargaHorariaObrigatoria(Integer cargaHorariaObrigatoria) {
-        this.cargaHorariaObrigatoria = cargaHorariaObrigatoria;
-    }
-
-    public Integer getCargaHorariaOptativa() {
-        return cargaHorariaOptativa;
-    }
-
-    public void setCargaHorariaOptativa(Integer cargaHorariaOptativa) {
-        this.cargaHorariaOptativa = cargaHorariaOptativa;
-    }
-    
-    
-
     public Map<String,MatrizDisciplina> getDisciplinasNaMatriz() {
         return disciplinasNaMatriz;
     }
@@ -68,9 +48,5 @@ public class MatrizCurricular {
     
     public MatrizDisciplina getDisciplina(String codigo){
         return disciplinasNaMatriz.get(codigo);
-    }
-
-    public Integer getCargaTotal(){
-        return this.cargaHorariaObrigatoria + this.cargaHorariaOptativa;
     }
 }

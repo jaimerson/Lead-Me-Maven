@@ -21,4 +21,5 @@ public interface ServiceFacade {
     public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas);
     public boolean cumpreCoRequisitos(Aluno aluno, MatrizDisciplina disciplinaAAdicionar, List<MatrizDisciplina> disciplinasM);
     public void ordenarDisciplinas(List<MatrizDisciplina> disciplinas);
+    public void atualizarBaseDeDados();
 }

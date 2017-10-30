@@ -15,6 +15,7 @@ public class ServiceFacadeImpl implements ServiceFacade {
     private DisciplinaService disciplinaService;
     private SimulacaoService simulacaoService;
     private RequisitosService requisitosService;
+    private DadosService dadosService;
     
     public ServiceFacadeImpl() {
         loginService = LoginService.getInstance();
@@ -22,6 +23,7 @@ public class ServiceFacadeImpl implements ServiceFacade {
         disciplinaService = new DisciplinaService();
         simulacaoService = SimulacaoService.getInstance();
         requisitosService = new RequisitosServiceUFRN();
+        dadosService = new DadosService();
     }
 
     @Override
@@ -72,5 +74,10 @@ public class ServiceFacadeImpl implements ServiceFacade {
     @Override
     public void ordenarDisciplinas(List<MatrizDisciplina> disciplinas) {
         disciplinaService.ordenarDisciplinas(disciplinas);
+    }
+
+    @Override
+    public void atualizarBaseDeDados() {
+        dadosService.atualizarBaseDeDados();
     }
 }

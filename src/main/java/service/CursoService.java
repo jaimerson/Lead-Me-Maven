@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import minerador.BibliotecaMineracao;
-import minerador.BibliotecaMineracaoFactory;
+import minerador.BibliotecaMineracaoImpl;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
@@ -31,7 +31,7 @@ public class CursoService {
     public CursoService(){
         cursoDAO = CursoDAO.getInstance();
         requisitosService = new RequisitosServiceUFRN();
-        bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
+        bibliotecaMineracao = new BibliotecaMineracaoImpl();
         disciplinaService = new DisciplinaService();
     }
     
@@ -69,6 +69,7 @@ public class CursoService {
                 disciplinasDisponiveis.add(disciplinaNaMatriz);
             }
         }
+        bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
         //Ordena pela ordem de prioridade das disciplinas a serem pagas
         disciplinaService.ordenarDisciplinas(disciplinasDisponiveis);
         return disciplinasDisponiveis;
@@ -82,7 +83,7 @@ public class CursoService {
      */
     public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
         List<Disciplina> disciplinasDificeis = curso.getDisciplinas();
-        ComparadorDisciplinaDificil comparador = new ComparadorDisciplinaDificil();
+        ComparadorDisciplinaDificil comparador = new ComparadorDisciplinaDificilUFRN();
         //As mais dificeis primeiro
         Collections.sort(disciplinasDificeis,comparador);
         //Só interessa o número de disciplinas para a tabela

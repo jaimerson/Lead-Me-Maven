@@ -30,7 +30,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import minerador.BibliotecaMineracao;
-import minerador.BibliotecaMineracaoFactory;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
@@ -98,12 +97,10 @@ public class TelaPrincipalController implements Initializable {
     private AutoCompletionBinding<Disciplina> autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
     private List<MatrizDisciplina> disciplinasDisponiveis;
-    private BibliotecaMineracao bibliotecaMineracao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = new ServiceFacadeImpl();
-        bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
         Aluno alunoLogado = service.coletarAlunoLogado();
         disciplinas = service.carregarDisciplinasDoCurso(alunoLogado.getCurso());
 
@@ -218,8 +215,6 @@ public class TelaPrincipalController implements Initializable {
         criarTabelaDeSugestoes();
         service.carregarPesoMaximoParaAluno(alunoLogado);
         disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
-        bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
-        service.ordenarDisciplinas(disciplinasDisponiveis);
         List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
         disciplinasParaTabela.addAll(disciplinasDisponiveis);
         ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
@@ -279,8 +274,8 @@ public class TelaPrincipalController implements Initializable {
                     disciplinasDisponiveis.add(disciplina);
                 }
             }
-            atualizarTabela(null);
             service.ordenarDisciplinas(disciplinasDisponiveis);
+            atualizarTabela(null);
             if (!listDisciplinasSelecionadas.getItems().isEmpty()) {
                 lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
             } else {

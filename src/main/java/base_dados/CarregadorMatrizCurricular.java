@@ -52,8 +52,8 @@ public class CarregadorMatrizCurricular extends Thread{
             String[] dadosLinha;
             Disciplina disciplina;
 
-            matriz.setCargaHorariaObrigatoria(Integer.parseInt(lerArq.readLine()));
-            matriz.setCargaHorariaOptativa(Integer.parseInt(lerArq.readLine()));
+            lerArq.readLine();
+            lerArq.readLine();
             while ((linha = lerArq.readLine()) != null) {
                 linha = linha.replace("\n", "");
                 dadosLinha = linha.split(";");

@@ -12,7 +12,6 @@ public class Curso {
     private String nome;
     private Map<String,MatrizCurricular> matrizesCurricular;
     private Map<String,Aluno> alunos;
-    private Integer cargaHoraria;
     private RecursoCompartilhado recurso;
 
     public Curso(String nome) {
@@ -80,14 +79,6 @@ public class Curso {
         return null;
     }
 
-    public Integer getCargaHoraria() {
-        return cargaHoraria;
-    }
-
-    public void setCargaHoraria(Integer cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
-    }
-    
     public List<Disciplina> getDisciplinas(){
         List<Disciplina> disciplinas = new ArrayList<>();
         Set<String> chaves = matrizesCurricular.keySet();

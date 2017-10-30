@@ -5,14 +5,17 @@
  */
 package service;
 
-import java.util.Comparator;
-import modelo.MatrizDisciplina;
+import extrator_dados.Extrator;
 
 /**
  *
  * @author rafao
  */
-public abstract class ComparadorMatrizDisciplina implements Comparator<MatrizDisciplina>{
+public class DadosService {
     
-    abstract public int compare(MatrizDisciplina md1, MatrizDisciplina md2);
+    private Extrator extrator;
+    
+    public void atualizarBaseDeDados(){
+        extrator.atualizarBaseDeDados();
+    }
 }
