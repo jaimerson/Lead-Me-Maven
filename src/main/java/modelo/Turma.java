@@ -69,17 +69,6 @@ public class Turma {
         return novaMatricula;
     }
     
-    //Assume-se que a turma ja tenha sido carregada com a lista de matriculas com suas situacoes definidas
-    public Double coletarMediaAprovacao(){
-        Double aprovados = 0.0;
-        for(Matricula matricula: matriculas){
-            if (matricula.foiAprovado()){
-                aprovados += 1;
-            }
-        }
-        return 100*(aprovados/matriculas.size());
-    }
-    
     public String toString(){
         return this.disciplina.getCodigo() + " - " + this.periodoLetivo;
     }

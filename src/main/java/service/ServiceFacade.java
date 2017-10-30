@@ -16,7 +16,7 @@ public interface ServiceFacade {
     public List<Disciplina> carregarDisciplinasDoCurso(Curso curso);
     public Double coletarMediaAprovacao(Disciplina disciplina);
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso); 
-    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso) throws DataException;
+    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso);
     public void carregarPesoMaximoParaAluno(Aluno aluno);
     public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas);
     public boolean cumpreCoRequisitos(Aluno aluno, MatrizDisciplina disciplinaAAdicionar, List<MatrizDisciplina> disciplinasM);

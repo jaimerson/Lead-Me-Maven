@@ -2,13 +2,9 @@ package controller;
 
 import excecoes.AutenticacaoException;
 import excecoes.DataException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -37,18 +33,11 @@ public class LoginController {
         try {
             serviceFacade.autenticar(txtLogin.getText(), txtSenha.getText());
         } catch (DataException ex) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Erro ao acessar as informações");
-            alert.setHeaderText("Houve um problema para acessar os dados");
-            alert.setContentText("Detalhes: " + ex.getLocalizedMessage());
-            alert.showAndWait();
+            util.criarAlerta("Erro ao acessar as informações", "Houve um problema para acessar os dados", 
+                    "Detalhes: " + ex.getLocalizedMessage());
             return;
         } catch (AutenticacaoException ex) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Usuário/Senha inválida");
-            alert.setHeaderText("Usuário/senha inválida");
-            alert.setContentText("Verifique os dados e tente novamente");
-            alert.showAndWait();
+            util.criarAlerta("Usuário/Senha inválida", "Usuário/senha inválida", "Verifique os dados e tente novamente");
             return;
         }
         Stage stage = util.carregarTela("/fxml/TelaPrincipal.fxml","Lead Me");

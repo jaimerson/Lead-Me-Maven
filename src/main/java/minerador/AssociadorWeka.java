@@ -111,7 +111,7 @@ public class AssociadorWeka {
                             MatrizDisciplina disciplinaEnvolvida = null;
                             for (MatrizDisciplina disciplinaM: disciplinasDisponiveis){
                                 
-                                if (disc.getItemValueAsString().contains(disciplinaM.getDisciplina().getCodigo())){
+                                if (disc.toString().contains(disciplinaM.getDisciplina().getCodigo())){
                                     disciplinaEnvolvida = disciplinaM;
                                     break;
                                 }

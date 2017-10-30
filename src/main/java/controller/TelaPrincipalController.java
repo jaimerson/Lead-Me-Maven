@@ -1,14 +1,10 @@
 package controller;
 
-import excecoes.DataException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,13 +16,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -111,7 +104,7 @@ public class TelaPrincipalController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         service = new ServiceFacadeImpl();
         bibliotecaMineracao = BibliotecaMineracaoFactory.getInstance().getBibliotecaMineracaoInstance();
-        final Aluno alunoLogado = service.coletarAlunoLogado();
+        Aluno alunoLogado = service.coletarAlunoLogado();
         disciplinas = service.carregarDisciplinasDoCurso(alunoLogado.getCurso());
 
         /*estatistica*/
@@ -172,16 +165,7 @@ public class TelaPrincipalController implements Initializable {
         cbTurmas.getSelectionModel().select(0);
     }
 
-    private void carregarSugestoes(Aluno alunoLogado) {
-        service.carregarPesoMaximoParaAluno(alunoLogado);
-        disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
-        bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
-        service.ordenarDisciplinas(disciplinasDisponiveis);
-        
-        List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
-        disciplinasParaTabela.addAll(disciplinasDisponiveis);
-        ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
-        tableDisciplinasDisponiveis.setItems(listaObs);
+    private void criarTabelaDeSugestoes() {
         TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<>("Código");
         TableColumn<MatrizDisciplina, String> nomeTabela = new TableColumn<>("Nome");
         TableColumn<MatrizDisciplina, String> naturezaTabela = new TableColumn<>("Natureza");
@@ -207,6 +191,10 @@ public class TelaPrincipalController implements Initializable {
             }
         });
         tableDisciplinasDisponiveis.getColumns().setAll(codigoTabela, nomeTabela, naturezaTabela, semestreTabela);
+        adicionarEventosCliqueTabela();
+    }
+
+    private void adicionarEventosCliqueTabela() {
         tableDisciplinasDisponiveis.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
@@ -226,29 +214,40 @@ public class TelaPrincipalController implements Initializable {
         });
     }
 
-    public void carregarDisciplinasMaisDificeis(Curso curso) {
-        try {
-            List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis(curso);
-            ObservableList<Disciplina> listaDisciplinasTabela = FXCollections.observableList(disciplinasMaisDificeis);
-            tabelaDisciplinasDificeis.setItems(listaDisciplinasTabela);
-            TableColumn<Disciplina, String> colunaNomeDisciplina = new TableColumn<>("Nome");
-            colunaNomeDisciplina.setSortable(false);
-            colunaNomeDisciplina.setEditable(false);
-            TableColumn<Disciplina, String> colunaAprovacoes = new TableColumn<>("% aprovados");
-            colunaAprovacoes.setSortable(false);
-            colunaAprovacoes.setEditable(false);
-            colunaNomeDisciplina.setCellValueFactory(new PropertyValueFactory("nome"));
-            colunaAprovacoes.setCellValueFactory(new Callback<CellDataFeatures<Disciplina, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
-                    return new SimpleStringProperty(String.format("%.1f", service.coletarMediaAprovacao(c.getValue())));
-                }
-            });
-            tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina, colunaAprovacoes);
+    private void carregarSugestoes(Aluno alunoLogado) {
+        criarTabelaDeSugestoes();
+        service.carregarPesoMaximoParaAluno(alunoLogado);
+        disciplinasDisponiveis = service.carregarDisciplinasDisponiveis(alunoLogado.getCurso());
+        bibliotecaMineracao.associarDisciplinasComunsAPeriodoLetivo(disciplinasDisponiveis);
+        service.ordenarDisciplinas(disciplinasDisponiveis);
+        List<MatrizDisciplina> disciplinasParaTabela = new ArrayList<>();
+        disciplinasParaTabela.addAll(disciplinasDisponiveis);
+        ObservableList<MatrizDisciplina> listaObs = FXCollections.observableList(disciplinasParaTabela);
+        tableDisciplinasDisponiveis.setItems(listaObs);
+    }
 
-        } catch (DataException ex) {
-            Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void criarTabelaRanking() {
+        TableColumn<Disciplina, String> colunaNomeDisciplina = new TableColumn<>("Nome");
+        colunaNomeDisciplina.setSortable(false);
+        colunaNomeDisciplina.setEditable(false);
+        TableColumn<Disciplina, String> colunaAprovacoes = new TableColumn<>("% aprovados");
+        colunaAprovacoes.setSortable(false);
+        colunaAprovacoes.setEditable(false);
+        colunaNomeDisciplina.setCellValueFactory(new PropertyValueFactory("nome"));
+        colunaAprovacoes.setCellValueFactory(new Callback<CellDataFeatures<Disciplina, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Disciplina, String> c) {
+                return new SimpleStringProperty(String.format("%.1f", service.coletarMediaAprovacao(c.getValue())));
+            }
+        });
+        tabelaDisciplinasDificeis.getColumns().setAll(colunaNomeDisciplina, colunaAprovacoes);
+    }
+
+    public void carregarDisciplinasMaisDificeis(Curso curso) {
+        criarTabelaRanking();
+        List<Disciplina> disciplinasMaisDificeis = service.coletarDisciplinasMaisDificeis(curso);
+        ObservableList<Disciplina> listaDisciplinasTabela = FXCollections.observableList(disciplinasMaisDificeis);
+        tabelaDisciplinasDificeis.setItems(listaDisciplinasTabela);
     }
 
     @FXML
@@ -261,11 +260,7 @@ public class TelaPrincipalController implements Initializable {
                 disciplinasDisponiveis.remove(selectedItem);
                 lbRecomendacao.setText(service.coletarRecomendacaoSemestre(listDisciplinasSelecionadas.getItems()));
             } else {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Aviso");
-                alert.setHeaderText("Você não atendeu os co-requisitos");
-                alert.setContentText("Para inserir a disciplina " + selectedItem.getDisciplina().getCodigo() + ", deverá cumprir os co-requisitos: " + selectedItem.getDisciplina().getCoRequisitos());
-                alert.showAndWait();
+                util.criarAlerta("Aviso", "Você não atendeu os co-requisitos", "Para inserir a disciplina " + selectedItem.getDisciplina().getCodigo() + ", deverá cumprir os co-requisitos: " + selectedItem.getDisciplina().getCoRequisitos());
             }
         }
     }

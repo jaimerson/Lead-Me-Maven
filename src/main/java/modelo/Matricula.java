@@ -55,7 +55,7 @@ public class Matricula {
         this.porcentagemFrequencia = numeroPresencas;
     }
     
-    public boolean foiAprovado(){
+    public boolean situacaoAprovada(){
         return situacao.startsWith("APR");
     }
 }

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
@@ -19,8 +20,8 @@ import javafx.stage.Stage;
  * @author f200976
  */
 public class ControllerUtil {
-    
-    public Stage carregarTela(String caminhoTela, String titulo){
+
+    public Stage carregarTela(String caminhoTela, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoTela));
             Parent root = loader.load();
@@ -34,5 +35,13 @@ public class ControllerUtil {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+
+    public void criarAlerta(String titulo, String header, String conteudo) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(header);
+        alert.setContentText(conteudo);
+        alert.showAndWait();
     }
 }

@@ -5,7 +5,6 @@
  */
 package service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +18,10 @@ import modelo.Turma;
  */
 public class DisciplinaService {
 
+    TurmaService turmaService;
+    
     public DisciplinaService() {
+        turmaService = new TurmaService();
     }
 
     /**
@@ -38,7 +40,7 @@ public class DisciplinaService {
         }
         Double somaAprovacoes = 0.0;
         for (Turma turma : turmas) {
-            somaAprovacoes += turma.coletarMediaAprovacao();
+            somaAprovacoes += turmaService.coletarMediaAprovacao(turma);
         }
         return somaAprovacoes / turmas.size();
     }

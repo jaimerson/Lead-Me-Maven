@@ -70,7 +70,7 @@ public class Aluno{
         List<Disciplina> disciplinasDoPeriodo;
         String periodoLetivo;
         for (Matricula matricula: matriculas){
-            if (apenasAprovados && !matricula.foiAprovado()){
+            if (apenasAprovados && !matricula.situacaoAprovada()){
                 continue;
             }
             periodoLetivo = matricula.getTurma().getPeriodoLetivo();
