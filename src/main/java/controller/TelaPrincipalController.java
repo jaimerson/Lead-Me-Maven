@@ -29,7 +29,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import minerador.BibliotecaMineracao;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
