@@ -132,5 +132,10 @@
             <artifactId>json</artifactId>
             <version>20171018</version>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>2.3.0</version>
+        </dependency>
     </dependencies>
 </project>

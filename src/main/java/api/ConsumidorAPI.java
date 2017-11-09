@@ -80,8 +80,9 @@ public class ConsumidorAPI {
         conn.setRequestProperty("content-type", "application/json");
         conn.setRequestProperty("charset", "UTF-8");
         if (token != null && xApiKey != null) {
-            conn.setRequestProperty("Authorization", "bearer " + token);
-            conn.setRequestProperty("x-api-key", xApiKey);
+            System.out.println("Token >>>>> "+token);
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setRequestProperty("X-Api-Key", xApiKey);
         }
         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String line;
@@ -94,7 +95,7 @@ public class ConsumidorAPI {
 
     public String coletarInfoTeste() {
         try {
-            return fazerRequisicao(BASE_URL + "/v0.1/usuarios/info", GET, accessToken, X_PI_KEY);
+            return fazerRequisicao(BASE_URL + "/usuario/v0.1/usuarios/info", GET, accessToken, X_PI_KEY);
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConsumidorAPI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
