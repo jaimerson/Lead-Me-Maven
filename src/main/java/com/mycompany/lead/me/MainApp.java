@@ -1,6 +1,7 @@
 package com.mycompany.lead.me;
 
 import base_dados.CursoDAO;
+import controller.ControllerUtil;
 import fabricas.Fabrica;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -12,16 +13,19 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    ControllerUtil util = new ControllerUtil();
+    
     @Override
     public void start(Stage stage) throws Exception {
         CarregadorTelaLogin carregadorTelaLogin = Fabrica.getInstance().getFactory().createCarregadorTelaLogin();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin()));
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
+        util.carregarTela("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin(), "Lead Me - Login");
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin()));
+//        Scene scene = new Scene(root);
+//        scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("Lead Me - Login");
-        stage.setScene(scene);
-        stage.show();
+//        stage.setTitle("Lead Me - Login");
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     /**

@@ -268,7 +268,7 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     void sair(ActionEvent event) {
-        ((Stage) btnSair.getScene().getWindow()).close();
+        System.exit(0);
     }
 
     @FXML

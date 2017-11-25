@@ -130,11 +130,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>weka</groupId>
-            <artifactId>weka</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.3.1.Final</version>
