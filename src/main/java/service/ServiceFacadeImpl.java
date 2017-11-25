@@ -6,7 +6,9 @@ import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.MatrizDisciplina;
 import excecoes.AutenticacaoException;
+import fabricas.Fabrica;
 import modelo.Curso;
+import modelo.MatrizCurricular;
 
 public class ServiceFacadeImpl implements ServiceFacade {
 
@@ -22,7 +24,7 @@ public class ServiceFacadeImpl implements ServiceFacade {
         cursoService = new CursoService();
         disciplinaService = new DisciplinaService();
         simulacaoService = SimulacaoService.getInstance();
-        requisitosService = new RequisitosServiceUFRN();
+        requisitosService = Fabrica.getInstance().getFactory().createRequisitosService();
         dadosService = new DadosService();
     }
 
@@ -42,8 +44,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
 
     @Override
-    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso) {
-        return cursoService.coletarDisciplinasDisponiveis(coletarAlunoLogado());
+    public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso, MatrizCurricular matriz) {
+        return cursoService.coletarDisciplinasDisponiveis(coletarAlunoLogado(), matriz);
     }
 
     @Override
@@ -52,18 +54,13 @@ public class ServiceFacadeImpl implements ServiceFacade {
     }
     
     @Override
-    public void carregarPesoMaximoParaAluno(Aluno aluno) {
-        simulacaoService.carregarPesoMaximoParaAluno(aluno);
+    public String coletarRecomendacaoSemestre(Aluno aluno, List<MatrizDisciplina> disciplinas) {
+        return simulacaoService.coletarRecomendacaoSemestre(aluno,disciplinas);
     }
 
     @Override
-    public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas) {
-        return simulacaoService.coletarRecomendacaoSemestre(disciplinas);
-    }
-
-    @Override
-    public List<Disciplina> carregarDisciplinasDoCurso(Curso curso) {
-        return cursoService.carregarDisciplinasDoCurso(curso);
+    public List<Disciplina> coletarDisciplinasDoCurso(Curso curso) {
+        return cursoService.coletarDisciplinasDoCurso(curso);
     }
 
     @Override

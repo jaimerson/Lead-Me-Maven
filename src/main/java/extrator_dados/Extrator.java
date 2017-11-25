@@ -9,6 +9,24 @@ package extrator_dados;
  *
  * @author rafao
  */
-public interface Extrator {
-    public void atualizarBaseDeDados();
+public abstract class Extrator {
+
+    abstract public void atualizarListaDeCursos();
+    abstract public void atualizarListaDeMatrizesCurriculares();
+    abstract public void atualizarListaDeDisciplinas();
+    abstract public void atualizarListaDeTurmas();
+    abstract public void atualizarListaDeAlunos();
+    abstract public void atualizarListaDeComponentesDasMatrizes();
+    abstract public void atualizarListaDeMatriculas();
+    
+    public void atualizarBaseDeDados(){
+        atualizarListaDeCursos();
+        atualizarListaDeMatrizesCurriculares();
+        atualizarListaDeDisciplinas();
+        atualizarListaDeTurmas();
+        atualizarListaDeAlunos();
+        atualizarListaDeComponentesDasMatrizes();
+        atualizarListaDeMatriculas();
+    }
+    
 }

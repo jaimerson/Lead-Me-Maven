@@ -25,11 +25,12 @@ import modelo.Turma;
  *
  * @author rafao
  */
-public class AlunoDAO extends AbstractDAO {
+public class AlunoDAO extends AbstractDAO<Aluno,String> {
 
     private static AlunoDAO instance = new AlunoDAO();
 
-    private AlunoDAO() {
+    public AlunoDAO() {
+        super(Aluno.class);
     }
 
     public static AlunoDAO getInstance() {
@@ -85,13 +86,16 @@ public class AlunoDAO extends AbstractDAO {
         return logins;
     }
 
+    public Aluno carregarAluno(String id){
+        return null;
+    }
     //Método utilizado pela funcionalidade de carregar curso
     public void carregarAluno(String nomeArquivoHistorico, Curso curso) throws DataException{
         Aluno aluno = new Aluno();
         try {
             BufferedReader lerArq = new BufferedReader(new InputStreamReader(new FileInputStream(nomeArquivoHistorico), "UTF-8"));
-            aluno.setNome(lerArq.readLine());
-            aluno.setNumeroMatricula(lerArq.readLine());
+            aluno.setId(lerArq.readLine());
+//            aluno.setNumeroMatricula(lerArq.readLine());
             String cursoComMatriz = lerArq.readLine();
             String nomeCurso = cursoComMatriz.split(" - ")[0];
             //Se o nome do curso não for o mesmo.. nao temos pra que continuar a leitura do arquivo
@@ -102,7 +106,7 @@ public class AlunoDAO extends AbstractDAO {
             aluno.setCurso(curso);
             
             String matrizCurricular = cursoComMatriz.split(" - ")[1];
-            aluno.setMatrizCurricular(matrizCurricular);
+//            aluno.setMatrizCurricular(matrizCurricular);
             lerArq.readLine();
             lerArq.readLine();
             String linha;
@@ -115,7 +119,7 @@ public class AlunoDAO extends AbstractDAO {
             while ((linha = lerArq.readLine()) != null) {
                 dadosDisciplina = linha.split(";");
                 //Para acessar as disciplinas não preciso usar exclusao mutua, por se tratar de somente leitura
-                matrizDisciplina = aluno.getCurso().getDisciplina(matrizCurricular, dadosDisciplina[1]);
+                matrizDisciplina = aluno.getCurso().coletarMatrizDisciplina(matrizCurricular, dadosDisciplina[1]);
                 if (matrizDisciplina == null) {
                     System.out.println("Thread " + Thread.currentThread().getName()+": Matriz nula! Disciplina "+ dadosDisciplina[1]);
                     continue;
@@ -123,17 +127,17 @@ public class AlunoDAO extends AbstractDAO {
                 disciplina = matrizDisciplina.getDisciplina();
                 
                 //Metodo que utiliza o lock
-                turma = disciplina.coletarOuCriarTurma(dadosDisciplina[0]);
+                turma = disciplina.coletarTurma(dadosDisciplina[0]);
 
                 //Metodo que utiliza o lock
                 matricula = turma.adicionarAluno(aluno);
                 
                 matricula.setMedia(Double.parseDouble(dadosDisciplina[3]));
                 matricula.setSituacao(dadosDisciplina[5]);
-                matricula.setPorcentagemPresencas(Double.parseDouble(dadosDisciplina[4]));
+                matricula.setNumeroFaltas(Double.parseDouble(dadosDisciplina[4]));
             }
             //Metodo que utiliza o lock
-            curso.adicionarAluno(aluno);
+//            curso.adicionarAluno(aluno);
             
             lerArq.close();
         } catch (FileNotFoundException ex) {

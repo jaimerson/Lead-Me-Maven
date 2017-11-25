@@ -11,20 +11,28 @@ import modelo.MatrizDisciplina;
  *
  * @author rafao
  */
-public class ComparadorMatrizDisciplinaUFRN extends ComparadorMatrizDisciplina{
+public class ComparadorMatrizDisciplinaUFRN extends ComparadorMatrizDisciplina {
 
-    
-    
+    public ComparadorMatrizDisciplinaUFRN() {
+
+    }
+
     @Override
     public int compare(MatrizDisciplina md1, MatrizDisciplina md2) {
+
         int comparacaoPeriodo = md1.getSemestreIdeal().compareTo(md2.getSemestreIdeal());
-        if (comparacaoPeriodo != 0){
-            return comparacaoPeriodo;
-        }
-        else{
+        if (comparacaoPeriodo != 0) {
+            if (md1.getSemestreIdeal().equals(0)) {
+                return 1;
+            } else if (md2.getSemestreIdeal().equals(0)) {
+                return -1;
+            } else {
+                return comparacaoPeriodo;
+            }
+        } else {
             //OBRIGATORIO < OPTATIVO, ainda bem, pois facilita a comparacao
             return md1.getNaturezaDisciplina().compareTo(md2.getNaturezaDisciplina());
         }
     }
-    
+
 }

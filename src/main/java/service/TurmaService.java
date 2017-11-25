@@ -5,6 +5,7 @@
  */
 package service;
 
+import fabricas.Fabrica;
 import java.util.List;
 import modelo.Matricula;
 import modelo.Turma;
@@ -18,11 +19,14 @@ public class TurmaService {
     private MatriculaService matriculaService;
     
     public TurmaService(){
-        matriculaService = new MatriculaServiceUFRN();
+        matriculaService = new MatriculaService();
     }
     public Double coletarMediaAprovacao(Turma turma){
         Double aprovados = 0.0;
         List<Matricula> matriculas = turma.getMatriculas();
+        if(matriculas == null || matriculas.isEmpty()){
+            return 100.0;
+        }
         for(Matricula matricula: matriculas){
             if (matriculaService.situacaoAprovada(matricula)){
                 aprovados += 1;

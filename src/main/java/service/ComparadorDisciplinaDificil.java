@@ -12,7 +12,7 @@ import modelo.Disciplina;
  *
  * @author rafao
  */
-public abstract class ComparadorDisciplinaDificil implements Comparator<Disciplina>{
+public class ComparadorDisciplinaDificil implements Comparator<Disciplina>{
 
     protected DisciplinaService disciplinaService;
     
@@ -20,6 +20,10 @@ public abstract class ComparadorDisciplinaDificil implements Comparator<Discipli
         this.disciplinaService = new DisciplinaService();
     }
     
-    abstract public int compare(Disciplina d1, Disciplina d2);
+    public int compare(Disciplina d1, Disciplina d2){
+        Double mediaAprovacoes = disciplinaService.coletarMediaAprovacao(d1);
+        Double mediaAprovacoesOther = disciplinaService.coletarMediaAprovacao(d2);
+        return mediaAprovacoes.compareTo(mediaAprovacoesOther);
+    }
     
 }

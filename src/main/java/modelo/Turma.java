@@ -1,30 +1,56 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import sincronizacao.RecursoCompartilhado;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-public class Turma {
+@Entity
+public class Turma implements Serializable{
 
-    private String periodoLetivo;
-    private String numeroTurma;
-    private Disciplina disciplina;
-    private List<Matricula> matriculas;
+    @Id
+    private Integer id;
     
-    private RecursoCompartilhado recurso;
+    private String periodoLetivo;
+    private String codigoTurma;
+    
+    @ManyToOne
+    @JoinColumn(name = "disciplina_id")
+    private Disciplina disciplina;
+    
+    private Integer idDocente;
+    
+    private Integer qtdeAulasLancadas;
+    
+//    @OneToMany(mappedBy = "turma")
+    private transient List<Matricula> matriculas;
+    
+    private Integer numeroAprovados;
+    private Integer numeroReprovados;
+    
+    private Double mediaNotas;
     
     public Turma(){
         this.matriculas = new ArrayList<>();
-        this.numeroTurma = "T01";
-        this.recurso = new RecursoCompartilhado();
+        this.codigoTurma = "T01";
     }
 
     public Turma(String periodoLetivo, Disciplina disciplina) {
         this.periodoLetivo = periodoLetivo;
         this.disciplina = disciplina;
         this.matriculas = new ArrayList<>();
-        this.numeroTurma = "T01";
-        this.recurso = new RecursoCompartilhado();
+        this.codigoTurma = "T01";
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getPeriodoLetivo() {
@@ -35,12 +61,12 @@ public class Turma {
         this.periodoLetivo = periodoLetivo;
     }
 
-    public String getNumeroTurma() {
-        return numeroTurma;
+    public String getCodigoTurma() {
+        return codigoTurma;
     }
 
-    public void setNumeroTurma(String numeroTurma) {
-        this.numeroTurma = numeroTurma;
+    public void setCodigoTurma(String codigoTurma) {
+        this.codigoTurma = codigoTurma;
     }
     
     public Disciplina getDisciplina() {
@@ -62,14 +88,12 @@ public class Turma {
     //Utiliza o lock para adicionar a matricula na lista
     public Matricula adicionarAluno(Aluno aluno){
         Matricula novaMatricula = new Matricula(this,aluno);
-        recurso.requisitarAcesso();
         this.matriculas.add(novaMatricula);
-        recurso.liberarAcesso();
         aluno.adicionarMatricula(novaMatricula);
         return novaMatricula;
     }
     
     public String toString(){
-        return this.disciplina.getCodigo() + " - " + this.periodoLetivo;
+        return this.disciplina.getCodigo() + " - " + this.periodoLetivo + " - " + this.codigoTurma;
     }
 }

@@ -11,6 +11,8 @@ import modelo.Matricula;
  *
  * @author rafao
  */
-public abstract class MatriculaService {
-    abstract public boolean situacaoAprovada(Matricula matricula);
+public class MatriculaService {
+    public boolean situacaoAprovada(Matricula matricula){
+        return matricula.getSituacao().toUpperCase().contains("APROVADO");
+    }
 }

@@ -11,6 +11,10 @@ package service;
  */
 public class RequisitosServiceUFRN extends RequisitosService{
 
+    public RequisitosServiceUFRN(){
+        
+    }
+    
     @Override
     public String coletarRegexCodigoDisciplina() {
         return "[A-Z]{3}[0-9]{4}";

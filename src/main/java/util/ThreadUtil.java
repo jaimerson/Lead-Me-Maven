@@ -5,7 +5,9 @@
  */
 package util;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -19,6 +21,16 @@ public class ThreadUtil {
                 t.join();
             } catch (InterruptedException ex) {
                 System.err.println("Erro ao esperar as threads");
+            }
+        }
+    }
+    
+    public static void esperarThreads(Collection<Future> tasks){
+        for (Future currTask : tasks) {
+            try {
+                currTask.get();
+            } catch (Throwable thrown) {
+                System.err.println(thrown.getLocalizedMessage());
             }
         }
     }

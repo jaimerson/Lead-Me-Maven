@@ -1,26 +1,49 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import sincronizacao.RecursoCompartilhado;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-public class Curso {
+@Entity
+public class Curso implements Serializable{
 
+    @Id
+    private Integer id;
+    
     private String nome;
-    private Map<String,MatrizCurricular> matrizesCurricular;
-    private Map<String,Aluno> alunos;
-    private RecursoCompartilhado recurso;
+    //Bacharelado, licenciatura, etc
+    private String grauAcademico;
+    //Presencial, EAD, etc
+    private String modalidade;
+    
+    @OneToMany(mappedBy = "curso")
+    private List<MatrizCurricular> matrizesCurricular;
+    
+    @OneToMany(mappedBy = "curso")
+    private List<Aluno> alunos;
 
+    public Curso(){
+        this.matrizesCurricular = new ArrayList<>();
+        this.alunos = new ArrayList<>();
+    }
+    
     public Curso(String nome) {
         this.nome = nome;
-        this.matrizesCurricular = new HashMap<>();
-        this.alunos = new HashMap<>();
-        recurso = new RecursoCompartilhado();
+        this.matrizesCurricular = new ArrayList<>();
+        this.alunos = new ArrayList<>();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -29,49 +52,59 @@ public class Curso {
         this.nome = nome;
     }
 
-    public Map<String,MatrizCurricular> getMatrizesCurricular() {
+    public String getGrauAcademico() {
+        return grauAcademico;
+    }
+
+    public void setGrauAcademico(String grauAcademico) {
+        this.grauAcademico = grauAcademico;
+    }
+
+    public String getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
+    }
+    
+    public List<MatrizCurricular> getMatrizesCurricular() {
         return matrizesCurricular;
     }
 
-    public void setMatrizesCurricular(Map<String,MatrizCurricular> matrizesCurricular) {
+    public void setMatrizesCurricular(List<MatrizCurricular> matrizesCurricular) {
         this.matrizesCurricular = matrizesCurricular;
     }
 
     public void adicionarMatrizCurricular(MatrizCurricular matriz) {
         matriz.setCurso(this);
-        recurso.requisitarAcesso();
-        this.matrizesCurricular.put(matriz.getNomeMatriz(),matriz);
-        recurso.liberarAcesso();
+        this.matrizesCurricular.add(matriz);
     }
 
-    public Map<String,Aluno> getAlunos() {
+    public List<Aluno> getAlunos() {
         return alunos;
     }
 
-    public void setAlunos(Map<String,Aluno> alunos) {
+    public void setAlunos(List<Aluno> alunos) {
         this.alunos = alunos;
     }
 
-    //Equivalente a metodo synchronized
-    public void adicionarAluno(Aluno aluno){
-        recurso.requisitarAcesso(); //Exclusao mutua
-        if(!this.alunos.containsKey(aluno.getNumeroMatricula())){
-            this.alunos.put(aluno.getNumeroMatricula(),aluno);
-        }
-        recurso.liberarAcesso();
-    }
-    
-    public Aluno coletarAluno(String matricula){
-        return this.alunos.getOrDefault(matricula, null);
-    }
-    
-    public MatrizDisciplina getDisciplina(String nomeMatriz, String codigoDisciplina){
-        MatrizCurricular matriz = this.matrizesCurricular.get(nomeMatriz);
+    public MatrizDisciplina coletarMatrizDisciplina(String nomeMatriz, String codigoDisciplina){
+        MatrizCurricular matriz = coletarMatrizCurricular(nomeMatriz);
         return matriz.getDisciplina(codigoDisciplina);
     }
     
-    public Disciplina getDisciplina(String codigoDisciplina){
-        for (Disciplina disc: getDisciplinas()){
+    public MatrizCurricular coletarMatrizCurricular(String nomeMatriz){
+        for(MatrizCurricular m: matrizesCurricular){
+            if (m.getNomeMatriz().equalsIgnoreCase(nomeMatriz)){
+                return m;
+            }
+        }
+        return null;
+    }
+    
+    public Disciplina coletarDisciplina(String codigoDisciplina){
+        for (Disciplina disc: coletarDisciplinas()){
             if (disc.getCodigo().equals(codigoDisciplina)){
                 return disc;
             }
@@ -79,17 +112,11 @@ public class Curso {
         return null;
     }
 
-    public List<Disciplina> getDisciplinas(){
+    public List<Disciplina> coletarDisciplinas(){
         List<Disciplina> disciplinas = new ArrayList<>();
-        Set<String> chaves = matrizesCurricular.keySet();
-        MatrizCurricular matriz;
-        for (String chave: chaves){
-            matriz = matrizesCurricular.get(chave);
-            Map<String, MatrizDisciplina> disciplinasNaMatriz = matriz.getDisciplinasNaMatriz();
-            Set<String> chavesDisciplinas = disciplinasNaMatriz.keySet();
-            MatrizDisciplina matrizDisciplina;
-            for (String chaveDisciplina: chavesDisciplinas){
-                matrizDisciplina = disciplinasNaMatriz.get(chaveDisciplina);
+        for (MatrizCurricular matriz: matrizesCurricular){
+            List<MatrizDisciplina> disciplinasNaMatriz = matriz.getDisciplinasNaMatriz();
+            for (MatrizDisciplina matrizDisciplina: disciplinasNaMatriz){
                 if (!disciplinas.contains(matrizDisciplina.getDisciplina())){
                     disciplinas.add(matrizDisciplina.getDisciplina());
                 }

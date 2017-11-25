@@ -6,6 +6,7 @@
 package service;
 
 import extrator_dados.Extrator;
+import fabricas.Fabrica;
 
 /**
  *
@@ -15,6 +16,9 @@ public class DadosService {
     
     private Extrator extrator;
     
+    public DadosService(){
+        extrator = Fabrica.getInstance().getFactory().createExtrator();
+    }
     public void atualizarBaseDeDados(){
         extrator.atualizarBaseDeDados();
     }

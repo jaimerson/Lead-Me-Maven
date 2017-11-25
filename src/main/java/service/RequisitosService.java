@@ -5,6 +5,7 @@
  */
 package service;
 
+import fabricas.Fabrica;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,12 +24,15 @@ import modelo.MatrizDisciplina;
  */
 public abstract class RequisitosService {
     
+    MatriculaService matriculaService;
+    
     public RequisitosService(){
+        matriculaService = new MatriculaService();
     }
     
     public boolean pagouMateria(Aluno aluno, Disciplina disciplina, boolean considerarEquivalentes){
         for(Matricula matricula: aluno.getMatriculas()){
-            if (matricula.getTurma().getDisciplina().equals(disciplina) && matricula.getSituacao().contains("APR")){
+            if (matricula.getTurma().getDisciplina().equals(disciplina) && matriculaService.situacaoAprovada(matricula)){
                 return true;
             }
         }
@@ -70,7 +74,7 @@ public abstract class RequisitosService {
         //Se tiver as equivalentes na expressao de pre requisitos, esse trecho eh desnecessario
         List<String> codigosExpressao = coletarDisciplinasDaExpressao(requisitos);
         for (String codigo: codigosExpressao){
-            Disciplina disciplina = aluno.getCurso().getDisciplina(codigo);
+            Disciplina disciplina = aluno.getCurso().coletarDisciplina(codigo);
             if (disciplina == null || !pagouMateria(aluno,disciplina,explorarEquivalentes)){
                 requisitos = requisitos.replace(codigo,"0");
             }

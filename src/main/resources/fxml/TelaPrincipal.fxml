@@ -66,16 +66,6 @@
                                                                      </font>
                                                                   </Label>
                                                                   <PieChart fx:id="chartAprovacoes" layoutX="228.0" layoutY="141.0" prefHeight="320.0" prefWidth="528.0" />
-                                                                  <ComboBox fx:id="cbTurmas" layoutX="42.0" layoutY="459.0" onAction="#carregarGraficosTurma" prefHeight="25.0" prefWidth="150.0" />
-                                                                  <Label layoutX="41.0" layoutY="439.0" text="Selecione a turma" />
-                                                                  <ScatterChart fx:id="graficoFrequenciaNotas" layoutX="282.0" layoutY="507.0" prefHeight="234.0" prefWidth="400.0" title="Frequência x Média">
-                                                                    <xAxis>
-                                                                      <NumberAxis label="Nº presenças" side="BOTTOM" />
-                                                                    </xAxis>
-                                                                    <yAxis>
-                                                                      <NumberAxis label="Média" side="LEFT" upperBound="10.0" />
-                                                                    </yAxis>
-                                                                  </ScatterChart>
                                                                </children>
                                                             </AnchorPane>
                                                         </content>
@@ -156,6 +146,12 @@
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font></Label>
+                        <ComboBox fx:id="cbMatrizCurricular" layoutX="243.0" layoutY="60.0" onAction="#carregarSugestoesDaMatriz" prefHeight="25.0" prefWidth="399.0" />
+                        <Label layoutX="243.0" layoutY="42.0" prefHeight="17.0" prefWidth="106.0" text="Matriz curricular">
+                           <font>
+                              <Font name="Linux Biolinum G Regular" size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </content>

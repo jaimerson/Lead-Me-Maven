@@ -105,7 +105,7 @@ public class SimulacaoService {
     private Double coletarPesoMedioSuportado(Curso curso) {
         int qtdeAlunosParaMedia = 0;
         Double pesoAcumulado = 0.0;
-        List<Aluno> alunos = new ArrayList(curso.getAlunos().values());
+        List<Aluno> alunos = curso.getAlunos();
         for (Aluno aluno : alunos) {
             try {
                 pesoAcumulado += calcularPesoMedioDoAluno(aluno);
@@ -122,8 +122,9 @@ public class SimulacaoService {
      * chamado assim que a tela de sugestões for carregada
      *
      * @param aluno
+     * @return a instancia do aluno
      */
-    public void carregarPesoMaximoParaAluno(Aluno aluno) {
+    public Aluno carregarPesoMaximoParaAluno(Aluno aluno) {
         List<Matricula> matriculas = aluno.getMatriculas();
         //Se tiver vazia, eh pq eh um aluno ingressante, entao devemos calcular a media dos outros
         if (matriculas.isEmpty()) {
@@ -135,6 +136,7 @@ public class SimulacaoService {
                 System.err.println("Houve erro ao calcular peso médio do aluno");
             }
         }
+        return aluno;
     }
 
     /**
@@ -145,7 +147,10 @@ public class SimulacaoService {
      * @return uma string com a recomendação do semestre para o aluno (pouca
      * matéria, ideal, um pouco acima ou muito acima)
      */
-    public String coletarRecomendacaoSemestre(List<MatrizDisciplina> disciplinas) {
+    public String coletarRecomendacaoSemestre(Aluno aluno, List<MatrizDisciplina> disciplinas) {
+        if(this.pesoEstimadoAluno == null){
+            carregarPesoMaximoParaAluno(aluno);
+        }
         Double pesoSemestre = coletarPesoDoSemestre(disciplinas);
         if (pesoSemestre < PROPORCAO_MINIMA_CH * this.pesoEstimadoAluno) {
             return ABAIXO_RECOMENDADO;

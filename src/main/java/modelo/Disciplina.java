@@ -1,39 +1,61 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import sincronizacao.RecursoCompartilhado;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
-public class Disciplina{
+@Entity
+public class Disciplina implements Serializable{
 
+    @Id
+    private Integer id;
+    
     private String codigo;
     private String nome;
     private Integer cargaHoraria;
+    
+    @Lob
+    @Column
+    private String preRequisitos;
+    
+    @Lob
+    @Column
+    private String equivalencias;
+    
+    @Lob
+    @Column
+    private String coRequisitos;
+    
+    @OneToMany(mappedBy = "disciplina")
     private List<MatrizDisciplina> matrizesRelacionadas;
 
-    private String preRequisitos;
-    private String equivalencias;
-    private String coRequisitos;
-
-    Map<String,Turma> turmas;
+    @OneToMany(mappedBy = "disciplina")
+    List<Turma> turmas;
     
-    private RecursoCompartilhado recurso;
-
     public Disciplina(){
-        turmas = new HashMap<>();
+        turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
-        recurso = new RecursoCompartilhado();
     }
 
     public Disciplina(String codigo, String nome, Integer cargaHoraria) {
         this.codigo = codigo;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
-        turmas = new HashMap<>();
+        turmas = new ArrayList<>();
         matrizesRelacionadas = new ArrayList<>();
-        recurso = new RecursoCompartilhado();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCodigo() {
@@ -52,11 +74,11 @@ public class Disciplina{
         this.nome = nome;
     }
 
-    public Map<String,Turma> getTurmas() {
+    public List<Turma> getTurmas() {
         return turmas;
     }
 
-    public void setTurmas(Map<String,Turma> turmas) {
+    public void setTurmas(List<Turma> turmas) {
         this.turmas = turmas;
     }
 
@@ -113,20 +135,14 @@ public class Disciplina{
         return (16 * cargaHoraria) / 15;
     }
     
-    public void adicionarTurma(Turma turma){
-        this.turmas.put(turma.getPeriodoLetivo(), turma);
-    }
-
     //equivalente ao usar synchronized, porem com politica justa (fifo)
-    public Turma coletarOuCriarTurma(String periodoLetivo) {
-        recurso.requisitarAcesso();
-        Turma turma = this.turmas.getOrDefault(periodoLetivo,null);
-        if (turma == null){
-            turma = new Turma(periodoLetivo,this);
-            adicionarTurma(turma);
+    public Turma coletarTurma(String periodoLetivo) {
+        for (Turma turma: this.turmas){
+            if(turma.getPeriodoLetivo().equals(periodoLetivo)){
+                return turma;
+            }
         }
-        recurso.liberarAcesso();
-        return turma;
+        return null;
     }
 
     @Override

@@ -1,18 +1,35 @@
 package modelo;
 
-public class Matricula {
+import java.io.Serializable;
 
+public class Matricula implements Serializable{
+
+    private Integer id;
+    
     private Turma turma;
+    
     private Aluno aluno;
-    private Double porcentagemFrequencia;
+    
+    private Double numeroFaltas;
 
     private Double media;
     private String situacao;
 
+    public Matricula() {
+    }
+
     public Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
         this.aluno = aluno;
-        porcentagemFrequencia = 0.0;
+        numeroFaltas = 0.0;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Turma getTurma() {
@@ -47,14 +64,15 @@ public class Matricula {
         this.situacao = situacao;
     }
     
-    public Double getPorcentagemFrequencia() {
-        return porcentagemFrequencia;
+    public Double getNumeroFaltas() {
+        return numeroFaltas;
     }
 
-    public void setPorcentagemPresencas(Double numeroPresencas) {
-        this.porcentagemFrequencia = numeroPresencas;
+    public void setNumeroFaltas(Double numeroPresencas) {
+        this.numeroFaltas = numeroPresencas;
     }
     
+    //TODO remover metodo e usar somente o metodo do service
     public boolean situacaoAprovada(){
         return situacao.startsWith("APR");
     }
