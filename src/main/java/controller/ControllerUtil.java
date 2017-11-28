@@ -42,6 +42,7 @@ public class ControllerUtil {
             stage.show();
             return stage;
         } catch (IOException ex) {
+            ex.printStackTrace();
             return null;
         }
     }

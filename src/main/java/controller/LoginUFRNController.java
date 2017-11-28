@@ -44,6 +44,7 @@ public class LoginUFRNController {
     private ServiceFacade service;
     private ControllerUtil util = new ControllerUtil();
     private ConsumidorAPI consumidor;
+    private boolean clicouEmLogar = false;
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -56,10 +57,11 @@ public class LoginUFRNController {
                 if (event.getSource() instanceof WebEngine) {
                     WebEngine we = (WebEngine) event.getSource();
                     String location = we.getLocation();
-                    if (location.startsWith(URL_ENCAMINHA) && location.contains("code")) {
+                    if (location.startsWith(URL_ENCAMINHA) && location.contains("code") && !clicouEmLogar) {
                         try {
                             consumidor.carregarAccessToken(location);
                             carregarAlunoParaService();
+                            clicouEmLogar = true;
                             util.carregarTela("/fxml/TelaPrincipal.fxml", "Lead Me");
                             
                             ((Stage) webViewLogin.getScene().getWindow()).close();

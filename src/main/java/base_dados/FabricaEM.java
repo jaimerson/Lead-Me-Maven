@@ -18,7 +18,7 @@ public class FabricaEM {
     
     public static EntityManagerFactory getEntityManagerFactory(){
         if (factory == null || !factory.isOpen()){
-            factory = Persistence.createEntityManagerFactory("LeadMeBD");
+            factory = Persistence.createEntityManagerFactory("LeadMePU");
         }
         return factory;
     }
