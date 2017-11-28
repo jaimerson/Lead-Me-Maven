@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Java >= 1.8 and Maven >= 3.1
+Java >= 1.8, Maven >= 3.1 and Netbeans IDE >= 8.2
 
 ## Installing
 
@@ -10,6 +10,7 @@ Java >= 1.8 and Maven >= 3.1
 mvn clean
 mvn install
 ```
+
 
 ## Running tests
 
