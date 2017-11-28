@@ -64,23 +64,6 @@ public class MatrizCurricular implements Serializable {
         this.disciplinasNaMatriz = disciplinasNaMatriz;
     }
 
-    public void adicionarDisciplina(Disciplina disciplina, String natureza, Integer semestreIdeal) {
-        MatrizDisciplina disciplinaRelacionada = new MatrizDisciplina(this, disciplina);
-        disciplinaRelacionada.setNaturezaDisciplina(natureza);
-        disciplinaRelacionada.setSemestreIdeal(semestreIdeal);
-        this.disciplinasNaMatriz.add(disciplinaRelacionada);
-        disciplina.adicionarMatrizRelacionada(disciplinaRelacionada);
-    }
-    
-    public MatrizDisciplina getDisciplina(String codigo){
-        for(MatrizDisciplina matrizDisciplina: this.disciplinasNaMatriz){
-            if(matrizDisciplina.getDisciplina().getCodigo().equals(codigo)){
-                return matrizDisciplina;
-            }
-        }
-        return null;
-    }
-    
     public String toString(){
         return this.id + " " + this.nomeMatriz;
     }

@@ -76,31 +76,12 @@ public class Curso implements Serializable{
         this.matrizesCurricular = matrizesCurricular;
     }
 
-    public void adicionarMatrizCurricular(MatrizCurricular matriz) {
-        matriz.setCurso(this);
-        this.matrizesCurricular.add(matriz);
-    }
-
     public List<Aluno> getAlunos() {
         return alunos;
     }
 
     public void setAlunos(List<Aluno> alunos) {
         this.alunos = alunos;
-    }
-
-    public MatrizDisciplina coletarMatrizDisciplina(String nomeMatriz, String codigoDisciplina){
-        MatrizCurricular matriz = coletarMatrizCurricular(nomeMatriz);
-        return matriz.getDisciplina(codigoDisciplina);
-    }
-    
-    public MatrizCurricular coletarMatrizCurricular(String nomeMatriz){
-        for(MatrizCurricular m: matrizesCurricular){
-            if (m.getNomeMatriz().equalsIgnoreCase(nomeMatriz)){
-                return m;
-            }
-        }
-        return null;
     }
     
     public Disciplina coletarDisciplina(String codigoDisciplina){

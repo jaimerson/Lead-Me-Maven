@@ -5,7 +5,7 @@
  */
 package fabricas;
 
-import com.mycompany.lead.me.CarregadorTelaLogin;
+import main.CarregadorTelaLogin;
 import service.AlunoService;
 import service.ComparadorMatrizDisciplina;
 import service.RequisitosService;

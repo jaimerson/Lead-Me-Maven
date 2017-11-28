@@ -80,19 +80,51 @@ public class Turma implements Serializable{
     public List<Matricula> getMatriculas() {
         return matriculas;
     }
-
+    
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
     }
 
-    //Utiliza o lock para adicionar a matricula na lista
-    public Matricula adicionarAluno(Aluno aluno){
-        Matricula novaMatricula = new Matricula(this,aluno);
-        this.matriculas.add(novaMatricula);
-        aluno.adicionarMatricula(novaMatricula);
-        return novaMatricula;
+    public Integer getIdDocente() {
+        return idDocente;
     }
-    
+
+    public void setIdDocente(Integer idDocente) {
+        this.idDocente = idDocente;
+    }
+
+    public Integer getQtdeAulasLancadas() {
+        return qtdeAulasLancadas;
+    }
+
+    public void setQtdeAulasLancadas(Integer qtdeAulasLancadas) {
+        this.qtdeAulasLancadas = qtdeAulasLancadas;
+    }
+
+    public Integer getNumeroAprovados() {
+        return numeroAprovados;
+    }
+
+    public void setNumeroAprovados(Integer numeroAprovados) {
+        this.numeroAprovados = numeroAprovados;
+    }
+
+    public Integer getNumeroReprovados() {
+        return numeroReprovados;
+    }
+
+    public void setNumeroReprovados(Integer numeroReprovados) {
+        this.numeroReprovados = numeroReprovados;
+    }
+
+    public Double getMediaNotas() {
+        return mediaNotas;
+    }
+
+    public void setMediaNotas(Double mediaNotas) {
+        this.mediaNotas = mediaNotas;
+    }
+
     public String toString(){
         return this.disciplina.getCodigo() + " - " + this.periodoLetivo + " - " + this.codigoTurma;
     }

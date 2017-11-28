@@ -1,4 +1,4 @@
-package com.mycompany.lead.me;
+package main;
 
 import base_dados.CursoDAO;
 import controller.ControllerUtil;

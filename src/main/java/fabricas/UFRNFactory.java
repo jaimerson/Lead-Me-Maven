@@ -5,8 +5,8 @@
  */
 package fabricas;
 
-import com.mycompany.lead.me.CarregadorTelaLogin;
-import com.mycompany.lead.me.CarregadorTelaLoginUFRN;
+import main.CarregadorTelaLogin;
+import main.CarregadorTelaLoginUFRN;
 import service.AlunoService;
 import service.AlunoServiceUFRN;
 import service.ComparadorMatrizDisciplina;

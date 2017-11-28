@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.lead.me;
+package main;
 
 /**
  *
  * @author rafao
  */
-public interface CarregadorTelaLogin {
-    public String coletarNomeTelaLogin();
+public class CarregadorTelaLoginUFRN implements CarregadorTelaLogin{
+
+    @Override
+    public String coletarNomeTelaLogin() {
+        return "TelaLoginWebView.fxml";
+    }
+    
 }

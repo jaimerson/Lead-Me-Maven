@@ -16,22 +16,11 @@ import modelo.Turma;
  */
 public class TurmaService {
     
-    private MatriculaService matriculaService;
-    
     public TurmaService(){
-        matriculaService = new MatriculaService();
     }
+    
     public Double coletarMediaAprovacao(Turma turma){
-        Double aprovados = 0.0;
-        List<Matricula> matriculas = turma.getMatriculas();
-        if(matriculas == null || matriculas.isEmpty()){
-            return 100.0;
-        }
-        for(Matricula matricula: matriculas){
-            if (matriculaService.situacaoAprovada(matricula)){
-                aprovados += 1;
-            }
-        }
-        return 100*(aprovados/matriculas.size());
+        Integer totalAlunos = turma.getNumeroAprovados() + turma.getNumeroReprovados();
+        return 100.0*(turma.getNumeroAprovados().doubleValue()/totalAlunos);
     }
 }

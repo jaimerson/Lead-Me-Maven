@@ -114,35 +114,12 @@ public class Disciplina implements Serializable{
         this.coRequisitos = coRequisitos;
     }
 
-    public void adicionarMatrizRelacionada(MatrizDisciplina matrizRelacionada) {
-        this.matrizesRelacionadas.add(matrizRelacionada);
-    }
-
     public Integer getCargaHoraria() {
         return cargaHoraria;
     }
 
     public void setCargaHoraria(Integer cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
-    }
-
-    public Curso getCurso() {
-        return this.matrizesRelacionadas.get(0).getMatrizCurricular().getCurso();
-    }
-
-    //proporcao de 60h para 64 presencas
-    public Integer getNumeroMaximoPresencas() {
-        return (16 * cargaHoraria) / 15;
-    }
-    
-    //equivalente ao usar synchronized, porem com politica justa (fifo)
-    public Turma coletarTurma(String periodoLetivo) {
-        for (Turma turma: this.turmas){
-            if(turma.getPeriodoLetivo().equals(periodoLetivo)){
-                return turma;
-            }
-        }
-        return null;
     }
 
     @Override
