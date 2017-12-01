@@ -48,10 +48,6 @@ public class ServiceFacadeImpl implements ServiceFacade {
         return cursoService.coletarDisciplinasDisponiveis(coletarAlunoLogado(), matriz);
     }
 
-    @Override
-    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
-        return cursoService.coletarDisciplinasMaisDificeis(curso);
-    }
     
     @Override
     public String coletarRecomendacaoSemestre(Aluno aluno, List<MatrizDisciplina> disciplinas) {

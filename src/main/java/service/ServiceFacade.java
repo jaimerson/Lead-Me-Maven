@@ -17,7 +17,6 @@ public interface ServiceFacade {
     public List<Disciplina> coletarDisciplinasDoCurso(Curso curso);
     public Double coletarMediaAprovacao(Disciplina disciplina);
     public List<MatrizDisciplina> carregarDisciplinasDisponiveis(Curso curso, MatrizCurricular matriz); 
-    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso);
     public String coletarRecomendacaoSemestre(Aluno aluno, List<MatrizDisciplina> disciplinas);
     public boolean cumpreCoRequisitos(Aluno aluno, MatrizDisciplina disciplinaAAdicionar, List<MatrizDisciplina> disciplinasM);
     public void ordenarDisciplinas(List<MatrizDisciplina> disciplinas);

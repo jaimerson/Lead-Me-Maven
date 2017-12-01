@@ -6,6 +6,8 @@
 package service;
 
 import base_dados.CursoDAO;
+import base_dados.TurmaDAO;
+import estatistica.EstatisticasSemestres;
 import excecoes.DataException;
 import fabricas.Fabrica;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import modelo.Curso;
 import modelo.Disciplina;
 import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
+import modelo.Turma;
 
 public class CursoService {
     
@@ -24,6 +27,7 @@ public class CursoService {
     private CursoDAO cursoDAO;
     private RequisitosService requisitosService;
     private DisciplinaService disciplinaService;
+    
     public CursoService(){
         cursoDAO = CursoDAO.getInstance();
         requisitosService = Fabrica.getInstance().getFactory().createRequisitosService();
@@ -67,21 +71,15 @@ public class CursoService {
         return disciplinasDisponiveis;
     }
     
-    /**
-     * Carrega a lista das disciplinas com menores índices de aprovação, considerando as turmas na base de dados.
-     * Essa lista deve ser usada para carregar a tabela de disciplinas mais difíceis
-     * @param curso
-     * @return 
-     */
-    public List<Disciplina> coletarDisciplinasMaisDificeis(Curso curso){
-        List<Disciplina> disciplinasDificeis = curso.coletarDisciplinas();
-        ComparadorDisciplinaDificil comparador = new ComparadorDisciplinaDificil();
-        //As mais dificeis primeiro
-        Collections.sort(disciplinasDificeis,comparador);
-        //Só interessa o número de disciplinas para a tabela
-        if (disciplinasDificeis.size() > NUMERO_DISCIPLINAS_DIFICEIS){
-            disciplinasDificeis = disciplinasDificeis.subList(0, NUMERO_DISCIPLINAS_DIFICEIS);
+    public EstatisticasSemestres coletarEstatisticasDosSemestres(){
+        EstatisticasSemestres estatisticas = new EstatisticasSemestres();
+        
+        TurmaDAO turmaDAO = TurmaDAO.getInstance();
+        List<Turma> listaTurmas = turmaDAO.listar();
+        for(Turma turma: listaTurmas){
+            estatisticas.adicionarEstatisticasDaTurma(turma);
         }
-        return disciplinasDificeis;
+        return estatisticas;
     }
+    
 }
