@@ -60,4 +60,14 @@ public class DisciplinaService {
         ComparadorMatrizDisciplina comparador = Fabrica.getInstance().getFactory().createComparadorMatrizDisciplina();
         Collections.sort(disciplinas, comparador);
     }
+    
+   public Double coletarMediaDeMatriculas(Disciplina disciplina){
+       Double somaMatriculas = 0.0;
+       List<Turma> turmas = disciplina.getTurmas();
+       for(Turma turma: turmas){
+           somaMatriculas += turma.getNumeroAprovados();
+           somaMatriculas += turma.getNumeroReprovados();
+       }
+       return somaMatriculas / turmas.size();
+   }
 }

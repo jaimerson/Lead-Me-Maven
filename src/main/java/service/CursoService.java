@@ -19,6 +19,8 @@ import modelo.Disciplina;
 import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CursoService {
     
@@ -37,7 +39,6 @@ public class CursoService {
     
     public Curso carregarCurso(Integer id) throws DataException{
         Curso curso = cursoDAO.encontrar(id);
-//        bibliotecaMineracao.gerarArquivoParaAssociarDisciplinas(curso);
         System.out.println("ENCONTROU O CURSO");
         return curso;
     }
@@ -80,6 +81,20 @@ public class CursoService {
             estatisticas.adicionarEstatisticasDaTurma(turma);
         }
         return estatisticas;
+    }
+    
+    public String coletarJSONDemandasDisciplinas(Curso curso){
+        List<Disciplina> disciplinas = coletarDisciplinasDoCurso(curso);
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject;
+        for(Disciplina disciplina: disciplinas){
+            jsonObject = new JSONObject();
+            jsonObject.put("nome_disciplina", disciplina.getNome());
+            jsonObject.put("codigo_disciplina", disciplina.getCodigo());
+            jsonObject.put("media", disciplinaService.coletarMediaDeMatriculas(disciplina));
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray.toString();
     }
     
 }

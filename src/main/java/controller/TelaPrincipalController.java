@@ -33,6 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import modelo.Aluno;
@@ -93,7 +94,7 @@ public class TelaPrincipalController implements Initializable {
     private WebView webViewSequencia;
 
     @FXML
-    private BubbleChart<?, ?> bubbleDemandas;
+    private WebView webViewDemandas;
 
     @FXML
     private StackedBarChart<String, Number> barAprovacoesSemestres;
@@ -138,12 +139,21 @@ public class TelaPrincipalController implements Initializable {
             }
         });
 
+//        carregarWebView(webViewDemandas, "demandas.html");
+//        carregarWebView(webViewSequencia, "sequencia.html");
+        
         //Tela de estatísticas
         carregarGraficoAprovacoes();
         //Tela de sugestoes/simulacoes
         carregarMatrizesDoCurso(alunoLogado.getCurso());
         carregarSugestoes(alunoLogado);
         carregarEstatisticasSemestres();
+    }
+    
+    private void carregarWebView(WebView webView, String nomeHTML){
+        WebEngine engine = webView.getEngine();
+        URL url = this.getClass().getResource("/paginas/" + nomeHTML);
+        engine.load(url.toString());
     }
 
     private void carregarEstatisticasSemestres() {
