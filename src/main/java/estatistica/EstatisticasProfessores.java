@@ -7,6 +7,8 @@ package estatistica;
 
 import java.util.HashMap;
 import java.util.Map;
+import modelo.Turma;
+import service.TurmaService;
 
 /**
  *
@@ -17,5 +19,31 @@ public class EstatisticasProfessores {
     
     public EstatisticasProfessores(){
         estatisticasProfessores = new HashMap<>();
+    }
+
+    public Map<Integer, EstatisticaMediaProfessor> getEstatisticasProfessores() {
+        return estatisticasProfessores;
+    }
+    
+    public void setEstatisticasProfessores(Map<Integer, EstatisticaMediaProfessor> estatisticasProfessores) {
+        this.estatisticasProfessores = estatisticasProfessores;
+    }
+    
+    public EstatisticaMediaProfessor coletarEstatisticaDoDocente(Integer idDocente){
+        return this.estatisticasProfessores.get(idDocente);
+    }
+    
+    public void adicionarEstatisticasDaTurma(Turma turma){
+        TurmaService turmaService = new TurmaService();
+        EstatisticaMediaProfessor mediaProfessor;
+        if(estatisticasProfessores.containsKey(turma.getIdDocente())){
+            mediaProfessor = estatisticasProfessores.get(turma.getIdDocente());
+        }
+        else{
+            mediaProfessor = new EstatisticaMediaProfessor();
+            mediaProfessor.setIdDocente(turma.getIdDocente());
+            estatisticasProfessores.put(turma.getIdDocente(), mediaProfessor);
+        }
+        mediaProfessor.incrementarMedia(turmaService.coletarMediaAprovacao(turma));
     }
 }
