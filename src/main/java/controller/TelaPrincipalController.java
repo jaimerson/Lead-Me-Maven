@@ -1,7 +1,5 @@
 package controller;
 
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 import estatistica.EstatisticaAprovacoesSemestre;
 import estatistica.EstatisticaMediaProfessor;
 import estatistica.EstatisticasProfessores;
@@ -34,6 +32,8 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -101,14 +101,6 @@ public class TelaPrincipalController implements Initializable {
     private WebView webViewDemandas;
     
     @FXML
-    private AnchorPane painelDashboard;
-    
-    @FXML
-    private VBox vboxSequencia;
-    
-    Browser browserSequencia;
-
-    @FXML
     private StackedBarChart<String, Number> barAprovacoesSemestres;
 
     @FXML
@@ -116,6 +108,9 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private PieChart chartAprovacoesProf;
+    
+    @FXML
+    private ImageView imagemGrafo;
 
     private ServiceFacade service;
     CursoService cursoService;
@@ -151,15 +146,9 @@ public class TelaPrincipalController implements Initializable {
 //            }
 //        });
 
-        browserSequencia = new Browser();
-        BrowserView browserView = new BrowserView(browserSequencia);
-        browserView.setPrefHeight(vboxSequencia.getPrefHeight());
-        browserView.setPrefWidth(vboxSequencia.getPrefWidth());
-        vboxSequencia.getChildren().add(browserView);
         
-        carregarBrowser(browserSequencia, "network/index.html");
         carregarWebView(webViewDemandas, "bubble/index.html");
-        
+        carregarGrafo();
         //Tela de estatísticas
 //        carregarGraficoAprovacoes();
         //Tela de sugestoes/simulacoes
@@ -172,14 +161,13 @@ public class TelaPrincipalController implements Initializable {
         WebEngine engine = webView.getEngine();
         URL url = getClass().getClassLoader().getResource(localArquivoHTML);
         engine.load(url.toString());
-//        engine.load("http://visjs.org/examples/network/data/scalingNodesEdgesLabels.html");
     }
     
-    private void carregarBrowser(Browser browser, String localArquivoHTML){
-        URL url = getClass().getClassLoader().getResource(localArquivoHTML);
-        browser.loadURL(url.toString());
+    private void carregarGrafo(){
+        URL url = getClass().getClassLoader().getResource("graph");
+        imagemGrafo.setImage(new Image(url.toString()));
     }
-
+    
     private void carregarEstatisticasSemestres() {
         EstatisticasSemestres estatisticas = cursoService.coletarEstatisticasDosSemestres();
         List<EstatisticaAprovacoesSemestre> aprovacoesSemestre = new ArrayList<>(estatisticas.getEstatisticasSemestres().values());

@@ -110,10 +110,6 @@
             <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
             <url>file:${project.basedir}/lib</url>
         </repository>
-        <repository>
-            <id>com.teamdev</id>
-            <url>http://maven.teamdev.com/repository/products</url>
-        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -170,11 +166,6 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.teamdev.jxbrowser</groupId>
-            <artifactId>jxbrowser-linux64</artifactId>
-            <version>6.0</version>
         </dependency>
     </dependencies>
 </project>
