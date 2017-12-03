@@ -14,6 +14,7 @@ public class Turma implements Serializable{
     @Id
     private Integer id;
     
+    private Integer ano;
     private String periodoLetivo;
     private String codigoTurma;
     
@@ -55,6 +56,10 @@ public class Turma implements Serializable{
 
     public String getPeriodoLetivo() {
         return periodoLetivo;
+    }
+    
+    public String getSemestre(){
+        return ano.toString()+"."+periodoLetivo;
     }
 
     public void setPeriodoLetivo(String periodoLetivo) {

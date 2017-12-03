@@ -76,7 +76,7 @@ public class Aluno implements Serializable{
             if (apenasAprovados && !matricula.situacaoAprovada()){
                 continue;
             }
-            periodoLetivo = matricula.getTurma().getPeriodoLetivo();
+            periodoLetivo = matricula.getTurma().getSemestre();
             if (!disciplinasAgrupadas.containsKey(periodoLetivo)){
                 disciplinasAgrupadas.put(periodoLetivo, new ArrayList<Disciplina>());
             }

@@ -31,13 +31,13 @@ public class EstatisticasSemestres {
     
     public void adicionarEstatisticasDaTurma(Turma turma){
         EstatisticaAprovacoesSemestre estatistica;
-        if(estatisticasSemestres.containsKey(turma.getPeriodoLetivo())){
-            estatistica = estatisticasSemestres.get(turma.getPeriodoLetivo());
+        if(estatisticasSemestres.containsKey(turma.getSemestre())){
+            estatistica = estatisticasSemestres.get(turma.getSemestre());
         }
         else{
             estatistica = new EstatisticaAprovacoesSemestre();
-            estatistica.setPeriodoLetivo(turma.getPeriodoLetivo());
-            estatisticasSemestres.put(turma.getPeriodoLetivo(), estatistica);
+            estatistica.setPeriodoLetivo(turma.getSemestre());
+            estatisticasSemestres.put(turma.getSemestre(), estatistica);
         }
         estatistica.incrementarNumeroAprovados(turma.getNumeroAprovados());
         estatistica.incrementarNumeroReprovados(turma.getNumeroReprovados());

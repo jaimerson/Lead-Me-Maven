@@ -102,20 +102,20 @@ public class SimulacaoService {
         return dificuldade;
     }
 
-    private Double coletarPesoMedioSuportado(Curso curso) {
-        int qtdeAlunosParaMedia = 0;
-        Double pesoAcumulado = 0.0;
-        List<Aluno> alunos = curso.getAlunos();
-        for (Aluno aluno : alunos) {
-            try {
-                pesoAcumulado += calcularPesoMedioDoAluno(aluno);
-                qtdeAlunosParaMedia++;
-            } catch (SemPeriodoLetivoException ex) {
-                System.out.println("Aluno sem periodo letivo, e assim nao estará na conta do peso medio");
-            }
-        }
-        return pesoAcumulado / qtdeAlunosParaMedia;
-    }
+//    private Double coletarPesoMedioSuportado(Curso curso) {
+//        int qtdeAlunosParaMedia = 0;
+//        Double pesoAcumulado = 0.0;
+//        List<Aluno> alunos = curso.getAlunos();
+//        for (Aluno aluno : alunos) {
+//            try {
+//                pesoAcumulado += calcularPesoMedioDoAluno(aluno);
+//                qtdeAlunosParaMedia++;
+//            } catch (SemPeriodoLetivoException ex) {
+//                System.out.println("Aluno sem periodo letivo, e assim nao estará na conta do peso medio");
+//            }
+//        }
+//        return pesoAcumulado / qtdeAlunosParaMedia;
+//    }
 
     /**
      * Carrega o peso estimado para o aluno suportar no semestre Deve ser
@@ -128,7 +128,8 @@ public class SimulacaoService {
         List<Matricula> matriculas = aluno.getMatriculas();
         //Se tiver vazia, eh pq eh um aluno ingressante, entao devemos calcular a media dos outros
         if (matriculas.isEmpty()) {
-            this.pesoEstimadoAluno = coletarPesoMedioSuportado(aluno.getCurso());
+            //PRA NAO PRECISAR ARMAZENAR AS MATRICULAS NO BANCO
+            this.pesoEstimadoAluno = 450.0;
         } else {
             try {
                 this.pesoEstimadoAluno = calcularPesoMedioDoAluno(aluno);
