@@ -89,9 +89,12 @@ public class CursoService {
         JSONObject jsonObject;
         for(Disciplina disciplina: disciplinas){
             jsonObject = new JSONObject();
-            jsonObject.put("nome_disciplina", disciplina.getNome());
-            jsonObject.put("codigo_disciplina", disciplina.getCodigo());
+            jsonObject.put("id",disciplina.getId());
             jsonObject.put("media", disciplinaService.coletarMediaDeMatriculas(disciplina));
+            jsonObject.put("codigo_disciplina", disciplina.getCodigo());
+            jsonObject.put("nome_disciplina", disciplina.getNome());
+            
+            
             jsonArray.put(jsonObject);
         }
         return jsonArray.toString();

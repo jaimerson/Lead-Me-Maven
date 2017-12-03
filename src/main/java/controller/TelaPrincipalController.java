@@ -1,5 +1,7 @@
 package controller;
 
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 import estatistica.EstatisticaAprovacoesSemestre;
 import estatistica.EstatisticaMediaProfessor;
 import estatistica.EstatisticasProfessores;
@@ -33,6 +35,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
@@ -95,6 +99,14 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private WebView webViewDemandas;
+    
+    @FXML
+    private AnchorPane painelDashboard;
+    
+    @FXML
+    private VBox vboxSequencia;
+    
+    Browser browserSequencia;
 
     @FXML
     private StackedBarChart<String, Number> barAprovacoesSemestres;
@@ -123,37 +135,49 @@ public class TelaPrincipalController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         service = new ServiceFacadeImpl();
         cursoService = new CursoService();
-        Aluno alunoLogado = service.coletarAlunoLogado();
-        txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
-        disciplinas = service.coletarDisciplinasDoCurso(alunoLogado.getCurso());
+//        Aluno alunoLogado = service.coletarAlunoLogado();
+//        txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
+//        disciplinas = service.coletarDisciplinasDoCurso(alunoLogado.getCurso());
 
         /*estatistica*/
-        autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
-        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<Disciplina>>() {
+//        autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
+//        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<Disciplina>>() {
+//
+//            @Override
+//            public void handle(AutoCompletionEvent<Disciplina> event) {
+//                disciplinaSelecionadaEstatistica = event.getCompletion();
+//                carregarGraficoAprovacoes();
+//                event.consume();
+//            }
+//        });
 
-            @Override
-            public void handle(AutoCompletionEvent<Disciplina> event) {
-                disciplinaSelecionadaEstatistica = event.getCompletion();
-                carregarGraficoAprovacoes();
-                event.consume();
-            }
-        });
-
-//        carregarWebView(webViewDemandas, "demandas.html");
-//        carregarWebView(webViewSequencia, "sequencia.html");
+        browserSequencia = new Browser();
+        BrowserView browserView = new BrowserView(browserSequencia);
+        browserView.setPrefHeight(vboxSequencia.getPrefHeight());
+        browserView.setPrefWidth(vboxSequencia.getPrefWidth());
+        vboxSequencia.getChildren().add(browserView);
+        
+        carregarBrowser(browserSequencia, "network/index.html");
+        carregarWebView(webViewDemandas, "bubble/index.html");
         
         //Tela de estatísticas
-        carregarGraficoAprovacoes();
+//        carregarGraficoAprovacoes();
         //Tela de sugestoes/simulacoes
-        carregarMatrizesDoCurso(alunoLogado.getCurso());
-        carregarSugestoes(alunoLogado);
-        carregarEstatisticasSemestres();
+//        carregarMatrizesDoCurso(alunoLogado.getCurso());
+//        carregarSugestoes(alunoLogado);
+//        carregarEstatisticasSemestres();
     }
     
-    private void carregarWebView(WebView webView, String nomeHTML){
+    private void carregarWebView(WebView webView, String localArquivoHTML){
         WebEngine engine = webView.getEngine();
-        URL url = this.getClass().getResource("/paginas/" + nomeHTML);
+        URL url = getClass().getClassLoader().getResource(localArquivoHTML);
         engine.load(url.toString());
+//        engine.load("http://visjs.org/examples/network/data/scalingNodesEdgesLabels.html");
+    }
+    
+    private void carregarBrowser(Browser browser, String localArquivoHTML){
+        URL url = getClass().getClassLoader().getResource(localArquivoHTML);
+        browser.loadURL(url.toString());
     }
 
     private void carregarEstatisticasSemestres() {

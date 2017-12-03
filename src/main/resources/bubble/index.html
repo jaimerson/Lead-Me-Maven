@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bubble Chart</title>
+
+  <link rel="stylesheet" href="../vendor/vis/vis-network.min.css">
+  <script type="text/javascript" src="../vendor/vis/vis-network.min.js"></script>
+  <script type="text/javascript" src="../vendor/d3/d3.min.js"></script>
+
+  <style type="text/css">
+    #wrapper {
+      display: block;
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper"></div>
+
+  <script type="text/javascript">
+    const data = [
+      { id: 1, media: 21, codigo_disciplina: 'DIM0504', nome_disciplina: 'ANÁLISE E PROJETO ORIENTADO A OBJETOS' },
+      { id: 2, media: 43, codigo_disciplina: 'DIM0501', nome_disciplina: 'BOAS PRÁTICAS DE PROGRAMAÇÃO' },
+      { id: 3, media: 34, codigo_disciplina: 'IMD0502', nome_disciplina: 'PROCESSO DE DESENVOLVIMENTO DE SOFTWARE EDUCACIONAL' },
+      { id: 4, media: 13, codigo_disciplina: 'DIM0508', nome_disciplina: 'PROJETO DE INTERFACES DE USUÁRIO' },
+      { id: 5, media: 41, codigo_disciplina: 'IMD0504', nome_disciplina: 'RELAÇÕES ENTRE COMUNICAÇÃO, MÍDIA E EDUCAÇÃO' },
+      { id: 6, media: 34, codigo_disciplina: 'DIM0533', nome_disciplina: 'TÓPICOS ESPECIAIS EM ENGENHARIA DE SOFTWARE III' },
+      { id: 7, media: 26, codigo_disciplina: 'IMD0252', nome_disciplina: 'TÓPICOS ESPECIAIS EM INFORMÁTICA EDUCACIONAL' },
+      { id: 8, media: 37, codigo_disciplina: 'IMD0512', nome_disciplina: 'AVALIAÇÃO DA INTERAÇÃO HUMANO-COMPUTADOR' },
+      { id: 9, media: 39, codigo_disciplina: 'IMD0409', nome_disciplina: 'DESENVOLVIMENTO DE SISTEMAS WEB II' },
+      { id: 10, media: 21, codigo_disciplina: 'DIM0345', nome_disciplina: 'EMPREENDEDORISMO' },
+      { id: 11, media: 46, codigo_disciplina: 'IMD0415', nome_disciplina: 'GESTÃO DE INFRAESTRUTURA DE TI' },
+      { id: 12, media: 29, codigo_disciplina: 'DIM0518', nome_disciplina: 'PLANEJAMENTO E GERENCIAMENTO DE PROJETOS' },
+      { id: 13, media: 45, codigo_disciplina: 'IMD0408', nome_disciplina: 'PROCESSOS DE SOFTWARE' },
+      { id: 14, media: 17, codigo_disciplina: 'IMD0105', nome_disciplina: 'TÓPICOS ESPECIAIS EM TECNOLOGIA DA INFORMAÇÃO VI' },
+      { id: 15, media: 41, codigo_disciplina: 'DIM0524', nome_disciplina: 'DESENVOLVIMENTO DE SISTEMAS PARA DISPOSITIVOS MÓVEIS' },
+      { id: 16, media: 31, codigo_disciplina: 'IMD0404', nome_disciplina: 'DESENVOLVIMENTO DE SISTEMAS WEB I' },
+      { id: 17, media: 25, codigo_disciplina: 'IMD0413', nome_disciplina: 'DESENVOLVIMENTO PARA AMBIENTE DESKTOP' },
+      { id: 18, media: 26, codigo_disciplina: 'IMD0407', nome_disciplina: 'DESIGN DE SOFTWARE II' },
+      { id: 19, media: 26, codigo_disciplina: 'IMD0412', nome_disciplina: 'INTRODUÇÃO AO TESTE DE SOFTWARE' },
+      { id: 20, media: 14, codigo_disciplina: 'IMD0505', nome_disciplina: 'DESIGN DA INTERAÇÃO HUMANO-COMPUTADOR' },
+      { id: 21, media: 26, codigo_disciplina: 'IMD0423', nome_disciplina: 'DESIGN DE SOFTWARE I' },
+      { id: 22, media: 43, codigo_disciplina: 'IMD0033', nome_disciplina: 'PROBABILIDADE' },
+      { id: 23, media: 26, codigo_disciplina: 'IMD0043', nome_disciplina: 'REDES DE COMPUTADORES' },
+      { id: 24, media: 42, codigo_disciplina: 'IMD0024', nome_disciplina: 'CÁLCULO DIFERENCIAL E INTEGRAL I' },
+      { id: 25, media: 42, codigo_disciplina: 'IMD0039', nome_disciplina: 'ESTRUTURAS DE DADOS BÁSICAS II' },
+      { id: 26, media: 33, codigo_disciplina: 'IMD0040', nome_disciplina: 'LINGUAGEM DE PROGRAMAÇÃO II' },
+      { id: 27, media: 49, codigo_disciplina: 'DIM0534', nome_disciplina: 'TÓPICOS ESPECIAIS EM ENGENHARIA DE SOFTWARE IV' },
+      { id: 28, media: 35, codigo_disciplina: 'IMD0029', nome_disciplina: ' ESTRUTURA DE DADOS BÁSICAS I' },
+      { id: 29, media: 31, codigo_disciplina: 'IMD0038', nome_disciplina: 'FUNDAMENTOS MATEMÁTICOS DA COMPUTAÇÃO II' },
+      { id: 30, media: 24, codigo_disciplina: 'IMD0041', nome_disciplina: 'INTRODUÇÃO A ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES' },
+      { id: 31, media: 43, codigo_disciplina: 'IMD0030', nome_disciplina: 'LINGUAGEM DE PROGRAMAÇÃO I' },
+      { id: 32, media: 35, codigo_disciplina: 'IMD0028', nome_disciplina: 'FUNDAMENTOS MATEMÁTICOS DA COMPUTAÇÃO I' },
+      { id: 33, media: 33, codigo_disciplina: 'IMD0012.0', nome_disciplina: 'INTRODUÇÃO ÀS TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 34, media: 13, codigo_disciplina: 'IMD0012', nome_disciplina: 'INTRODUÇÃO ÀS TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 35, media: 24, codigo_disciplina: 'IMD0027', nome_disciplina: 'PRÁTICAS DE LEITURA E ESCRITA EM PORTUGUÊS II' },
+      { id: 36, media: 24, codigo_disciplina: 'IMD0012.1', nome_disciplina: 'PRÁTICAS DE TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 37, media: 38, codigo_disciplina: 'IMD0034', nome_disciplina: 'VETORES E GEOMETRIA ANALÍTICA' },
+      { id: 38, media: 25, codigo_disciplina: 'IMD0017', nome_disciplina: 'PRÁTICAS DE LEITURA E ESCRITA EM PORTUGUÊS I' },
+      { id: 39, media: 26, codigo_disciplina: 'IMD0019', nome_disciplina: 'RESOLUÇÃO DE PROBLEMAS MATEMÁTICOS PARA TI' },
+      { id: 40, media: 36, codigo_disciplina: 'IMD0020', nome_disciplina: 'TECNOLOGIA DA INFORMAÇÃO E SOCIEDADE' },
+    ];
+
+    let meanList = [];
+    for(let i = data.length - 1; i >= 0; i--) {
+      meanList.push(data[i].media);
+    }
+
+    const scale = d3.scaleLinear()
+      .domain([d3.min(meanList), d3.max(meanList)])
+      .range([20, 100]);
+
+    let nodes = [];
+    for(let i = data.length - 1; i >= 0; i--) {
+      const item = data[i];
+      const node = {
+        id: item.id,
+        size: scale(item.media),
+        label: item.codigo_disciplina,
+        title: `Código: ${ item.codigo_disciplina }<br/>Nome: ${ item.nome_disciplina }</br>Média: ${ item.media }`
+      };
+      nodes.push(node);
+    }
+
+    const container = document.getElementById('wrapper');
+    const options = {
+      nodes: {
+        shape: 'dot',
+        font: {
+          size: 12
+        }
+      },
+      layout: {
+        improvedLayout: false
+      },
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -1500,
+          centralGravity: 2.0,
+          avoidOverlap: 0.7
+        },
+        minVelocity: 0.5
+      },
+      interaction: {
+        hover: true
+      }
+    };
+    const network = new vis.Network(container, { nodes }, options);
+  </script>
+</body>
+</html>

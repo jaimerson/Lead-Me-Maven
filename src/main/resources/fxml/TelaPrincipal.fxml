@@ -15,6 +15,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
@@ -48,12 +49,11 @@
                                                    <children>
                                                       <ScrollPane layoutY="-3.0" prefHeight="510.0" prefWidth="1056.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="834.0" prefWidth="1057.0">
+                                                          <AnchorPane fx:id="painelDashboard" minHeight="0.0" minWidth="0.0" prefHeight="834.0" prefWidth="1057.0">
                                                                <children>
-                                                                  <WebView fx:id="webViewSequencia" layoutX="68.0" layoutY="52.0" prefHeight="296.0" prefWidth="935.0" />
                                                                   <Label layoutX="456.0" layoutY="31.0" text="Sequencia de disciplinas" />
-                                                                  <Label layoutX="192.0" layoutY="425.0" text="Demanda de turmas" />
-                                                                  <Label layoutX="704.0" layoutY="429.0" text="Demanda de turmas" />
+                                                                  <Label layoutX="204.0" layoutY="425.0" text="Demanda de turmas" />
+                                                                  <Label layoutX="635.0" layoutY="433.0" text="Aprovaçoes/reprovaçoes por semestre" />
                                                                   <StackedBarChart fx:id="barAprovacoesSemestres" layoutX="528.0" layoutY="451.0" prefHeight="346.0" prefWidth="466.0">
                                                                     <xAxis>
                                                                       <CategoryAxis side="BOTTOM" />
@@ -63,6 +63,7 @@
                                                                     </yAxis>
                                                                   </StackedBarChart>
                                                                   <WebView fx:id="webViewDemandas" layoutX="43.0" layoutY="453.0" prefHeight="338.0" prefWidth="456.0" />
+                                                                  <VBox fx:id="vboxSequencia" layoutX="196.0" layoutY="47.0" prefHeight="372.0" prefWidth="681.0" />
                                                                </children>
                                                             </AnchorPane>
                                                         </content>

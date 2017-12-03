@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Network Chart</title>
+
+  <link rel="stylesheet" href="../vendor/vis/vis-network.min.css">
+  <script type="text/javascript" src="../vendor/vis/vis-network.min.js"></script>
+  <script type="text/javascript" src="../vendor/d3/d3.min.js"></script>
+
+  <style type="text/css">
+    #wrapper {
+      display: block;
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper"></div>
+
+  <script type="text/javascript">
+    const nodesBase = [
+      { id: 28, media: 35, codigo_disciplina: 'IMD0029', nome_disciplina: 'ESTRUTURA DE DADOS BÁSICAS I' },
+      { id: 29, media: 31, codigo_disciplina: 'IMD0038', nome_disciplina: 'FUNDAMENTOS MATEMÁTICOS DA COMPUTAÇÃO II' },
+      { id: 30, media: 24, codigo_disciplina: 'IMD0041', nome_disciplina: 'INTRODUÇÃO A ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES' },
+      { id: 31, media: 43, codigo_disciplina: 'IMD0030', nome_disciplina: 'LINGUAGEM DE PROGRAMAÇÃO I' },
+      { id: 32, media: 35, codigo_disciplina: 'IMD0028', nome_disciplina: 'FUNDAMENTOS MATEMÁTICOS DA COMPUTAÇÃO I' },
+      { id: 33, media: 33, codigo_disciplina: 'IMD0012.0', nome_disciplina: 'INTRODUÇÃO ÀS TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 34, media: 13, codigo_disciplina: 'IMD0012', nome_disciplina: 'INTRODUÇÃO ÀS TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 35, media: 24, codigo_disciplina: 'IMD0027', nome_disciplina: 'PRÁTICAS DE LEITURA E ESCRITA EM PORTUGUÊS II' },
+      { id: 36, media: 24, codigo_disciplina: 'IMD0012.1', nome_disciplina: 'PRÁTICAS DE TÉCNICAS DE PROGRAMAÇÃO' },
+      { id: 37, media: 38, codigo_disciplina: 'IMD0034', nome_disciplina: 'VETORES E GEOMETRIA ANALÍTICA' },
+      { id: 38, media: 25, codigo_disciplina: 'IMD0017', nome_disciplina: 'PRÁTICAS DE LEITURA E ESCRITA EM PORTUGUÊS I' },
+      { id: 39, media: 26, codigo_disciplina: 'IMD0019', nome_disciplina: 'RESOLUÇÃO DE PROBLEMAS MATEMÁTICOS PARA TI' },
+      { id: 40, media: 36, codigo_disciplina: 'IMD0020', nome_disciplina: 'TECNOLOGIA DA INFORMAÇÃO E SOCIEDADE' },
+    ];
+    const edgesBase = [
+      { from: 28, to: 24, value: 96 },
+      { from: 28, to: 25, value: 74 },
+      { from: 28, to: 26, value: 63 },
+      { from: 28, to: 27, value: 150 },
+      { from: 29, to: 24, value: 146 },
+      { from: 29, to: 25, value: 121 },
+      { from: 29, to: 26, value: 37 },
+      { from: 29, to: 27, value: 75 },
+      { from: 30, to: 24, value: 82 },
+      { from: 30, to: 25, value: 76 },
+      { from: 30, to: 26, value: 117 },
+      { from: 30, to: 27, value: 61 },
+      { from: 31, to: 24, value: 121 },
+      { from: 31, to: 25, value: 67 },
+      { from: 31, to: 26, value: 106 },
+      { from: 31, to: 27, value: 15 },
+      { from: 32, to: 28, value: 90 },
+      { from: 32, to: 29, value: 61 },
+      { from: 32, to: 30, value: 12 },
+      { from: 32, to: 31, value: 41 },
+      { from: 33, to: 28, value: 27 },
+      { from: 33, to: 29, value: 100 },
+      { from: 33, to: 30, value: 25 },
+      { from: 33, to: 31, value: 114 },
+      { from: 34, to: 28, value: 21 },
+      { from: 34, to: 29, value: 91 },
+      { from: 34, to: 30, value: 123 },
+      { from: 34, to: 31, value: 89 },
+      { from: 35, to: 28, value: 47 },
+      { from: 35, to: 29, value: 78 },
+      { from: 35, to: 30, value: 49 },
+      { from: 35, to: 31, value: 83 },
+      { from: 36, to: 28, value: 89 },
+      { from: 36, to: 29, value: 33 },
+      { from: 36, to: 30, value: 22 },
+      { from: 36, to: 31, value: 81 },
+      { from: 37, to: 28, value: 108 },
+      { from: 37, to: 29, value: 144 },
+      { from: 37, to: 30, value: 39 },
+      { from: 37, to: 31, value: 120 },
+      { from: 38, to: 32, value: 19 },
+      { from: 38, to: 33, value: 141 },
+      { from: 38, to: 34, value: 85 },
+      { from: 38, to: 35, value: 27 },
+      { from: 38, to: 36, value: 92 },
+      { from: 38, to: 37, value: 141 },
+      { from: 39, to: 32, value: 116 },
+      { from: 39, to: 33, value: 106 },
+      { from: 39, to: 34, value: 45 },
+      { from: 39, to: 35, value: 30 },
+      { from: 39, to: 36, value: 105 },
+      { from: 39, to: 37, value: 30 },
+      { from: 40, to: 32, value: 108 },
+      { from: 40, to: 33, value: 56 },
+      { from: 40, to: 34, value: 128 },
+      { from: 40, to: 35, value: 108 },
+      { from: 40, to: 36, value: 116 },
+      { from: 40, to: 37, value: 90 },
+    ];
+
+    let nodes = [];
+    for(let i = nodesBase.length - 1; i >= 0; i--) {
+      const item = nodesBase[i];
+      const node = {
+        id: item.id,
+        label: item.codigo_disciplina,
+        title: `Código: ${ item.codigo_disciplina }<br/>Nome: ${ item.nome_disciplina }`
+      };
+      nodes.push(node);
+    }
+
+    let edges = [];
+    for(let i = edgesBase.length - 1; i >= 0; i--) {
+      const item = edgesBase[i];
+      const edge = {
+        ...item,
+        title: `Ocorrências: ${ item.value }`,
+        arrows: 'to'
+      };
+      edges.push(edge);
+    }
+
+    const container = document.getElementById('wrapper');
+    const options = {
+      nodes: {
+        shape: 'dot',
+        size: 20,
+        font: {
+          size: 12
+        },
+        color: {
+          highlight: {
+            background: '#4778b7',
+            border: '#4778b7'
+          }
+        },
+      },
+      chosen: {
+        edge: {
+          color: 'red'
+        }
+      },
+      edges: {
+        scaling: {
+          min: 1,
+          max: 10
+        },
+        color: {
+          color: '#6da2e8',
+          highlight: '#4778b7'
+        }
+      },
+      layout: {
+        improvedLayout: false
+      },
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -15000,
+          centralGravity: 0.5,
+          avoidOverlap: 10
+        },
+        minVelocity: 0.5
+      },
+    };
+    const network = new vis.Network(container, { nodes, edges }, options);
+  </script>
+</body>
+</html>
