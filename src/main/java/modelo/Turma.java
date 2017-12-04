@@ -19,7 +19,7 @@ public class Turma implements Serializable{
     private String codigoTurma;
     
     @ManyToOne
-    @JoinColumn(name = "disciplina_id")
+    @JoinColumn(name = "idcomponentecurricular")
     private Disciplina disciplina;
     
     private Integer idDocente;

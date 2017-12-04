@@ -5,8 +5,10 @@
  */
 package service;
 
+import base_dados.DisciplinaDAO;
 import fabricas.Fabrica;
 import java.util.List;
+import modelo.Disciplina;
 import modelo.Matricula;
 import modelo.Turma;
 
@@ -16,11 +18,19 @@ import modelo.Turma;
  */
 public class TurmaService {
     
+    DisciplinaDAO disciplinaDAO;
+    
     public TurmaService(){
+        disciplinaDAO = DisciplinaDAO.getInstance();
     }
     
     public Double coletarMediaAprovacao(Turma turma){
         Integer totalAlunos = turma.getNumeroAprovados() + turma.getNumeroReprovados();
         return 100.0*(turma.getNumeroAprovados().doubleValue()/totalAlunos);
+    }
+    
+    //Só no caso do Hibernate der ruim com postgres
+    public Disciplina coletarDisciplinaDaTurma(Turma turma){
+        return disciplinaDAO.encontrarDisciplinaDaTurma(turma);
     }
 }

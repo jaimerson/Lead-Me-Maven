@@ -6,8 +6,10 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Disciplina implements Serializable{
@@ -20,14 +22,17 @@ public class Disciplina implements Serializable{
     private Integer cargaHoraria;
     
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column
     private String preRequisitos;
     
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column
     private String equivalencias;
     
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column
     private String coRequisitos;
     
@@ -35,6 +40,7 @@ public class Disciplina implements Serializable{
     private List<MatrizDisciplina> matrizesRelacionadas;
 
     @OneToMany(mappedBy = "disciplina")
+//    @JoinColumn(name="disciplina_id",referencedColumnName="id")
     List<Turma> turmas;
     
     public Disciplina(){

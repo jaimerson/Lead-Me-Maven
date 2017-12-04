@@ -1,10 +1,12 @@
 package main;
 
+import base_dados.DisciplinaDAO;
 import controller.ControllerUtil;
 import fabricas.Fabrica;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.stage.Stage;
+import modelo.Disciplina;
 
 
 public class MainApp extends Application {
@@ -15,6 +17,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         CarregadorTelaLogin carregadorTelaLogin = Fabrica.getInstance().getFactory().createCarregadorTelaLogin();
         util.carregarTela("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin(), "Lead Me - Login");
+//        DisciplinaDAO disciplinaDAO = DisciplinaDAO.getInstance();
+        
+//        Disciplina disciplina = disciplinaDAO.encontrar(18715);
     }
 
     /**

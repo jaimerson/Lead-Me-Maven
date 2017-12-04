@@ -55,7 +55,6 @@ public class CursoService {
      * @return Lista de disciplinas que pode pagar, ordenada pela relevância (obrigatório e dos primeiros períodos)
      */
     public List<MatrizDisciplina> coletarDisciplinasDisponiveis(Aluno aluno, MatrizCurricular matriz){
-        Curso curso = aluno.getCurso();
         //Crio a lista com as disciplinas disponiveis
         List<MatrizDisciplina> disciplinasDisponiveis = new ArrayList<>();
         //TODO fornecer a lista de matrizes para aluno escolher qual fazer as simulacoes

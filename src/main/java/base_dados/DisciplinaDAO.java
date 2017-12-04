@@ -6,6 +6,7 @@
 package base_dados;
 
 import modelo.Disciplina;
+import modelo.Turma;
 
 /**
  *
@@ -20,5 +21,9 @@ public class DisciplinaDAO extends AbstractDAO<Disciplina,Integer>{
     
     public static DisciplinaDAO getInstance(){
         return instance;
+    }
+    
+    public Disciplina encontrarDisciplinaDaTurma(Turma turma){
+        return null;
     }
 }

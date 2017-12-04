@@ -5,6 +5,7 @@
  */
 package service;
 
+import base_dados.DisciplinaDAO;
 import fabricas.Fabrica;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import modelo.Aluno;
 import modelo.Disciplina;
 import modelo.Matricula;
 import modelo.MatrizDisciplina;
+import modelo.Turma;
 
 /**
  *
@@ -32,7 +34,12 @@ public abstract class RequisitosService {
     
     public boolean pagouMateria(Aluno aluno, Disciplina disciplina, boolean considerarEquivalentes){
         for(Matricula matricula: aluno.getMatriculas()){
-            if (matricula.getTurma().getDisciplina().equals(disciplina) && matriculaService.situacaoAprovada(matricula)){
+            Turma turma = matricula.getTurma();
+            Disciplina disciplinaAtual = turma.getDisciplina();
+            if(disciplinaAtual == null){
+                return false;
+            }
+            if (disciplinaAtual.equals(disciplina) && matriculaService.situacaoAprovada(matricula)){
                 return true;
             }
         }

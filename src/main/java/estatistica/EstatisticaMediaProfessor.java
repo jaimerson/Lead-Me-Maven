@@ -5,6 +5,7 @@
  */
 package estatistica;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,10 @@ public class EstatisticaMediaProfessor {
     private Integer idDocente;
     private List<Double> mediaAprovacoes;
 
+    public EstatisticaMediaProfessor(){
+        mediaAprovacoes = new ArrayList<>();
+    }
+    
     public Integer getIdDocente() {
         return idDocente;
     }

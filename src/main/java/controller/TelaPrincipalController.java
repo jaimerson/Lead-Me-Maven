@@ -130,31 +130,45 @@ public class TelaPrincipalController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         service = new ServiceFacadeImpl();
         cursoService = new CursoService();
-//        Aluno alunoLogado = service.coletarAlunoLogado();
-//        txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
-//        disciplinas = service.coletarDisciplinasDoCurso(alunoLogado.getCurso());
+        Aluno alunoLogado = service.coletarAlunoLogado();
+        imprimirDisciplinas(alunoLogado.getCurso());
+        txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
+        disciplinas = service.coletarDisciplinasDoCurso(alunoLogado.getCurso());
 
         /*estatistica*/
-//        autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
-//        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<Disciplina>>() {
-//
-//            @Override
-//            public void handle(AutoCompletionEvent<Disciplina> event) {
-//                disciplinaSelecionadaEstatistica = event.getCompletion();
-//                carregarGraficoAprovacoes();
-//                event.consume();
-//            }
-//        });
+        autoCompleteEstatistica = TextFields.bindAutoCompletion(txtDisciplina, disciplinas);
+        autoCompleteEstatistica.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<Disciplina>>() {
+
+            @Override
+            public void handle(AutoCompletionEvent<Disciplina> event) {
+                disciplinaSelecionadaEstatistica = event.getCompletion();
+                carregarGraficoAprovacoes();
+                event.consume();
+            }
+        });
 
         
         carregarWebView(webViewDemandas, "bubble/index.html");
         carregarGrafo();
         //Tela de estatísticas
-//        carregarGraficoAprovacoes();
+        carregarGraficoAprovacoes();
         //Tela de sugestoes/simulacoes
-//        carregarMatrizesDoCurso(alunoLogado.getCurso());
-//        carregarSugestoes(alunoLogado);
-//        carregarEstatisticasSemestres();
+        carregarMatrizesDoCurso(alunoLogado.getCurso());
+        carregarSugestoes(alunoLogado);
+        carregarEstatisticasSemestres();
+    }
+    
+    public void imprimirDisciplinas(Curso curso){
+        List<Disciplina> disciplinas = curso.coletarDisciplinas();
+        System.out.println("nº de disciplinas: " + disciplinas.size());
+        for(Disciplina disciplina: disciplinas){
+            if(disciplina == null){
+                System.out.println("Disciplina nula!");
+            }
+            else{
+                System.out.println("Disciplina codigo: " + disciplina.getCodigo());
+            }
+        }
     }
     
     private void carregarWebView(WebView webView, String localArquivoHTML){
@@ -220,6 +234,9 @@ public class TelaPrincipalController implements Initializable {
     
     public void carregarGraficoPorProfessor(){
         estatisticaProfSelecionado = estatisticasProfessores.coletarEstatisticaDoDocente(cbProf.getSelectionModel().getSelectedItem());
+        if(estatisticaProfSelecionado == null){
+            return;
+        }
         Double aprovacoes = estatisticaProfSelecionado.coletarMediaFinalDoProfessor();
         ObservableList<PieChart.Data> dadosPieChart = FXCollections.observableArrayList(
                 new PieChart.Data("Aprovados: " + String.format("%.2f", aprovacoes) + "%", aprovacoes),

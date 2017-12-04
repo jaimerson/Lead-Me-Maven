@@ -37,19 +37,15 @@ public class DisciplinaService {
         Collection<Turma> turmas = disciplina.getTurmas();
         //Se nenhuma turma foi adicionada, nao podemos falar q houve reprovacoes
         if (disciplina.getTurmas() == null || disciplina.getTurmas().isEmpty()) {
+            System.out.println("Disciplina " + disciplina.getCodigo() + " nao possui turmas cadastradas");
             return 100.0;
         }
         Double somaAprovacoes = 0.0;
-        int turmasValidas = 0;
         
         for (Turma turma : turmas) {
-            if(turma.getMatriculas().isEmpty()){
-                continue;
-            }
-            turmasValidas++;
             somaAprovacoes += turmaService.coletarMediaAprovacao(turma);
         }
-        return turmasValidas > 0 ? somaAprovacoes / turmasValidas : 100.0;
+        return somaAprovacoes / turmas.size();
     }
     
     public Double coletarMediaReprovacao(Disciplina disciplina){
