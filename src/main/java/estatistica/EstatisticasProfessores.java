@@ -15,35 +15,35 @@ import service.TurmaService;
  * @author rafael
  */
 public class EstatisticasProfessores {
-    private Map<Integer,EstatisticaMediaProfessor> estatisticasProfessores;
+    private Map<String,EstatisticaProfessor> estatisticasProfessores;
     
     public EstatisticasProfessores(){
         estatisticasProfessores = new HashMap<>();
     }
 
-    public Map<Integer, EstatisticaMediaProfessor> getEstatisticasProfessores() {
+    public Map<String, EstatisticaProfessor> getEstatisticasProfessores() {
         return estatisticasProfessores;
     }
     
-    public void setEstatisticasProfessores(Map<Integer, EstatisticaMediaProfessor> estatisticasProfessores) {
+    public void setEstatisticasProfessores(Map<String, EstatisticaProfessor> estatisticasProfessores) {
         this.estatisticasProfessores = estatisticasProfessores;
     }
     
-    public EstatisticaMediaProfessor coletarEstatisticaDoDocente(Integer idDocente){
+    public EstatisticaProfessor coletarEstatisticaDoDocente(Integer idDocente){
         return this.estatisticasProfessores.get(idDocente);
     }
     
     public void adicionarEstatisticasDaTurma(Turma turma){
-        TurmaService turmaService = new TurmaService();
-        EstatisticaMediaProfessor mediaProfessor;
-        if(estatisticasProfessores.containsKey(turma.getIdDocente())){
-            mediaProfessor = estatisticasProfessores.get(turma.getIdDocente());
+        EstatisticaProfessor mediaProfessor;
+        if(estatisticasProfessores.containsKey(turma.getIdDocente().toString())){
+            mediaProfessor = estatisticasProfessores.get(turma.getIdDocente().toString());
         }
         else{
-            mediaProfessor = new EstatisticaMediaProfessor();
+            mediaProfessor = new EstatisticaProfessor();
             mediaProfessor.setIdDocente(turma.getIdDocente());
-            estatisticasProfessores.put(turma.getIdDocente(), mediaProfessor);
+            estatisticasProfessores.put(turma.getIdDocente().toString(), mediaProfessor);
         }
-        mediaProfessor.incrementarMedia(turmaService.coletarMediaAprovacao(turma));
+        mediaProfessor.incrementarNumeroAprovados(turma.getNumeroAprovados());
+        mediaProfessor.incrementarNumeroReprovados(turma.getNumeroReprovados());
     }
 }

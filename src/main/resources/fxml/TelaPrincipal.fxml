@@ -63,7 +63,7 @@
                                                                     </yAxis>
                                                                   </StackedBarChart>
                                                                   <WebView fx:id="webViewDemandas" layoutX="43.0" layoutY="453.0" prefHeight="338.0" prefWidth="456.0" />
-                                                                  <ImageView fx:id="imagemGrafo" fitHeight="354.0" fitWidth="518.0" layoutX="292.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
+                                                                  <ImageView fx:id="imagemGrafo" fitHeight="354.0" fitWidth="518.0" layoutX="326.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
                                                                </children>
                                                             </AnchorPane>
                                                         </content>
@@ -78,7 +78,7 @@
                                                    <children>
                                                       <ScrollPane layoutX="-1.0" prefHeight="453.0" prefWidth="788.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="745.0" prefWidth="1054.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="1054.0">
                                                                <children>
                                                                   <Label layoutX="11.0" layoutY="16.0" text="Selecione a disciplina" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="16.0">
                                                                      <font>
@@ -86,19 +86,15 @@
                                                                      </font>
                                                                   </Label>
                                                                   <TextField fx:id="txtDisciplina" layoutX="11.0" layoutY="33.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="33.0" />
-                                                                  <Label fx:id="txtTituloPieChart" layoutX="20.0" layoutY="77.0" text="Aprovações" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="77.0">
-                                                                     <font>
-                                                                        <Font name="Linux Biolinum G Regular" size="14.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                                  <PieChart fx:id="chartAprovacoes" layoutX="264.0" layoutY="109.0" prefHeight="270.0" prefWidth="454.0" AnchorPane.topAnchor="109.0" />
-                                                                  <ComboBox fx:id="cbProf" layoutX="16.0" layoutY="405.0" onAction="#atualizarGraficoProfessor" prefWidth="150.0" AnchorPane.leftAnchor="16.0" />
-                                                                  <Label fx:id="txtTituloPieChart1" layoutX="18.0" layoutY="383.0" text="Media com o professor" AnchorPane.leftAnchor="18.0">
-                                                                     <font>
-                                                                        <Font name="Linux Biolinum G Regular" size="14.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                                  <PieChart fx:id="chartAprovacoesProf" layoutX="268.0" layoutY="437.0" prefHeight="284.0" prefWidth="460.0" />
+                                                                  <PieChart fx:id="chartAprovacoes" layoutX="14.0" layoutY="97.0" prefHeight="299.0" prefWidth="454.0" title="Média de aprovações" AnchorPane.topAnchor="97.0" />
+                                                                  <StackedBarChart fx:id="barAprovacoesPorDocente" layoutX="496.0" layoutY="97.0" prefHeight="300.0" prefWidth="510.0" title="Aprovações/reprovações por docente">
+                                                                    <xAxis>
+                                                                      <CategoryAxis label="Docente" side="BOTTOM" />
+                                                                    </xAxis>
+                                                                    <yAxis>
+                                                                      <NumberAxis label="Nº alunos" side="LEFT" />
+                                                                    </yAxis>
+                                                                  </StackedBarChart>
                                                                </children>
                                                             </AnchorPane>
                                                         </content>

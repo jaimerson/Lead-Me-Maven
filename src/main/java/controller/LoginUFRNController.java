@@ -96,25 +96,6 @@ public class LoginUFRNController {
         alunoService.carregarMatriculasDoAluno(aluno);
         System.out.println("Carregou as matriculas do aluno");
         loginService.setAluno(aluno);
-        imprimirTurmas(aluno);
     }
     
-    public void imprimirTurmas(Aluno aluno){
-        for(Matricula matricula: aluno.getMatriculas()){
-            if(matricula == null){
-                System.out.println("Matricula nula");
-            }
-            else{
-                System.out.println(matricula.getSituacao());
-                Turma turma = matricula.getTurma();
-                if(turma == null){
-                    System.out.println("Turma nula");
-                }
-                else{
-                    System.out.println(turma.getId() + " " + turma.getSemestre());
-                    System.out.println(turma.getDisciplina().getCodigo());
-                }
-            }
-        }
-    }
 }
