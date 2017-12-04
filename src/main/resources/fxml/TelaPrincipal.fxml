@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="1058.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="1158.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TelaPrincipalController">
    <children>
       <Label layoutX="14.0" layoutY="13.0" prefHeight="48.0" prefWidth="136.0" text="Lead Me" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
          <font>
@@ -39,7 +39,7 @@
                      <children>
                         <ScrollPane layoutY="-5.0" prefHeight="539.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="525.0" prefWidth="1057.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="525.0" prefWidth="1157.0">
                                  <children>
                                     <TabPane layoutY="-1.0" prefHeight="538.0" prefWidth="1056.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <tabs>
@@ -49,12 +49,12 @@
                                                    <children>
                                                       <ScrollPane layoutY="-3.0" prefHeight="510.0" prefWidth="1056.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="834.0" prefWidth="1057.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="834.0" prefWidth="1151.0">
                                                                <children>
                                                                   <Label layoutX="471.0" layoutY="31.0" text="Sequencia de disciplinas" />
                                                                   <Label layoutX="204.0" layoutY="425.0" text="Demanda de turmas" />
-                                                                  <Label layoutX="635.0" layoutY="433.0" text="Aprovaçoes/reprovaçoes por semestre" />
-                                                                  <StackedBarChart fx:id="barAprovacoesSemestres" layoutX="528.0" layoutY="451.0" prefHeight="346.0" prefWidth="466.0">
+                                                                  <Label layoutX="685.0" layoutY="434.0" text="Aprovaçoes/reprovaçoes por semestre" />
+                                                                  <StackedBarChart fx:id="barAprovacoesSemestres" layoutX="559.0" layoutY="455.0" prefHeight="346.0" prefWidth="508.0">
                                                                     <xAxis>
                                                                       <CategoryAxis side="BOTTOM" />
                                                                     </xAxis>
@@ -62,7 +62,7 @@
                                                                       <NumberAxis side="LEFT" />
                                                                     </yAxis>
                                                                   </StackedBarChart>
-                                                                  <WebView fx:id="webViewDemandas" layoutX="43.0" layoutY="453.0" prefHeight="338.0" prefWidth="456.0" />
+                                                                  <WebView fx:id="webViewDemandas" layoutX="43.0" layoutY="453.0" prefHeight="338.0" prefWidth="496.0" />
                                                                   <ImageView fx:id="imagemGrafo" fitHeight="354.0" fitWidth="518.0" layoutX="326.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
                                                                </children>
                                                             </AnchorPane>
@@ -78,7 +78,7 @@
                                                    <children>
                                                       <ScrollPane layoutX="-1.0" prefHeight="453.0" prefWidth="788.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="1054.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="1154.0">
                                                                <children>
                                                                   <Label layoutX="11.0" layoutY="16.0" text="Selecione a disciplina" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="16.0">
                                                                      <font>
@@ -87,7 +87,7 @@
                                                                   </Label>
                                                                   <TextField fx:id="txtDisciplina" layoutX="11.0" layoutY="33.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="33.0" />
                                                                   <PieChart fx:id="chartAprovacoes" layoutX="14.0" layoutY="97.0" prefHeight="299.0" prefWidth="454.0" title="Média de aprovações" AnchorPane.topAnchor="97.0" />
-                                                                  <StackedBarChart fx:id="barAprovacoesPorDocente" layoutX="496.0" layoutY="97.0" prefHeight="300.0" prefWidth="510.0" title="Aprovações/reprovações por docente">
+                                                                  <StackedBarChart fx:id="barAprovacoesPorDocente" layoutX="480.0" layoutY="97.0" prefHeight="300.0" prefWidth="638.0" title="Aprovações/reprovações por docente">
                                                                     <xAxis>
                                                                       <CategoryAxis label="Docente" side="BOTTOM" />
                                                                     </xAxis>
@@ -128,7 +128,7 @@
                               <Font name="Linux Biolinum G Regular" size="14.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="tableDisciplinasDisponiveis" layoutX="20.0" layoutY="95.0" prefHeight="342.0" prefWidth="694.0">
+                        <TableView fx:id="tableDisciplinasDisponiveis" layoutX="20.0" layoutY="95.0" prefHeight="342.0" prefWidth="792.0">
                           <columns>
                             <TableColumn prefWidth="101.0" text="C1" />
                             <TableColumn prefWidth="312.3333435058594" text="C2" />
@@ -136,20 +136,20 @@
                               <TableColumn prefWidth="92.0" text="C1" />
                           </columns>
                         </TableView>
-                        <Label layoutX="796.0" layoutY="61.0" text="Disciplinas selecionadas">
+                        <Label layoutX="942.0" layoutY="63.0" text="Disciplinas selecionadas">
                            <font>
                               <Font name="Linux Biolinum G Regular" size="14.0" />
                            </font>
                         </Label>
-                        <ListView fx:id="listDisciplinasSelecionadas" layoutX="723.0" layoutY="91.0" prefHeight="346.0" prefWidth="299.0" />
-                        <Button fx:id="btnAdicionarDisciplina" layoutX="568.0" layoutY="441.0" mnemonicParsing="false" onAction="#adicionarDisciplinaParaSimulacao" text="Adicionar disciplina" />
-                        <Button fx:id="btnRemoverDisciplina" layoutX="875.0" layoutY="446.0" mnemonicParsing="false" onAction="#removerDisciplinaDaSimulacao" text="Remover disciplina" />
+                        <ListView fx:id="listDisciplinasSelecionadas" layoutX="826.0" layoutY="86.0" prefHeight="346.0" prefWidth="299.0" />
+                        <Button fx:id="btnAdicionarDisciplina" layoutX="664.0" layoutY="441.0" mnemonicParsing="false" onAction="#adicionarDisciplinaParaSimulacao" text="Adicionar disciplina" />
+                        <Button fx:id="btnRemoverDisciplina" layoutX="987.0" layoutY="440.0" mnemonicParsing="false" onAction="#removerDisciplinaDaSimulacao" text="Remover disciplina" />
                         <Label fx:id="lbRecomendacao" layoutX="495.0" layoutY="490.0" prefHeight="9.0" prefWidth="343.0" text="Selecione as disciplinas para simulação" textAlignment="RIGHT" AnchorPane.rightAnchor="31.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font></Label>
-                        <ComboBox fx:id="cbMatrizCurricular" layoutX="309.0" layoutY="57.0" onAction="#carregarSugestoesDaMatriz" prefHeight="25.0" prefWidth="399.0" />
-                        <Label layoutX="314.0" layoutY="42.0" prefHeight="18.0" prefWidth="127.0" text="Matriz curricular">
+                        <ComboBox fx:id="cbMatrizCurricular" layoutX="410.0" layoutY="57.0" onAction="#carregarSugestoesDaMatriz" prefHeight="25.0" prefWidth="399.0" />
+                        <Label layoutX="411.0" layoutY="34.0" prefHeight="18.0" prefWidth="127.0" text="Matriz curricular">
                            <font>
                               <Font name="Linux Biolinum G Regular" size="14.0" />
                            </font>

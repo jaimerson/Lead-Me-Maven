@@ -6,6 +6,7 @@ import estatistica.EstatisticasProfessores;
 import estatistica.EstatisticasSemestres;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -171,8 +172,9 @@ public class TelaPrincipalController implements Initializable {
         XYChart.Series<String, Number> serieAprovados = new XYChart.Series<>();
         XYChart.Series<String, Number> serieReprovados = new XYChart.Series<>();
         CategoryAxis periodosLetivosGrafico = (CategoryAxis) barAprovacoesSemestres.getXAxis();
-        periodosLetivosGrafico.setCategories(FXCollections.<String>observableArrayList(estatisticas.getEstatisticasSemestres().keySet()));
-        
+        ObservableList<String> observableArrayList = FXCollections.<String>observableArrayList(estatisticas.getEstatisticasSemestres().keySet());
+        Collections.sort(observableArrayList);
+        periodosLetivosGrafico.setCategories(observableArrayList);
         serieAprovados.setName("Aprovados");
         serieReprovados.setName("Reprovados");
         
@@ -218,6 +220,7 @@ public class TelaPrincipalController implements Initializable {
         serieReprovados.setName("Reprovados");
         
         for(EstatisticaProfessor estatistica : estatisticasPorProfessor){
+            System.out.println("Id docente: "+ estatistica.getIdDocente());
              serieAprovados.getData().add(new XYChart.Data<>(estatistica.getIdDocente().toString(), estatistica.getNumeroAprovados()));
              serieReprovados.getData().add(new XYChart.Data<>(estatistica.getIdDocente().toString(), estatistica.getNumeroReprovados()));
         }
