@@ -1,12 +1,14 @@
 package main;
 
 import base_dados.DisciplinaDAO;
+import base_dados.DocenteDAO;
 import controller.ControllerUtil;
 import fabricas.Fabrica;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.stage.Stage;
 import modelo.Disciplina;
+import modelo.Docente;
 
 
 public class MainApp extends Application {
@@ -17,8 +19,10 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         CarregadorTelaLogin carregadorTelaLogin = Fabrica.getInstance().getFactory().createCarregadorTelaLogin();
         util.carregarTela("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin(), "Lead Me - Login");
+        DocenteDAO docenteDAO = new DocenteDAO();
+        Docente docente = docenteDAO.encontrar(5752204);
+        System.out.println("Docente: " + docente.getNome());
 //        DisciplinaDAO disciplinaDAO = DisciplinaDAO.getInstance();
-        
 //        Disciplina disciplina = disciplinaDAO.encontrar(18715);
     }
 

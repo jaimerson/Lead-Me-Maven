@@ -20,6 +20,7 @@
     </organization>
 
     <build>
+    	<finalName>LeadMe</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -53,6 +54,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                        	<mainClass>main.MainApp</mainClass>
                             <executable>${java.home}/../bin/javapackager</executable>
                             <arguments>
                                 <argument>-createjar</argument>
