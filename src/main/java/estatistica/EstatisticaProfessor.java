@@ -53,6 +53,10 @@ public class EstatisticaProfessor {
     public void incrementarNumeroReprovados(Integer numero){
         this.numeroReprovados += numero;
     }
+    
+    public String coletarPorcentagem(){
+        return String.format("%.2f", 100.0*(this.numeroAprovados.doubleValue() / (this.numeroAprovados + this.numeroReprovados)));
+    }
 
     @Override
     public String toString() {

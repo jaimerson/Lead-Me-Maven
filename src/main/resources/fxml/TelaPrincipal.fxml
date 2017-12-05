@@ -78,7 +78,7 @@
                                                    <children>
                                                       <ScrollPane layoutX="-1.0" prefHeight="453.0" prefWidth="788.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="1154.0">
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="815.0" prefWidth="1154.0">
                                                                <children>
                                                                   <Label layoutX="11.0" layoutY="16.0" text="Selecione a disciplina" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="16.0">
                                                                      <font>
@@ -86,8 +86,8 @@
                                                                      </font>
                                                                   </Label>
                                                                   <TextField fx:id="txtDisciplina" layoutX="11.0" layoutY="33.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="33.0" />
-                                                                  <PieChart fx:id="chartAprovacoes" layoutX="14.0" layoutY="97.0" prefHeight="299.0" prefWidth="454.0" title="Média de aprovações" AnchorPane.topAnchor="97.0" />
-                                                                  <StackedBarChart fx:id="barAprovacoesPorDocente" layoutX="480.0" layoutY="97.0" prefHeight="300.0" prefWidth="638.0" title="Aprovações/reprovações por docente">
+                                                                  <PieChart fx:id="chartAprovacoes" layoutX="236.0" layoutY="55.0" prefHeight="401.0" prefWidth="670.0" title="Média de aprovações" AnchorPane.topAnchor="55.0" />
+                                                                  <StackedBarChart fx:id="barAprovacoesPorDocente" layoutX="18.0" layoutY="471.0" prefHeight="300.0" prefWidth="1116.0" title="Aprovações/reprovações por docente">
                                                                     <xAxis>
                                                                       <CategoryAxis label="Docente" side="BOTTOM" />
                                                                     </xAxis>

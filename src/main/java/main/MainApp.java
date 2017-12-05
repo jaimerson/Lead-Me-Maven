@@ -19,11 +19,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         CarregadorTelaLogin carregadorTelaLogin = Fabrica.getInstance().getFactory().createCarregadorTelaLogin();
         util.carregarTela("/fxml/"+carregadorTelaLogin.coletarNomeTelaLogin(), "Lead Me - Login");
-        DocenteDAO docenteDAO = new DocenteDAO();
-        Docente docente = docenteDAO.encontrar(5752204);
-        System.out.println("Docente: " + docente.getNome());
-//        DisciplinaDAO disciplinaDAO = DisciplinaDAO.getInstance();
-//        Disciplina disciplina = disciplinaDAO.encontrar(18715);
     }
 
     /**

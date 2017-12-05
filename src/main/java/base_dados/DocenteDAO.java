@@ -14,7 +14,13 @@ import modelo.Docente;
  */
 public class DocenteDAO extends AbstractDAO<Docente, Integer>{
     
-    public DocenteDAO(){
+    private static DocenteDAO instance = new DocenteDAO();
+    
+    private DocenteDAO(){
         super(Docente.class);
+    }
+    
+    public static DocenteDAO getInstance(){
+        return instance;
     }
 }

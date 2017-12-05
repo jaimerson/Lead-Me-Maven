@@ -1,5 +1,6 @@
 package controller;
 
+import base_dados.DocenteDAO;
 import estatistica.EstatisticaAprovacoesSemestre;
 import estatistica.EstatisticaProfessor;
 import estatistica.EstatisticasProfessores;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +20,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BubbleChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
@@ -36,14 +37,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import modelo.Aluno;
 import modelo.Curso;
 import modelo.Disciplina;
+import modelo.Docente;
 import modelo.MatrizCurricular;
 import modelo.MatrizDisciplina;
 import modelo.Turma;
@@ -67,7 +67,6 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private Label txtBemVindo;
-
 
     @FXML
     private TableView<MatrizDisciplina> tableDisciplinasDisponiveis;
@@ -98,7 +97,7 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private WebView webViewDemandas;
-    
+
     @FXML
     private StackedBarChart<String, Number> barAprovacoesSemestres;
 
@@ -116,7 +115,7 @@ public class TelaPrincipalController implements Initializable {
     private Disciplina disciplinaSelecionadaEstatistica;
     private EstatisticasProfessores estatisticasProfessores;
     private EstatisticaProfessor estatisticaProfSelecionado;
-    
+    DocenteDAO docenteDAO;
     private AutoCompletionBinding<Disciplina> autoCompleteEstatistica;
     private ControllerUtil util = new ControllerUtil();
     private List<MatrizDisciplina> disciplinasDisponiveis;
@@ -126,6 +125,7 @@ public class TelaPrincipalController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         service = new ServiceFacadeImpl();
         cursoService = new CursoService();
+        docenteDAO = DocenteDAO.getInstance();
         Aluno alunoLogado = service.coletarAlunoLogado();
         txtBemVindo.setText("Bem vindo, " + alunoLogado.getNome());
         disciplinas = service.coletarDisciplinasDoCurso(alunoLogado.getCurso());
@@ -142,7 +142,6 @@ public class TelaPrincipalController implements Initializable {
             }
         });
 
-        
         carregarWebView(webViewDemandas, "bubble/index.html");
         carregarGrafo();
         //Tela de estatísticas
@@ -152,19 +151,18 @@ public class TelaPrincipalController implements Initializable {
         carregarSugestoes(alunoLogado);
         carregarEstatisticasSemestres();
     }
-    
-    
-    private void carregarWebView(WebView webView, String localArquivoHTML){
+
+    private void carregarWebView(WebView webView, String localArquivoHTML) {
         WebEngine engine = webView.getEngine();
         URL url = getClass().getClassLoader().getResource(localArquivoHTML);
         engine.load(url.toString());
     }
-    
-    private void carregarGrafo(){
+
+    private void carregarGrafo() {
         URL url = getClass().getClassLoader().getResource("graph");
         imagemGrafo.setImage(new Image(url.toString()));
     }
-    
+
     private void carregarEstatisticasSemestres() {
         EstatisticasSemestres estatisticas = cursoService.coletarEstatisticasDosSemestres();
         List<EstatisticaAprovacoesSemestre> aprovacoesSemestre = new ArrayList<>(estatisticas.getEstatisticasSemestres().values());
@@ -177,12 +175,12 @@ public class TelaPrincipalController implements Initializable {
         periodosLetivosGrafico.setCategories(observableArrayList);
         serieAprovados.setName("Aprovados");
         serieReprovados.setName("Reprovados");
-        
-        for(EstatisticaAprovacoesSemestre estatistica : aprovacoesSemestre){
-             serieAprovados.getData().add(new XYChart.Data<>(estatistica.getPeriodoLetivo(), estatistica.getNumeroAprovados()));
-             serieReprovados.getData().add(new XYChart.Data<>(estatistica.getPeriodoLetivo(), estatistica.getNumeroReprovados()));
+
+        for (EstatisticaAprovacoesSemestre estatistica : aprovacoesSemestre) {
+            serieAprovados.getData().add(new XYChart.Data<>(estatistica.getPeriodoLetivo(), estatistica.getNumeroAprovados()));
+            serieReprovados.getData().add(new XYChart.Data<>(estatistica.getPeriodoLetivo(), estatistica.getNumeroReprovados()));
         }
-        barAprovacoesSemestres.getData().addAll(serieAprovados,serieReprovados);
+        barAprovacoesSemestres.getData().addAll(serieAprovados, serieReprovados);
     }
 
     private void carregarGraficoAprovacoes() {
@@ -199,34 +197,41 @@ public class TelaPrincipalController implements Initializable {
         txtDisciplina.clear();
         carregarEstatisticasPorProfessor(disciplinaSelecionadaEstatistica);
     }
-    
-    private void carregarEstatisticasPorProfessor(Disciplina disciplina){
+
+    private void carregarEstatisticasPorProfessor(Disciplina disciplina) {
         List<Turma> turmas = disciplina.getTurmas();
         estatisticasProfessores = new EstatisticasProfessores();
-        for(Turma turma : turmas){
+        for (Turma turma : turmas) {
             estatisticasProfessores.adicionarEstatisticasDaTurma(turma);
         }
         carregarGraficoPorProfessor();
     }
-    
-    
-    public void carregarGraficoPorProfessor(){
+
+    public List<String> coletarListaDeProfessoresPorIds(Set<String> idsDocentes) {
+        List<String> listaProfessores = new ArrayList<>();
+        Docente docente;
+        for (String id : idsDocentes) {
+            docente = docenteDAO.encontrar(Integer.parseInt(id));
+            listaProfessores.add(docente != null ? docente.coletarNome(): id);
+        }
+        return listaProfessores;
+    }
+
+    public void carregarGraficoPorProfessor() {
         List<EstatisticaProfessor> estatisticasPorProfessor = new ArrayList<>(estatisticasProfessores.getEstatisticasProfessores().values());
         XYChart.Series<String, Number> serieAprovados = new XYChart.Series<>();
         XYChart.Series<String, Number> serieReprovados = new XYChart.Series<>();
-        CategoryAxis eixoDocentes = (CategoryAxis) barAprovacoesSemestres.getXAxis();
-        eixoDocentes.setCategories(FXCollections.<String>observableArrayList(estatisticasProfessores.getEstatisticasProfessores().keySet()));
         serieAprovados.setName("Aprovados");
         serieReprovados.setName("Reprovados");
-        
-        for(EstatisticaProfessor estatistica : estatisticasPorProfessor){
-            System.out.println("Id docente: "+ estatistica.getIdDocente());
-             serieAprovados.getData().add(new XYChart.Data<>(estatistica.getIdDocente().toString(), estatistica.getNumeroAprovados()));
-             serieReprovados.getData().add(new XYChart.Data<>(estatistica.getIdDocente().toString(), estatistica.getNumeroReprovados()));
+        Docente docente;
+        for (EstatisticaProfessor estatistica : estatisticasPorProfessor) {
+            System.out.println("Id docente: " + estatistica.getIdDocente());
+            docente = docenteDAO.encontrar(estatistica.getIdDocente());
+            serieAprovados.getData().add(new XYChart.Data<>((docente != null ? docente.coletarNome() : estatistica.getIdDocente().toString()) + " " + estatistica.coletarPorcentagem() + "%", estatistica.getNumeroAprovados()));
+            serieReprovados.getData().add(new XYChart.Data<>((docente != null ? docente.coletarNome() : estatistica.getIdDocente().toString()) + " " + estatistica.coletarPorcentagem() + "%", estatistica.getNumeroReprovados()));
         }
-        barAprovacoesPorDocente.getData().setAll(serieAprovados,serieReprovados);
+        barAprovacoesPorDocente.getData().setAll(serieAprovados, serieReprovados);
     }
-    
 
     private void criarTabelaDeSugestoes() {
         TableColumn<MatrizDisciplina, String> codigoTabela = new TableColumn<>("Código");
